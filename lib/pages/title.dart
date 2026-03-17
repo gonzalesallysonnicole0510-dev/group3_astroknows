@@ -141,7 +141,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
         ),
       ),
       child: ElevatedButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MainMenuPage())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SolarSystemInterface())),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
