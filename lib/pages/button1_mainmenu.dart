@@ -3,7 +3,7 @@ import 'dart:math';
 import 'button0_charac.dart';
 import 'button2_shop.dart';
 import 'button3_settings.dart';
-import 'title.dart';
+import 'splash_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -60,7 +60,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
             onPressed: () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => TitlePage(),
+                builder: (context) => SplashScreen(), // navigate to splash screen (countdown) before quiz starts
                 ),
               ),
             child: const Text(
