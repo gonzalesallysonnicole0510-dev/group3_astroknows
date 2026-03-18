@@ -57,19 +57,20 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
         actions: [
           // Quizteroid Quest Button
           TextButton(
-            onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SplashScreen(), // navigate to splash screen (countdown) before quiz starts
-                ),
-              ),
-            child: const Text(
-              "Quizteroid Quest",
-              style: TextStyle(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SplashScreen(planet: name)), // navigate to splash screen first as a countdown before the quiz starts
+              );
+            },
+            child: Text(
+              "Quizteroid Quest for ${name[0].toUpperCase()}${name.substring(1).toLowerCase()}", // uppercase first letter only
+              style: const TextStyle(
                 color: Colors.cyanAccent
                 ),
               ),
           ),
+
           
           // Close Button
           TextButton(
@@ -99,84 +100,6 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
         appBar: AppBar(
           backgroundColor: Colors.black.withValues(alpha: 0.0),  // transparent
           elevation: 0.0, //removes shadow of the appBar
-
-
-          // Character Customization Button
-          leading: GestureDetector(
-            onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CharacCustPage())
-                  );
-            },
-          child: Container(
-            margin: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(100)
-              ),
-            ),
-          ),
-
-
-          // Shop Button
-          actions: [
-            GestureDetector(
-            onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ShopPage(star: 0))
-                  );
-            },
-          child: Container(
-            margin: EdgeInsets.all(5),
-            width: 47,
-            height: 47,
-            decoration: BoxDecoration(
-              color: Colors.blueGrey,
-              border: Border.all(
-              color: Colors.lightBlue,
-              width: 1,
-              ),
-              borderRadius: BorderRadius.circular(100)
-              ),
-            child: Icon (
-              Icons.shop,
-              color: Colors.white,
-              size: 30,
-            ),
-            ),
-            ),
-
-
-            // Settings Button
-            GestureDetector(
-            onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingsPage())
-                  );
-            },
-          child: Container(
-            margin: EdgeInsets.all(5),
-            width: 47,
-            height: 47,
-            decoration: BoxDecoration(
-              color: Colors.blueGrey,
-              border: Border.all(
-              color: Colors.lightBlue,
-              width: 1,
-              ),
-              borderRadius: BorderRadius.circular(100)
-              ),
-            child: Icon (
-              Icons.settings,
-              color: Colors.white,
-              size: 30,
-            ),
-            ),
-            ),
-          ],
         ),
 
 
@@ -195,56 +118,143 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
           // --- PLANET LAYOUT ---
 
           // Sun
-          _pos(context, top: -h * 0.15, left: w * 0.25, size: h * 0.5, path: 'assets/sun.png', name: 'Sun',
-            info: 'The star at the center of our Solar System.'),
+          _pos(context, top: -h * 0.15, left: w * 0.25, size: h * 0.5, path: 'images/sun.png', name: 'Sun',
+            info: '''The star at the center of our Solar System. 
+            
+          The sun holds 99.8% of the solar system's mass.
+
+          Its gravity keeps everything from the biggest planets to the smallest debris in orbit.
+
+          The Sun is classified as a G-type Main-Sequence Star.
+
+          The surface temperature of the Sun is approximately 5,500°C.
+
+          Light from the Sun takes about 8 minutes and 20 seconds to reach Earth.
+
+            '''),
 
 
           // Venus
-          _pos(context, top: h * 0.22, left: w * 0.12, size: h * 0.18, path: 'assets/venus.png', name: 'Venus',
-            info: 'Venus is the second planet from the Sun and the hottest planet in our solar system.'),
+          _pos(context, top: h * 0.15, left: w * 0.12, size: h * 0.18, path: 'images/venus.png', name: 'Venus',
+            info: '''Venus is the second planet from the Sun and the hottest planet in our solar system with surface temperatures reaching 471°C.
+            
+          Venus is often called Earth's 'Evil Twin' due to its similar size but toxic atmosphere.
+  
+          It rotates backward compared to most other planets, meaning the Sun rises in the West.
+
+          The atmospheric pressure on the surface is 90 times greater than Earth's—like being 3,000 feet underwater.
+
+          A day on Venus is longer than its year; it takes 243 Earth days to rotate once but only 225 to orbit the Sun.
+
+          It is the brightest object in our night sky after the Moon.
+            '''),
 
 
           // Mars
-          _pos(context, top: h * 0.45, left: w * 0.05, size: h * 0.14, path: 'assets/mars.png', name: 'Mars',
-            info: 'Mars is known as the Red Planet due to iron oxide on its surface.'),
+          _pos(context, top: h * 0.45, left: w * 0.10, size: h * 0.14, path: 'images/mars.png', name: 'Mars',
+            info: '''Mars is known as the Red Planet due to iron oxide on its surface.
+            
+          It is home to Olympus Mons, which is the largest volcano in the solar system.
+
+          The planet has the largest dust storms in the solar system, which can cover the entire globe for months.
+
+          Mars has two tiny, lumpy moons named Phobos (Fear) and Deimos (Panic).
+
+          The Martian sky appears pinkish-red during the day, but the sunsets are actually blue.
+
+          Liquid water cannot exist on the surface today because the atmosphere is too thin, but ice is trapped at the poles.
+
+            '''),
 
 
           // Saturn
-          _pos(context, bottom: h * 0.12, left: w * 0.08, size: h * 0.28, path: 'assets/saturn.png', name: 'Saturn',
-            info: 'Saturn is a gas giant famous for its extensive ring system.'),
+          _pos(context, bottom: h * 0.12, left: w * 0.08, size: h * 0.28, path: 'images/saturn.png', name: 'Saturn',
+            info: '''Saturn is a gas giant famous for its extensive ring system made of ice and rock.
+            
+          The planet is mostly made of hydrogen and helium and is less dense than water—it would float in a giant pool.
+
+          There is a massive, permanent hexagonal-shaped storm swirling at Saturn's north pole.
+
+          Saturn has 146 moons, the most of any planet in the solar system.
+
+          Winds in Saturn's upper atmosphere can reach 1,800 km/h, much faster than the strongest Earth hurricane.
+
+            '''),
 
 
           // Mercury
-          _pos(context, top: h * 0.25, right: w * 0.22, size: h * 0.1, path: 'assets/mercury.png', name: 'Mercury', 
+          _pos(context, top: h * 0.02, right: w * 0.38, size: h * 0.02, path: 'images/mercury.png', name: 'Mercury', 
             info: '''Mercury is the smallest planet in our solar system and nearest to the Sun. It's only slightly larger than Earth's Moon. 
 
-From the surface of Mercury, the Sun would appear more than three times as large as it does when viewed from Earth, and the sunlight would be as much as seven times brighter.
+          From the surface of Mercury, the Sun would appear more than three times as large as it does when viewed from Earth, and the sunlight would be as much as seven times brighter.
 
-Mercury's surface temperatures are both extremely hot and cold. Because the planet is so close to the Sun, day temperatures can reach highs of 800°F (430°C). Without an atmosphere to retain that heat at night, temperatures can dip as low as -290°F (-180°C).
+          Mercury's surface temperatures are both extremely hot and cold. Because the planet is so close to the Sun, day temperatures can reach highs of 800°F (430°C). Without an atmosphere to retain that heat at night, temperatures can dip as low as -290°F (-180°C).
 
-Despite its proximity to the Sun, Mercury is not the hottest planet in our solar system – that title belongs to nearby Venus, thanks to its dense atmosphere. But Mercury is the fastest planet, zipping around the Sun every 88 Earth days.
+          Despite its proximity to the Sun, Mercury is not the hottest planet in our solar system – that title belongs to nearby Venus, thanks to its dense atmosphere. But Mercury is the fastest planet, zipping around the Sun every 88 Earth days.
 
-Mercury doesn't have moons nor rings.'''),
+          Mercury doesn't have moons nor rings.'''),
+
 
 
           // Earth
-          _pos(context, top: h * 0.32, right: w * 0.05, size: h * 0.2, path: 'assets/earth.png', name: 'Earth',
-            info: 'Our home planet and the only known world to support life.'),
+          _pos(context, top: h * 0.32, right: w * 0.05, size: h * 0.2, path: 'images/earth.png', name: 'Earth',
+            info: '''Our home planet and the only known world to support life.
+          
+          It is the densest planet in the solar system due to its large iron core.
+
+          The Earth is not a perfect sphere; it bulges at the equator because of its rotation.
+
+          About 70% of the surface is covered by oceans, but only 3% of that water is fresh.
+
+          It is the only planet not named after a Greek or Roman god; its name comes from Old English.
+            '''),
 
 
           // Jupiter
-          _pos(context, bottom: h * 0.08, right: w * 0.05, size: h * 0.3, path: 'assets/jupiter.png', name: 'Jupiter',
-            info: 'The largest planet in our Solar System.'),
+          _pos(context, bottom: h * 0.08, right: w * 0.05, size: h * 0.3, path: 'images/jupiter.png', name: 'Jupiter',
+            info: '''The largest planet in our Solar System that all other planets in the solar system could fit in it twice.
+
+          It has the shortest day of any planet, spinning once every 10 hours.
+
+          The Great Red Spot is a hurricane-like storm that has been shrinking for decades but is still wider than Earth.
+          
+          Jupiter acts as a 'space vacuum' because its massive gravity pulls in many dangerous comets and asteroids.
+
+          It has a moon called Ganymede, which is the only moon known to have its own magnetic field.
+            
+            '''),
 
 
           // Uranus
-          _pos(context, bottom: h * 0.08, left: w * 0.35, size: h * 0.18, path: 'assets/uranus.png', name: 'Uranus',
-            info: 'An ice giant that rotates on its side.'),
+          _pos(context, bottom: h * 0.08, left: w * 0.35, size: h * 0.18, path: 'images/uranus.pn', name: 'Uranus',
+            info: '''An ice giant that rotates on its side.
+            
+          It is the only planet that tilts so far it effectively orbits the Sun on its side.
+
+          Uranus was the first planet discovered using a telescope (in 1781).
+
+          The temperature can drop to -224°C, making it even colder than the more distant Neptune.
+
+          Its 27 moons are uniquely named after characters created by William Shakespeare and Alexander Pope.
+
+            '''),
 
 
           // Neptune
-          _pos(context, bottom: h * 0.1, right: w * 0.32, size: h * 0.18, path: 'assets/neptune.png', name: 'Neptune',
-            info: 'The most distant planet from the Sun.'),
+          _pos(context, bottom: h * 0.1, right: w * 0.32, size: h * 0.18, path: 'images/neptune.jpg', name: 'Neptune',
+            info: '''The most distant planet from the Sun.
+          
+          Neptune was the first planet discovered through mathematical calculations rather than direct observation.
+
+          It is the windiest world, with supersonic winds that move faster than the speed of sound on Earth.
+
+          Because it is so far away, Neptune takes 165 Earth years to complete just one orbit around the Sun.
+
+          Neptune has a 'Great Dark Spot,' a massive storm that disappears and reappears every few years.
+
+          Its largest moon, Triton, is the only large moon in the solar system that orbits in the opposite direction of its planet.
+
+            '''),
         ],
       ),
     );
