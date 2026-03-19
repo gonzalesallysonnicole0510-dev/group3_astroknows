@@ -1,29 +1,33 @@
 import 'dart:math';
 import 'button0_charac.dart';
-import 'button1_mainmenu.dart';
+import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
 import 'button3_settings.dart';
 import 'package:flutter/material.dart';
 
+
 class TitlePage extends StatefulWidget {
   const TitlePage({super.key});
+
 
   @override
   State<TitlePage> createState() => _TitlePageState();
 }
 
+
 class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMixin {
   late AnimationController _blinkController;
+
 
   @override
   void initState() {
     super.initState();
-    // 1.5 seconds makes the "pop" quick enough to notice easily
     _blinkController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
   }
+
 
   @override
   void dispose() {
@@ -31,20 +35,22 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
     super.dispose();
   }
 
+
   void refreshCharacter() {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(10, 10, 26, 1.0),
       body: Stack(
         children: [
-          // STAR FIELD
           AnimatedBuilder(
             animation: _blinkController,
             builder: (context, child) {
@@ -54,29 +60,23 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
               );
             },
           ),
-
           Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                  top: screenHeight * 0.05, 
-                  left: screenWidth * 0.05
-                ),
+                padding: EdgeInsets.only(top: screenHeight * 0.05, left: screenWidth * 0.05),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: _buildCharacterButton(context, screenHeight),
                 ),
               ),
-              
               const Spacer(),
-
               FittedBox(
                 child: Text(
                   'ASTROKNOWS',
                   style: TextStyle(
                     fontFamily: 'Michroma',
                     color: Colors.white,
-                    fontSize: screenHeight * 0.14, 
+                    fontSize: screenHeight * 0.14,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 8.0,
                     shadows: [
@@ -86,36 +86,29 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
                   ),
                 ),
               ),
-
               const Spacer(),
-
               _buildMainButton(
                 context,
                 label: 'LAUNCH OFF',
                 width: screenWidth * 0.40,
                 height: screenHeight * 0.13,
               ),
-
               SizedBox(height: screenHeight * 0.04),
-
               _buildSecondaryButton(
-                context, 
-                label: 'SHOP', 
+                context,
+                label: 'SHOP',
                 destination: const ShopPage(star: 0),
                 width: screenWidth * 0.34,
                 height: screenHeight * 0.10,
               ),
-
               SizedBox(height: screenHeight * 0.03),
-
               _buildSecondaryButton(
-                context, 
-                label: 'SETTINGS', 
+                context,
+                label: 'SETTINGS',
                 destination: const SettingsPage(),
                 width: screenWidth * 0.34,
                 height: screenHeight * 0.10,
               ),
-
               const Spacer(flex: 2),
             ],
           ),
@@ -124,8 +117,9 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
     );
   }
 
-  // UI Helper methods stay the same as your provided code
-  Widget _buildMainButton(BuildContext context, {required String label, required double width, required double height}) {
+
+  Widget _buildMainButton(BuildContext context,
+      {required String label, required double width, required double height}) {
     return Container(
       width: width,
       height: height,
@@ -162,7 +156,9 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildSecondaryButton(BuildContext context, {required String label, required Widget destination, required double width, required double height}) {
+
+  Widget _buildSecondaryButton(BuildContext context,
+      {required String label, required Widget destination, required double width, required double height}) {
     return Container(
       width: width,
       height: height,
@@ -194,6 +190,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
     );
   }
 
+
   Widget _buildCharacterButton(BuildContext context, double h) {
     return GestureDetector(
       onTap: () async {
@@ -210,47 +207,43 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
         ),
         child: const CircleAvatar(
           backgroundColor: Colors.black26,
-          child: Icon(Icons.person, color: Colors.white), 
+          child: Icon(Icons.person, color: Colors.white),
         ),
       ),
     );
   }
 }
 
+
 class StarFieldPainter extends CustomPainter {
   final double blinkValue;
   StarFieldPainter(this.blinkValue);
 
+
   @override
   void paint(Canvas canvas, Size size) {
-    final Random random = Random(42); 
+    final Random random = Random(42);
     final paint = Paint();
-
     for (int i = 0; i < 100; i++) {
       double x = random.nextDouble() * size.width;
       double y = random.nextDouble() * size.height;
-      
-      // Bigger size variation for visibility
       double starSize = 0.5 + (random.nextDouble() * 2.0);
-      
       double opacity;
       if (i % 3 == 0) {
-        // Group 1: Blinks with the timer
-        opacity = 0.1 + (blinkValue * 0.9); 
+        opacity = 0.1 + (blinkValue * 0.9);
       } else if (i % 3 == 1) {
-        // Group 2: Blinks opposite to Group 1
         opacity = 1.0 - (blinkValue * 0.9);
       } else {
-        // Group 3: Stays mostly steady
         opacity = 0.4;
       }
-
       paint.color = Colors.white.withOpacity(opacity);
       canvas.drawCircle(Offset(x, y), starSize, paint);
     }
   }
 
+
   @override
-  bool shouldRepaint(covariant StarFieldPainter oldDelegate) => 
+  bool shouldRepaint(covariant StarFieldPainter oldDelegate) =>
       oldDelegate.blinkValue != blinkValue;
 }
+

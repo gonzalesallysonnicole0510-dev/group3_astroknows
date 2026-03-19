@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+
 int musicLevel = 5;
 int sfxLevel = 5;
 int narrationLevel = 5;
 
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -41,6 +45,7 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
 
+
       body: Center(
         child: Container(
           width: screenWidth * 0.7,
@@ -66,6 +71,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
+
 
               VolumeRow(
                 title: "Music Volume",
@@ -93,10 +99,12 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
+
 class VolumeRow extends StatefulWidget {
   final String title;
   final int currentLevel;
   final Function(int) onChanged;
+
 
   const VolumeRow({
     super.key,
@@ -105,19 +113,23 @@ class VolumeRow extends StatefulWidget {
     required this.onChanged,
   });
 
+
   @override
   State<VolumeRow> createState() => _VolumeRowState();
 }
 
+
 class _VolumeRowState extends State<VolumeRow> {
   late int level;
   final int maxLevel = 10;
+
 
   @override
   void initState() {
     super.initState();
     level = widget.currentLevel;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +200,7 @@ class _VolumeRowState extends State<VolumeRow> {
     );
   }
 
+
   Widget _circleButton({required IconData icon, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
@@ -220,3 +233,4 @@ class _VolumeRowState extends State<VolumeRow> {
     );
   }
 }
+
