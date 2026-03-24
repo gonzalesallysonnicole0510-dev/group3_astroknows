@@ -81,7 +81,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
             Navigator.pushReplacement(  // go to achievement page when all questions are answered
               context,
               MaterialPageRoute(
-                builder: (context) => AchievementPage(),
+                builder: (context) => AchievementPage(star: 500, planet: 'earth'),
               ),
             );
           }
@@ -442,6 +442,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
             bottom: screenHeight * 0.15, 
             left: screenWidth * 0.1, 
             child: buildLives(screenWidth)),
+            
           if (isPaused)
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
@@ -457,9 +458,9 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
 // screen button to move the spaceship/player in the middle
 class ScreenButton_Middle extends StatelessWidget {
-  final VoidCallback? functionMiddle;
+  final VoidCallback functionMiddle;
 
-  const ScreenButton_Middle({super.key, this.functionMiddle});
+  const ScreenButton_Middle({super.key, required this.functionMiddle});
 
   @override
   Widget build(BuildContext context) {
@@ -477,9 +478,9 @@ class ScreenButton_Middle extends StatelessWidget {
 
 // screen button to move the spaceship/player to left & right sides
 class ScreenButton_LeftRight extends StatelessWidget {
-  final VoidCallback? functionLeftRight;
+  final VoidCallback functionLeftRight;
 
-  const ScreenButton_LeftRight({super.key, this.functionLeftRight});
+  const ScreenButton_LeftRight({super.key, required this.functionLeftRight});
 
   @override
   Widget build(BuildContext context) {
@@ -499,9 +500,9 @@ class ScreenButton_LeftRight extends StatelessWidget {
 
 // shoot button
 class ShootButton extends StatelessWidget {
-  final VoidCallback? functionLaser;
+  final VoidCallback functionLaser;
 
-  const ShootButton({super.key, this.functionLaser});
+  const ShootButton({super.key, required this.functionLaser});
 
   @override
   Widget build(BuildContext context) {

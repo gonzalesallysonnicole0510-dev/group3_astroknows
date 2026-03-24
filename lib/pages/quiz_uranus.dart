@@ -95,7 +95,7 @@ class _QuizGame_UranusState extends State<QuizGame_Uranus> {
             Navigator.pushReplacement(  // go to achievement page when all questions are answered
               context,
               MaterialPageRoute(
-                builder: (context) => AchievementPage(),
+                builder: (context) => AchievementPage(star: 500, planet: 'uranus'),
               ),
             );
           }
@@ -520,20 +520,16 @@ class _QuizGame_UranusState extends State<QuizGame_Uranus> {
 
 
 
-
 // screen button to move the spaceship/player in the middle
 class ScreenButton_Middle extends StatelessWidget {
-  final VoidCallback? functionMiddle;
+  final VoidCallback functionMiddle;
 
-
-  const ScreenButton_Middle({super.key, this.functionMiddle});
-
+  const ScreenButton_Middle({super.key, required this.functionMiddle});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap:functionMiddle,
-
 
     child: Container(
       color: Colors.transparent,
@@ -544,24 +540,18 @@ class ScreenButton_Middle extends StatelessWidget {
 }
 
 
-
-
 // screen button to move the spaceship/player to left & right sides
 class ScreenButton_LeftRight extends StatelessWidget {
-  final VoidCallback? functionLeftRight;
+  final VoidCallback functionLeftRight;
 
-
-  const ScreenButton_LeftRight({super.key, this.functionLeftRight});
-
+  const ScreenButton_LeftRight({super.key, required this.functionLeftRight});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-
     return GestureDetector(
       onTap:functionLeftRight,
-
 
     child: Container(
       color: Colors.transparent,
@@ -572,25 +562,19 @@ class ScreenButton_LeftRight extends StatelessWidget {
 }
 
 
-
-
 // shoot button
 class ShootButton extends StatelessWidget {
-  final VoidCallback? functionLaser;
+  final VoidCallback functionLaser;
 
-
-  const ShootButton({super.key, this.functionLaser});
-
+  const ShootButton({super.key, required this.functionLaser});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-
     return GestureDetector(
       onTap: functionLaser,
-
 
       child: Container(
         alignment: Alignment.center,
@@ -602,7 +586,7 @@ class ShootButton extends StatelessWidget {
           border: Border.all(color: Colors.lightBlue, width: 1),
         ),
         child: const Text(
-          '+',
+          '+', 
           style: TextStyle(
             color: Colors.white,
           ),
@@ -611,8 +595,6 @@ class ShootButton extends StatelessWidget {
     );
   }
 }
-
-
 
 
 // look of asteroid choices with answers inside the circle containers
@@ -624,7 +606,6 @@ class AsteroidChoice extends StatelessWidget {
   final int currentQuestion;
   final List<Map<String, dynamic>> quiz;
 
-
   const AsteroidChoice({
     super.key,
     required this.asteroidX,
@@ -635,12 +616,10 @@ class AsteroidChoice extends StatelessWidget {
     required this.quiz,
   });
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
 
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 150, left: 190, right: 190),
@@ -668,18 +647,14 @@ class AsteroidChoice extends StatelessWidget {
 }
 
 
-
-
-// pause button
+// pause button 
 class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
   const PauseMenu({super.key, required this.onResume});
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
 
     return Stack(
       children: [
@@ -725,18 +700,18 @@ class PauseMenu extends StatelessWidget {
                           letterSpacing: 4,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(height: 35),
-                 
+                  
                   // resume
                   _menuButton(context, 'RESUME', onTap: onResume),
                   const SizedBox(height: 18),
-                 
+                  
                   // customi
                   _menuButton(context, 'CUSTOMIZATION', onTap: () {
                     Navigator.push(
                         context, MaterialPageRoute(builder: (_) => const CharacCustPage()));
                   }),
                   const SizedBox(height: 18),
-                 
+                  
                   // exit to title screen (title.dart)
                   _menuButton(context, 'EXIT TO MAIN MENU', isExit: true, onTap: () {
                     Navigator.pushAndRemoveUntil(
@@ -753,7 +728,6 @@ class PauseMenu extends StatelessWidget {
       ],
     );
   }
-
 
   Widget _menuButton(BuildContext context, String label,
       {required VoidCallback onTap, bool isExit = false}) {
@@ -787,4 +761,3 @@ class PauseMenu extends StatelessWidget {
     );
   }
 }
-

@@ -80,7 +80,6 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
           ),
 
 
-         
           // Close Button
           TextButton(
             onPressed: () => Navigator.pop(context),
