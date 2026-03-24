@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-
-int star = 10000;
+int totalStar = 0;
+Set<String> claimedQuizzes = {};
 
 
 class ShopPage extends StatefulWidget {
@@ -13,9 +13,7 @@ class ShopPage extends StatefulWidget {
   State<ShopPage> createState() => _ShopPageState();
 }
 
-
 class _ShopPageState extends State<ShopPage> {
-
 
   void _showDialog (int price) {
     showDialog(
@@ -26,7 +24,6 @@ class _ShopPageState extends State<ShopPage> {
           content: Text ('Spend $price ⭐?'),
           actions: [
 
-
             // Purchase Button
             MaterialButton(
               onPressed: () {
@@ -35,7 +32,6 @@ class _ShopPageState extends State<ShopPage> {
               },
               child: Text('Purchase'),
             ),
-
 
             // Cancel Button
             MaterialButton(
@@ -51,12 +47,10 @@ class _ShopPageState extends State<ShopPage> {
   }
 
 
-
-
   void buyItem(int price) {
-  if (star >= price) {
+  if (totalStar >= price) {
     setState(() {
-      star -= price;
+      totalStar -= price;
     });
 
 
@@ -78,13 +72,10 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
        backgroundColor: Colors.black,
-
 
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -109,7 +100,7 @@ class _ShopPageState extends State<ShopPage> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  Navigator.pop(context, star);
+                  Navigator.pop(context, totalStar);
                 },
                 ),
             ),
@@ -123,6 +114,7 @@ class _ShopPageState extends State<ShopPage> {
               margin: EdgeInsets.only(right: 25, top: 5),
               alignment: Alignment.center,
 
+
               decoration: BoxDecoration(
                 color: Colors.blueGrey.shade800,
                 borderRadius: BorderRadius.circular(100),
@@ -132,7 +124,7 @@ class _ShopPageState extends State<ShopPage> {
                 )
               ),
               child: Text(
-                '$star',
+                '⭐ $totalStar',
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -141,50 +133,59 @@ class _ShopPageState extends State<ShopPage> {
           ],
         ),
 
-        // Merchandise (premium spaceship designs) items
-        body: Center(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Merchandise(
-                    price: 10000,
-                    onBuy: () => _showDialog(10000),
-                    ),
-                  Merchandise(
-                    price: 10000,
-                    onBuy: () => _showDialog(10000),
-                    ),
-                  Merchandise(
-                    price: 10000,
-                    onBuy: () => _showDialog(10000),
-                    ),
-                ],
-              ),
-              SizedBox(height: 25),
 
-              // Extra Lives Items
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ExtraLives(
-                    price: 200000,
-                    onBuy: () => _showDialog(200000),
-                    ),
-                  ExtraLives(
-                    price: 300000,
-                    onBuy: () => _showDialog(300000),
-                    ),
-                  ExtraLives(
-                    price: 450000,
-                    onBuy: () => _showDialog(450000),
-                    ),
-                ],
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          children: [
+
+            // Premium Spaceships
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Merchandise(
+                  imagePath: 'images/premium1.png',
+                  price: 3000,
+                  onBuy: () => _showDialog(3000),
+                ),
+                Merchandise(
+                  imagePath: 'images/premium2.png',
+                  price: 3000,
+                  onBuy: () => _showDialog(3000),
+                ),
+                Merchandise(
+                  imagePath: 'images/premium3.png',
+                  price: 3000,
+                  onBuy: () => _showDialog(3000),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 25),
+
+            // Extra Lives
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ExtraLives(
+                  imagePath: 'images/x2.png',
+                  price: 3000,
+                  onBuy: () => _showDialog(3000),
+                ),
+                ExtraLives(
+                  imagePath: 'images/x3.png',
+                  price: 5000,
+                  onBuy: () => _showDialog(5000),
+                ),
+                ExtraLives(
+                  imagePath: 'images/x5.png',
+                  price: 7000,
+                  onBuy: () => _showDialog(7000),
+                ),
+              ],
+            ),
+          ],
         ),
+      ),
     );
   }
 }
@@ -192,7 +193,14 @@ class _ShopPageState extends State<ShopPage> {
 class Merchandise extends StatelessWidget {
   final int price;
   final VoidCallback onBuy;
-  const Merchandise({super.key, required this.price, required this.onBuy});
+  final String imagePath;
+
+  const Merchandise({
+    super.key,
+    required this.price,
+    required this.onBuy,
+    required this.imagePath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -200,32 +208,31 @@ class Merchandise extends StatelessWidget {
       onTap: onBuy,
       child: Column(
         children: [
-          Container( // container of shop items
+          Container(
             height: 95,
             width: 95,
-            margin: EdgeInsets.only(left: 15, right: 15, bottom: 5),
-
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(15),
             ),
-
-            child: Icon (
-              Icons.rocket,
-              color: Colors.white,
-              size: 50,
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                width: 55,
+                height: 55,
+              ),
             ),
           ),
-
-          Text (
-            '$price',
-            style: TextStyle(
+          Text(
+            '⭐ $price',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
-            )
-          )
-        ]
-        ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -233,8 +240,14 @@ class Merchandise extends StatelessWidget {
 class ExtraLives extends StatelessWidget {
   final int price;
   final VoidCallback onBuy;
-  const ExtraLives({super.key, required this.price, required this.onBuy});
+  final String imagePath;
 
+  const ExtraLives({
+    super.key,
+    required this.price,
+    required this.onBuy,
+    required this.imagePath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -242,35 +255,31 @@ class ExtraLives extends StatelessWidget {
       onTap: onBuy,
       child: Column(
         children: [
-          Container( // container of shop items
+          Container(
             height: 95,
             width: 95,
-            margin: EdgeInsets.only(left: 15, right: 15, bottom: 5),
-
-
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(15),
             ),
-
-
-            child: Icon (
-              Icons.favorite,
-              color: Colors.white,
-              size: 50,
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                width: 50,
+                height: 50,
+              ),
             ),
           ),
-
-
-          Text (
-            '$price',
-            style: TextStyle(
+          Text(
+            '⭐ $price',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
-            )
-          )
-        ]
-        ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

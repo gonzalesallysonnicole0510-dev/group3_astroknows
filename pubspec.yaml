@@ -72,6 +72,13 @@ flutter:
     - images/neptune.png
     - images/sun.png
     - images/spaceship.png
+    - images/premium1.png
+    - images/premium2.png
+    - images/premium3.png
+    - images/x2.png
+    - images/x3.png
+    - images/x5.png
+    - images/alien.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

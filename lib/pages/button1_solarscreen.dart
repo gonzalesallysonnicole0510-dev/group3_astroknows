@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'button0_charac.dart';
-import 'button2_shop.dart';
-import 'button3_settings.dart';
 import 'splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +97,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
         appBar: AppBar(
           backgroundColor: Colors.black.withValues(alpha: 0.0),  // transparent
           elevation: 0.0, //removes shadow of the appBar
-        ),
+        ),        
 
 
         body: Stack(
@@ -151,7 +148,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
 
 
           // Mars
-          _pos(context, top: h * 0.45, left: w * 0.10, size: h * 0.14, path: 'images/mars.png', name: 'Mars',
+          _pos(context, top: h * 0.21, right: w * 0.22, size: h * 0.14, path: 'images/mars.png', name: 'Mars',
             info: '''Mars is known as the Red Planet due to iron oxide on its surface.
             
           It is home to Olympus Mons, which is the largest volcano in the solar system.
@@ -183,21 +180,23 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
 
 
           // Mercury
-          _pos(context, top: h * 0.02, right: w * 0.38, size: h * 0.02, path: 'images/mercury.png', name: 'Mercury', 
+          _pos(context, top: h * 0.15, right: w * 0.38, size: h * 0.08, path: 'images/mercury.png', name: 'Mercury', 
             info: '''Mercury is the smallest planet in our solar system and nearest to the Sun. It's only slightly larger than Earth's Moon. 
 
           From the surface of Mercury, the Sun would appear more than three times as large as it does when viewed from Earth, and the sunlight would be as much as seven times brighter.
 
           Mercury's surface temperatures are both extremely hot and cold. Because the planet is so close to the Sun, day temperatures can reach highs of 800°F (430°C). Without an atmosphere to retain that heat at night, temperatures can dip as low as -290°F (-180°C).
 
-          Despite its proximity to the Sun, Mercury is not the hottest planet in our solar system – that title belongs to nearby Venus, thanks to its dense atmosphere. But Mercury is the fastest planet, zipping around the Sun every 88 Earth days.
+          Despite its proximity to the Sun, Mercury is not the hottest planet in our solar system. 
+          
+          Mercury is the fastest planet, zipping around the Sun every 88 Earth days.
 
           Mercury doesn't have moons nor rings.'''),
 
 
 
           // Earth
-          _pos(context, top: h * 0.32, right: w * 0.05, size: h * 0.2, path: 'images/earth.png', name: 'Earth',
+          _pos(context, top: h * 0.29, right: w * 0.07, size: h * 0.2, path: 'images/earth.png', name: 'Earth',
             info: '''Our home planet and the only known world to support life.
           
           It is the densest planet in the solar system due to its large iron core.
@@ -226,7 +225,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
 
 
           // Uranus
-          _pos(context, bottom: h * 0.08, left: w * 0.35, size: h * 0.18, path: 'images/uranus.pn', name: 'Uranus',
+          _pos(context, bottom: h * 0.08, left: w * 0.35, size: h * 0.18, path: 'images/uranus.png', name: 'Uranus',
             info: '''An ice giant that rotates on its side.
             
           It is the only planet that tilts so far it effectively orbits the Sun on its side.
@@ -241,7 +240,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
 
 
           // Neptune
-          _pos(context, bottom: h * 0.1, right: w * 0.32, size: h * 0.18, path: 'images/neptune.jpg', name: 'Neptune',
+          _pos(context, bottom: h * 0.1, right: w * 0.32, size: h * 0.18, path: 'images/neptune.png', name: 'Neptune',
             info: '''The most distant planet from the Sun.
           
           Neptune was the first planet discovered through mathematical calculations rather than direct observation.

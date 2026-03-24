@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'button0_charac.dart';
-import 'button1_mainmenu.dart';
+import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
 import 'button3_settings.dart';
 import 'package:flutter/material.dart';
