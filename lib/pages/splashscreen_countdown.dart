@@ -11,16 +11,16 @@ import 'quiz_sun.dart';
 import 'quiz_uranus.dart';
 import 'quiz_venus.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen_Countdown extends StatefulWidget {
   final String planet;
 
-  const SplashScreen({super.key, required this.planet});
+  const SplashScreen_Countdown({super.key, required this.planet});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  _SplashScreen_CountdownState createState() => _SplashScreen_CountdownState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
 
   int countdown = 3;
 

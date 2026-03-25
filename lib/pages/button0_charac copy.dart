@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/title.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const title.dart()),
+        MaterialPageRoute(builder: (context) => const TitlePage()),
       );
     });
   }

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'splash_screen.dart';
+import 'splashscreen_countdown.dart';
 import 'package:flutter/material.dart';
 
 
@@ -57,7 +57,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface> with Single
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => SplashScreen(planet: name)), // navigate to splash screen first as a countdown before the quiz starts
+                MaterialPageRoute(builder: (context) => SplashScreen_Countdown(planet: name)), // navigate to splash screen first as a countdown before the quiz starts
               );
             },
             child: Text(
