@@ -17,7 +17,6 @@ class QuizGame_Jupiter extends StatefulWidget {
 enum direction { UP, DOWN }
 
 class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
-
   // position of player in x coordinate
   double playerX = 0;
 
@@ -37,7 +36,11 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
     return Row(
       children: List.generate(
         lives,
-        (index) => Icon(Icons.favorite, color: Colors.pink[100], size: screenWidth * 0.04),
+        (index) => Icon(
+          Icons.favorite,
+          color: Colors.pink[100],
+          size: screenWidth * 0.04,
+        ),
       ),
     );
   }
@@ -46,16 +49,56 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
   int currentQuestion = 0;
   String feedback = '';
   List<Map<String, dynamic>> quiz = [
-    {'question': 'Jupiter Question 1', 'answers': ['x', 'yes', 'x'], 'correct': 1},
-    {'question': 'Jupiter Question 2', 'answers': ['x', 'x', 'yes'], 'correct': 2},
-    {'question': 'Jupiter Question 3', 'answers': ['yes', 'x', 'x'], 'correct': 0},
-    {'question': 'Jupiter Question 4', 'answers': ['x', 'yes', 'x'], 'correct': 1},
-    {'question': 'Jupiter Question 5', 'answers': ['x', 'x', 'yes'], 'correct': 2},
-    {'question': 'Jupiter Question 6', 'answers': ['yes', 'x', 'x'], 'correct': 0},
-    {'question': 'Jupiter Question 7', 'answers': ['x', 'yes', 'x'], 'correct': 1},
-    {'question': 'Jupiter Question 8', 'answers': ['x', 'x', 'yes'], 'correct': 2},
-    {'question': 'Jupiter Question 9', 'answers': ['yes', 'x', 'x'], 'correct': 0},
-    {'question': 'Jupiter Question 10', 'answers': ['x', 'yes', 'x'], 'correct': 1},
+    {
+      'question': 'Jupiter Question 1',
+      'answers': ['x', 'yes', 'x'],
+      'correct': 1
+    },
+    {
+      'question': 'Jupiter Question 2',
+      'answers': ['x', 'x', 'yes'],
+      'correct': 2
+    },
+    {
+      'question': 'Jupiter Question 3',
+      'answers': ['yes', 'x', 'x'],
+      'correct': 0
+    },
+    {
+      'question': 'Jupiter Question 4',
+      'answers': ['x', 'yes', 'x'],
+      'correct': 1
+    },
+    {
+      'question': 'Jupiter Question 5',
+      'answers': ['x', 'x', 'yes'],
+      'correct': 2
+    },
+    {
+      'question': 'Jupiter Question 6',
+      'answers': ['yes', 'x', 'x'],
+      'correct': 0
+    },
+    {
+      'question': 'Jupiter Question 7',
+      'answers': ['x', 'yes', 'x'],
+      'correct': 1
+    },
+    {
+      'question': 'Jupiter Question 8',
+      'answers': ['x', 'x', 'yes'],
+      'correct': 2
+    },
+    {
+      'question': 'Jupiter Question 9',
+      'answers': ['yes', 'x', 'x'],
+      'correct': 0
+    },
+    {
+      'question': 'Jupiter Question 10',
+      'answers': ['x', 'yes', 'x'],
+      'correct': 1
+    },
   ];
 
   // for checking answers
@@ -73,43 +116,50 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
             currentQuestion++;
             resetAsteroids();
             feedback = '';
-          }      
-          else {
+          } else {
             currentQuestion = 0;
             resetAsteroids();
             feedback = '';
-            Navigator.pushReplacement(  // go to achievement page when all questions are answered
+            Navigator.pushReplacement(
+              // go to achievement page when all questions are answered
               context,
               MaterialPageRoute(
-                builder: (context) => AchievementPage(star: 500, planet: 'jupiter'),
+                builder: (context) => AchievementPage(
+                  star: 500,
+                  planet: 'jupiter',
+                ),
               ),
             );
           }
-          });
         });
-      } 
-      else {
-        setState(() {
-          feedback = "Incorrect!";
-          lives--;
-        });
+      });
+    } else {
+      setState(() {
+        feedback = "Incorrect!";
+        lives--;
+      });
 
-        if (lives <= 0) {
-          currentQuestion = 0;
-          feedback = '';
-          Navigator.pushReplacement(
-              context, 
-              MaterialPageRoute(builder: (context) => const MissionFailedPage()));
-        }
+      if (lives <= 0) {
+        currentQuestion = 0;
+        feedback = '';
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MissionFailedPage(),
+          ),
+        );
       }
     }
-
-
+  }
 
   // Asteroids
   List<double> asteroidX = [-0.58, 0, 0.58];
   List<double> asteroidY = [-0.7, -0.7, -0.7];
-  List<direction> asteroidFloat = [direction.UP, direction.DOWN, direction.UP];
+  List<direction> asteroidFloat = [
+    direction.UP,
+    direction.DOWN,
+    direction.UP,
+  ];
 
   late Timer gameTimer;
 
@@ -126,64 +176,56 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
     super.dispose();
   }
 
-
   void startQuizGame() {
     gameTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (isPaused) return; // stop updates while paused
 
-    if (isPaused) return; // stop updates while paused
-
-    // left asteroid
-    if (asteroidY[0] - 0.2 < -1) {
-      asteroidFloat[0] = direction.DOWN;
-    }
-    else if (asteroidY[0] + 0.2 > 1) {
-      asteroidFloat[0] = direction.UP;
-    }
-
-    setState(() {
-      if (asteroidFloat[0] == direction.UP) {
-        asteroidY[0] -= 0.08;
-      } else {
-        asteroidY[0] += 0.08;
+      // left asteroid
+      if (asteroidY[0] - 0.2 < -1) {
+        asteroidFloat[0] = direction.DOWN;
+      } else if (asteroidY[0] + 0.2 > 1) {
+        asteroidFloat[0] = direction.UP;
       }
-    });
 
+      setState(() {
+        if (asteroidFloat[0] == direction.UP) {
+          asteroidY[0] -= 0.08;
+        } else {
+          asteroidY[0] += 0.08;
+        }
+      });
 
-    // middle asteroid
-    if (asteroidY[1] - 0.2 < -1) {
-      asteroidFloat[1] = direction.DOWN;
-    }
-    else if (asteroidY[1] + 0.2 > 1) {
-      asteroidFloat[1] = direction.UP;
-    }
-
-    setState(() {
-      if (asteroidFloat[1] == direction.UP) {
-        asteroidY[1] -= 0.08;
-      } else {
-        asteroidY[1] += 0.08;
+      // middle asteroid
+      if (asteroidY[1] - 0.2 < -1) {
+        asteroidFloat[1] = direction.DOWN;
+      } else if (asteroidY[1] + 0.2 > 1) {
+        asteroidFloat[1] = direction.UP;
       }
-    });
 
+      setState(() {
+        if (asteroidFloat[1] == direction.UP) {
+          asteroidY[1] -= 0.08;
+        } else {
+          asteroidY[1] += 0.08;
+        }
+      });
 
-     // right asteroid
-    if (asteroidY[2] - 0.2 < -1) {
-      asteroidFloat[2] = direction.DOWN;
-    }
-    else if (asteroidY[2] + 0.2 > 1) {
-      asteroidFloat[2] = direction.UP;
-    }
-
-    setState(() {
-      if (asteroidFloat[2] == direction.UP) {
-        asteroidY[2] -= 0.08;
-      } else {
-        asteroidY[2] += 0.08;
+      // right asteroid
+      if (asteroidY[2] - 0.2 < -1) {
+        asteroidFloat[2] = direction.DOWN;
+      } else if (asteroidY[2] + 0.2 > 1) {
+        asteroidFloat[2] = direction.UP;
       }
-    });
-  });
- }
 
+      setState(() {
+        if (asteroidFloat[2] == direction.UP) {
+          asteroidY[2] -= 0.08;
+        } else {
+          asteroidY[2] += 0.08;
+        }
+      });
+    });
+  }
 
   // Player movement
   void moveLeft() {
@@ -213,7 +255,6 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
     midShot = true;
 
     Timer.periodic(Duration(milliseconds: 10), (timer) {
-
       // laser shoots until it hits the top of the screen
       setState(() {
         laserHeight += 20;
@@ -230,31 +271,27 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
 
       // check if laser has hit the 3 asteroids
       // for asteroid on the left
-        if (asteroidY[0] > heightToCoordinate(laserHeight) &&
-            (asteroidX[0] - laserX).abs() < 0.35) {
-       
-            asteroidY[0] = -50;
-            checkAnswer(0);
-        }
+      if (asteroidY[0] > heightToCoordinate(laserHeight) &&
+          (asteroidX[0] - laserX).abs() < 0.35) {
+        asteroidY[0] = -50;
+        checkAnswer(0);
+      }
 
       // for asteroid in the middle
-        if (asteroidY[1] > heightToCoordinate(laserHeight) &&
-            (asteroidX[1] - laserX).abs() < 0.3) {
-       
-            asteroidY[1] = -50;
-            checkAnswer(1);
-        }
+      if (asteroidY[1] > heightToCoordinate(laserHeight) &&
+          (asteroidX[1] - laserX).abs() < 0.3) {
+        asteroidY[1] = -50;
+        checkAnswer(1);
+      }
 
       // for asteroid on the right
-        if (asteroidY[2] > heightToCoordinate(laserHeight) &&
-            (asteroidX[2] - laserX).abs() < 0.35) {
-          
-            asteroidY[2] = -50;
-            checkAnswer(2);
-        }
+      if (asteroidY[2] > heightToCoordinate(laserHeight) &&
+          (asteroidX[2] - laserX).abs() < 0.35) {
+        asteroidY[2] = -50;
+        checkAnswer(2);
+      }
     });
   }
-
 
   double heightToCoordinate(double height) {
     double totalHeight = MediaQuery.of(context).size.height * 3 / 4;
@@ -272,8 +309,6 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
     asteroidFloat = [direction.UP, direction.DOWN, direction.UP];
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -288,91 +323,97 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
         // Pause button
         actions: [
           GestureDetector(
-            onTap: () => setState(() => isPaused = true), 
+            onTap: () => setState(() => isPaused = true),
             child: Container(
               width: screenWidth * 0.08,
               height: screenWidth * 0.08,
-              margin: EdgeInsets.only(right: screenWidth * 0.05, top: screenHeight * 0.01),
+              margin: EdgeInsets.only(
+                right: screenWidth * 0.05,
+                top: screenHeight * 0.01,
+              ),
               decoration: BoxDecoration(
                 color: Colors.blueGrey.shade800,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.lightBlue, width: 1),
               ),
               child: Icon(
-                Icons.pause, 
-                color: Colors.white, 
-                size: screenWidth * 0.06
-                ),
+                Icons.pause,
+                color: Colors.white,
+                size: screenWidth * 0.06,
+              ),
             ),
           ),
         ],
       ),
-
       body: Stack(
         children: [
           Column(
             children: [
-
               // container of spaceship, asteroids, and laser
               Expanded(
                 flex: 3,
                 child: Container(
                   margin: EdgeInsets.only(bottom: screenHeight * 0.02),
                   color: Colors.transparent,
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          AsteroidChoice(
-                            asteroidX: asteroidX[0],
-                            asteroidY: asteroidY[0],
-                            asteroidColor: Colors.grey,
-                            answerIndex: 0,
-                            currentQuestion: currentQuestion,
-                            quiz: quiz,
-                          ),
-                          AsteroidChoice(
-                            asteroidX: asteroidX[1],
-                            asteroidY: asteroidY[1],
-                            asteroidColor: const Color.fromARGB(255, 63, 61, 61),
-                            answerIndex: 1,
-                            currentQuestion: currentQuestion,
-                            quiz: quiz,
-                          ),
-                          AsteroidChoice(
-                            asteroidX: asteroidX[2],
-                            asteroidY: asteroidY[2],
-                            asteroidColor: const Color.fromARGB(255, 103, 103, 103),
-                            answerIndex: 2,
-                            currentQuestion: currentQuestion,
-                            quiz: quiz,
-                          ),
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        AsteroidChoice(
+                          asteroidX: asteroidX[0],
+                          asteroidY: asteroidY[0],
+                          asteroidColor: Colors.grey,
+                          answerIndex: 0,
+                          currentQuestion: currentQuestion,
+                          quiz: quiz,
+                        ),
+                        AsteroidChoice(
+                          asteroidX: asteroidX[1],
+                          asteroidY: asteroidY[1],
+                          asteroidColor: const Color.fromARGB(255, 63, 61, 61),
+                          answerIndex: 1,
+                          currentQuestion: currentQuestion,
+                          quiz: quiz,
+                        ),
+                        AsteroidChoice(
+                          asteroidX: asteroidX[2],
+                          asteroidY: asteroidY[2],
+                          asteroidColor:
+                              const Color.fromARGB(255, 103, 103, 103),
+                          answerIndex: 2,
+                          currentQuestion: currentQuestion,
+                          quiz: quiz,
+                        ),
 
-                          // Laser animation
-                          AnimatedAlign(
-                            alignment: Alignment(laserX, 1),
-                            duration: const Duration(milliseconds: 150),
-                            curve: Curves.fastOutSlowIn,
-                            child: Container(width: screenWidth * 0.002, height: laserHeight, color: Colors.lightBlue),
+                        // Laser animation
+                        AnimatedAlign(
+                          alignment: Alignment(laserX, 1),
+                          duration: const Duration(milliseconds: 150),
+                          curve: Curves.fastOutSlowIn,
+                          child: Container(
+                            width: screenWidth * 0.002,
+                            height: laserHeight,
+                            color: Colors.lightBlue,
                           ),
+                        ),
 
-                          // Spaceship (player)
-                          AnimatedAlign(
-                            alignment: Alignment(playerX, 1),
-                            duration: const Duration(milliseconds: 150),
-                            curve: Curves.fastOutSlowIn,
-                            child: Container(
-                              width: screenWidth * 0.04,
-                              height: screenHeight * 0.16,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('images/spaceship.png'),
-                                  fit: BoxFit.cover,
-                                ),
+                        // Spaceship (player)
+                        AnimatedAlign(
+                          alignment: Alignment(playerX, 1),
+                          duration: const Duration(milliseconds: 150),
+                          curve: Curves.fastOutSlowIn,
+                          child: Container(
+                            width: screenWidth * 0.04,
+                            height: screenHeight * 0.16,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('images/spaceship.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -386,15 +427,9 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ScreenButton_LeftRight(
-                  functionLeftRight: moveLeft
-                  ),
-                ScreenButton_Middle(
-                  functionMiddle: moveMiddle
-                  ),
-                ScreenButton_LeftRight(
-                  functionLeftRight: moveRight
-                  ),
+                ScreenButton_LeftRight(functionLeftRight: moveLeft),
+                ScreenButton_Middle(functionMiddle: moveMiddle),
+                ScreenButton_LeftRight(functionLeftRight: moveRight),
               ],
             ),
           ),
@@ -404,9 +439,9 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
             alignment: Alignment.bottomRight,
             child: Container(
               margin: EdgeInsets.only(
-                bottom: screenHeight * 0.20, 
-                right: screenWidth * 0.12
-                ),
+                bottom: screenHeight * 0.20,
+                right: screenWidth * 0.12,
+              ),
               child: ShootButton(functionLaser: fireLaser),
             ),
           ),
@@ -424,22 +459,25 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
               ),
               child: Center(
                 child: Text(
-                  feedback.isEmpty ? quiz[currentQuestion]['question'] : feedback,
+                  feedback.isEmpty
+                      ? quiz[currentQuestion]['question']
+                      : feedback,
                   style: TextStyle(
-                    color: Colors.white, 
-                    fontSize: screenHeight * 0.05
-                    ),
+                    color: Colors.white,
+                    fontSize: screenHeight * 0.05,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
           ),
-          
+
           // Lives display
           Positioned(
-            bottom: screenHeight * 0.15, 
-            left: screenWidth * 0.1, 
-            child: buildLives(screenWidth)),
+            bottom: screenHeight * 0.15,
+            left: screenWidth * 0.1,
+            child: buildLives(screenWidth),
+          ),
           if (isPaused)
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
@@ -450,9 +488,6 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
   }
 }
 
-
-
-
 // screen button to move the spaceship/player in the middle
 class ScreenButton_Middle extends StatelessWidget {
   final VoidCallback? functionMiddle;
@@ -462,16 +497,14 @@ class ScreenButton_Middle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:functionMiddle,
-
-    child: Container(
-      color: Colors.transparent,
-      width: 120,
-      )
+      onTap: functionMiddle,
+      child: Container(
+        color: Colors.transparent,
+        width: 120,
+      ),
     );
   }
 }
-
 
 // screen button to move the spaceship/player to left & right sides
 class ScreenButton_LeftRight extends StatelessWidget {
@@ -484,16 +517,14 @@ class ScreenButton_LeftRight extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      onTap:functionLeftRight,
-
-    child: Container(
-      color: Colors.transparent,
-      width: screenWidth * 0.3,
-      )
+      onTap: functionLeftRight,
+      child: Container(
+        color: Colors.transparent,
+        width: screenWidth * 0.3,
+      ),
     );
   }
 }
-
 
 // shoot button
 class ShootButton extends StatelessWidget {
@@ -508,7 +539,6 @@ class ShootButton extends StatelessWidget {
 
     return GestureDetector(
       onTap: functionLaser,
-
       child: Container(
         alignment: Alignment.center,
         width: screenWidth * 0.15,
@@ -519,7 +549,7 @@ class ShootButton extends StatelessWidget {
           border: Border.all(color: Colors.lightBlue, width: 1),
         ),
         child: const Text(
-          '+', 
+          '+',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -528,7 +558,6 @@ class ShootButton extends StatelessWidget {
     );
   }
 }
-
 
 // look of asteroid choices with answers inside the circle containers
 class AsteroidChoice extends StatelessWidget {
@@ -555,10 +584,15 @@ class AsteroidChoice extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 150, left: 190, right: 190),
+      margin: EdgeInsets.only(
+        top: 20,
+        bottom: 150,
+        left: 190,
+        right: 190,
+      ),
       alignment: Alignment(asteroidX, asteroidY),
       child: Container(
-        width: screenWidth *0.10,
+        width: screenWidth * 0.10,
         height: screenWidth * 0.10,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -579,8 +613,7 @@ class AsteroidChoice extends StatelessWidget {
   }
 }
 
-
-// pause button 
+// pause button
 class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
   const PauseMenu({super.key, required this.onResume});
@@ -594,7 +627,9 @@ class PauseMenu extends StatelessWidget {
         // The Blurred Background
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-          child: Container(color: Colors.black.withValues(alpha: 0.5)),
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+          ),
         ),
         Center(
           child: TweenAnimationBuilder(
@@ -604,19 +639,28 @@ class PauseMenu extends StatelessWidget {
             builder: (context, scale, child) {
               return Transform.scale(
                 scale: scale,
-                child: Opacity(opacity: scale.clamp(0.0, 1.0), child: child),
+                child: Opacity(
+                  opacity: scale.clamp(0.0, 1.0),
+                  child: child,
+                ),
               );
             },
             child: Container(
               width: screenWidth * 0.45,
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
+              padding: const EdgeInsets.symmetric(
+                vertical: 30,
+                horizontal: 25,
+              ),
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
+                color: const Color(0xFF1A1B35).withOpacity(0.95),
                 borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.8), width: 2),
+                border: Border.all(
+                  color: Colors.cyanAccent.withOpacity(0.8),
+                  width: 2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.cyanAccent.withValues(alpha: 0.2),
+                    color: Colors.cyanAccent.withOpacity(0.2),
                     blurRadius: 15,
                     spreadRadius: 2,
                   ),
@@ -625,34 +669,52 @@ class PauseMenu extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('PAUSED',
-                      style: TextStyle(
-                          fontFamily: 'Michroma',
-                          color: Colors.white,
-                          fontSize: 26,
-                          letterSpacing: 4,
-                          fontWeight: FontWeight.bold)),
+                  const Text(
+                    'PAUSED',
+                    style: TextStyle(
+                      fontFamily: 'Michroma',
+                      color: Colors.white,
+                      fontSize: 26,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 35),
-                  
+
                   // resume
                   _menuButton(context, 'RESUME', onTap: onResume),
                   const SizedBox(height: 18),
-                  
+
                   // customi
-                  _menuButton(context, 'CUSTOMIZATION', onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => const CharacCustPage()));
-                  }),
+                  _menuButton(
+                    context,
+                    'CUSTOMIZATION',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CharacCustPage(),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 18),
-                  
+
                   // exit to title screen (title.dart)
-                  _menuButton(context, 'EXIT TO MAIN MENU', isExit: true, onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const TitlePage()),
-                      (route) => false,
-                    );
-                  }),
+                  _menuButton(
+                    context,
+                    'EXIT TO MAIN MENU',
+                    isExit: true,
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const TitlePage(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -662,8 +724,12 @@ class PauseMenu extends StatelessWidget {
     );
   }
 
-  Widget _menuButton(BuildContext context, String label,
-      {required VoidCallback onTap, bool isExit = false}) {
+  Widget _menuButton(
+    BuildContext context,
+    String label, {
+    required VoidCallback onTap,
+    bool isExit = false,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: 55,
@@ -675,7 +741,9 @@ class PauseMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
             side: BorderSide(
-              color: isExit ? Colors.redAccent.withValues(alpha: 0.7) : Colors.cyan.withValues(alpha: 0.7),
+              color: isExit
+                  ? Colors.redAccent.withOpacity(0.7)
+                  : Colors.cyan.withOpacity(0.7),
               width: 2,
             ),
           ),
