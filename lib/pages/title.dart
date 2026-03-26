@@ -72,7 +72,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
                     fontWeight: FontWeight.bold,
                     letterSpacing: 8.0,
                     shadows: [
-                      Shadow(blurRadius: 25, color: Colors.cyan.withOpacity(0.8)),
+                      Shadow(blurRadius: 25, color: Colors.cyan.withValues(alpha: 0.8)),
                       Shadow(blurRadius: 10, color: Colors.cyanAccent),
                     ],
                   ),
@@ -117,7 +117,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height * 0.5),
         boxShadow: [
-          BoxShadow(color: Colors.orange.withOpacity(0.5), blurRadius: 15, spreadRadius: 1),
+          BoxShadow(color: Colors.orange.withValues(alpha: 0.5), blurRadius: 15, spreadRadius: 1),
         ],
         gradient: const LinearGradient(
           colors: [Color(0xFFFFA726), Color(0xFFFF3D00)],
@@ -154,7 +154,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height * 0.5),
-        border: Border.all(color: Colors.cyan.withOpacity(0.8), width: 2),
+        border: Border.all(color: Colors.cyan.withValues(alpha: 0.8), width: 2),
         color: const Color(0xFF15152D),
       ),
       child: ElevatedButton(
@@ -192,7 +192,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: Colors.cyan, width: 2),
-          boxShadow: [BoxShadow(color: Colors.cyan.withOpacity(0.4), blurRadius: 10)],
+          boxShadow: [BoxShadow(color: Colors.cyan.withValues(alpha: 0.4), blurRadius: 10)],
         ),
         child: const CircleAvatar(
           backgroundColor: Colors.black26,
@@ -223,7 +223,7 @@ class StarFieldPainter extends CustomPainter {
       } else {
         opacity = 0.4;
       }
-      paint.color = Colors.white.withOpacity(opacity);
+      paint.color = Colors.white.withValues(alpha: opacity);
       canvas.drawCircle(Offset(x, y), starSize, paint);
     }
   }

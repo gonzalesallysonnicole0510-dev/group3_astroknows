@@ -31,54 +31,54 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
 
   final List<Map<String, dynamic>> quiz = [
     {
-      'question': 'Mars Question 1',
-      'answers': ['x', 'yes', 'x'],
-      'correct': 1
+      'question': '1.  Which planet is known as the "Red Planet" because of the iron minerals in its soil?', 
+      'answers': ['Mercury', 'Venus', 'Mars'], 
+      'correct': 2  //Mars
     },
     {
-      'question': 'Mars Question 2',
-      'answers': ['x', 'x', 'yes'],
-      'correct': 2
+      'question': '2.  What is the name of the innermost moon of Mars?', 
+      'answers': ['Phobos', 'Deimos', 'Oberon'], 
+      'correct': 0  //Phobos
     },
     {
-      'question': 'Mars Question 3',
-      'answers': ['yes', 'x', 'x'],
-      'correct': 0
+      'question': '3.  What color does the Martian sky appear during the day?', 
+      'answers': ['Blue', 'Black', 'Pinkish-red'], 
+      'correct': 2  //Pinkish-red
     },
     {
-      'question': 'Mars Question 4',
-      'answers': ['x', 'yes', 'x'],
-      'correct': 1
+      'question': '4.  Sunsets on Mars actually appear as what color?', 
+      'answers': ['Red', 'Blue', 'Green'], 
+      'correct': 1  //Blue
     },
     {
-      'question': 'Mars Question 5',
-      'answers': ['x', 'x', 'yes'],
-      'correct': 2
+      'question': '5.  Mars has two tiny, lumpy moons named Phobos and…?', 
+      'answers': ['Titan', 'Lo', 'Deimos'], 
+      'correct': 2  //Deimos
     },
     {
-      'question': 'Mars Question 6',
-      'answers': ['yes', 'x', 'x'],
-      'correct': 0
+      'question': '6.  A Martian solar day is called a what?', 
+      'answers': ['Sol', 'Sun-day', 'Mars-day'], 
+      'correct': 0  //Sol
     },
     {
-      'question': 'Mars Question 7',
-      'answers': ['x', 'yes', 'x'],
-      'correct': 1
+      'question': '7.  WHow long does it take Mars to complete one orbit around the Sun?', 
+      'answers': ['365 days', '687 days', '10 days'], 
+      'correct': 1  //687 days
     },
     {
-      'question': 'Mars Question 8',
-      'answers': ['x', 'x', 'yes'],
-      'correct': 2
+      'question': '8.  Why can’t liquid water exist on the Martian surface today?', 
+      'answers': ['Atmosphere \nis too thin', 'It is too hot', 'No gravity'], 
+      'correct': 0  //Atmosphere is too thin
     },
     {
-      'question': 'Mars Question 9',
-      'answers': ['yes', 'x', 'x'],
-      'correct': 0
+      'question': '9.  Where is water currently trapped on Mars?', 
+      'answers': ['In the oceans', 'In the polar \nice caps', 'In the volcanoes'], 
+      'correct': 1  //In the polar ice caps
     },
     {
-      'question': 'Mars Question 10',
-      'answers': ['x', 'yes', 'x'],
-      'correct': 1
+      'question': '10.  What is the shape of Mars’ moons, Phobos and Deimos?', 
+      'answers': ['Perfectly round', 'Potato-shaped', 'Square'], 
+      'correct': 1  //Potato-shaped
     },
   ];
 
@@ -107,7 +107,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
 
   void startQuizGame() {
     gameTimer = Timer.periodic(
-      const Duration(milliseconds: 50),
+      const Duration(milliseconds: 50), 
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
@@ -121,8 +121,8 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
-            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
-                ? -0.03
+            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
+                ? -0.03 
                 : 0.03;
           }
         });
@@ -162,7 +162,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
     });
 
     Timer.periodic(
-      const Duration(milliseconds: 15),
+      const Duration(milliseconds: 15), 
       (timer) {
         if (!mounted) {
           timer.cancel();
@@ -220,7 +220,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
 
     if (lives <= 0) {
       Future.delayed(
-        const Duration(milliseconds: 800),
+        const Duration(milliseconds: 800), 
         () {
           if (mounted) {
             Navigator.pushReplacement(
@@ -237,7 +237,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
 
     // Delay before moving to next question or ending game
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 1), 
       () {
         if (!mounted) return;
         bool isLast = currentQuestion >= quiz.length - 1;
@@ -247,8 +247,8 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
             context,
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
-                star: 500,
-                planet: 'mars',
+                star: 500, 
+                planet: 'earth',
               ),
             ),
           );
@@ -264,28 +264,35 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
     );
   }
 
+  // Reset asteroid positions and movement directions
   void _resetAsteroids() {
     setState(() {
+      asteroidX = [-0.52, 0, 0.52];
       asteroidY = [-0.6, -0.6, -0.6];
+      asteroidFloat = [
+        AsteroidDirection.up,
+        AsteroidDirection.down,
+        AsteroidDirection.up
+  ];
     });
   }
 
   // Main build method for the quiz game UI
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final sw = MediaQuery.of(context).size.width;
+    final sh = MediaQuery.of(context).size.height;
 
-    // Calculate rocket size based on screen dimensions
-    final double rocketWidth = (screenWidth * 0.20).clamp(60.0, 95.0);
-    final double rocketHeight = (screenHeight * 0.15).clamp(60.0, 95.0);
+  // Calculate rocket size based on screen dimensions
+    final double rocketWidth = (sw * 0.20).clamp(60.0, 95.0);
+    final double rocketHeight = (sh * 0.15).clamp(60.0, 95.0);
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
           Positioned.fill(
-            bottom: screenHeight * 0.2,
+            bottom: sh * 0.2,
             child: Row(
               children: [
                 _buildMoveZone(moveLeft),
@@ -299,20 +306,20 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
             top: 0,
             left: 0,
             right: 0,
-            height: screenHeight * 0.7,
+            height: sh * 0.7,
             child: Stack(
               children: [
                 for (int i = 0; i < 3; i++)
                   AsteroidChoice(
                     x: asteroidX[i],
                     y: asteroidY[i],
-                    color: i == 1
-                        ? const Color(0xFF3B4043)
+                    color: i == 1 
+                        ? const Color(0xFF3B4043) 
                         : const Color(0xFF5A6064),
                     label: quiz[currentQuestion]['answers'][i],
                     alignWidth: rocketWidth,
                   ),
-                // Laser
+                // Laser and spaceship
                 AnimatedAlign(
                   alignment: Alignment(laserX, 0.72),
                   duration: const Duration(milliseconds: 50),
@@ -326,7 +333,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
                           color: Colors.cyanAccent,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.cyanAccent.withOpacity(0.8),
+                              color: Colors.cyanAccent.withValues(alpha: 0.8),
                               blurRadius: 10,
                               spreadRadius: 1,
                             )
@@ -336,7 +343,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
                     ),
                   ),
                 ),
-                // Spaceship
+                // Spaceship (player)
                 AnimatedAlign(
                   alignment: Alignment(playerX, 0.9),
                   duration: const Duration(milliseconds: 150),
@@ -351,88 +358,93 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
           ),
           // Pause button
           Positioned(
-            top: (screenHeight * 0.05).clamp(30.0, 60.0),
-            right: (screenWidth * 0.05).clamp(15.0, 30.0),
+            top: (sh * 0.05).clamp(30.0, 60.0),
+            right: (sw * 0.05).clamp(15.0, 30.0),
             child: GestureDetector(
               onTap: () => setState(() => isPaused = true),
               child: Container(
-                width: (screenWidth * 0.12).clamp(45.0, 60.0),
-                height: (screenWidth * 0.12).clamp(45.0, 60.0),
+                width: (sw * 0.12).clamp(45.0, 60.0),
+                height: (sw * 0.12).clamp(45.0, 60.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFF131B26),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.cyanAccent,
+                    color: Colors.cyanAccent, 
                     width: 2.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.3),
+                      color: Colors.cyanAccent.withValues(alpha: 0.3), 
                       blurRadius: 10,
                     )
                   ],
                 ),
                 child: Icon(
-                  Icons.pause,
-                  color: Colors.white,
-                  size: (screenWidth * 0.06).clamp(24.0, 32.0),
+                  Icons.pause, 
+                  color: Colors.white, 
+                  size: (sw * 0.06).clamp(24.0, 32.0),
                 ),
               ),
             ),
           ),
           // Lives and question box
           Positioned(
-            bottom: screenHeight * 0.05,
-            left: screenWidth * 0.08,
-            right: screenWidth * 0.08,
+            bottom: sh * 0.05,
+            left: sw * 0.08,
+            right: sw * 0.08,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    // Lives display
                     Row(
                       children: List.generate(
                         lives,
                         (i) => Padding(
                           padding: const EdgeInsets.only(right: 6),
                           child: Icon(
-                            Icons.favorite,
-                            color: const Color(0xFFFFD1DC),
-                            size: (screenWidth * 0.09).clamp(28.0, 40.0),
+                            Icons.favorite, 
+                            color: const Color(0xFFFFD1DC), 
+                            size: (sw * 0.09).clamp(28.0, 40.0),
                           ),
                         ),
                       ),
                     ),
+                    // Shoot button
                     ShootButton(onTap: fireLaser),
                   ],
                 ),
                 const SizedBox(height: 25),
+                // Question container
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   width: double.infinity,
-                  height: screenHeight * 0.12,
+                  height: sh * 0.12,
                   decoration: BoxDecoration(
                     color: const Color(0xFF131B26),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: boxBorderColor,
+                      color: boxBorderColor, 
                       width: 2.5,
                     ),
                   ),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        feedback.isEmpty
-                            ? quiz[currentQuestion]['question']
-                            : feedback,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: (screenHeight * 0.035).clamp(18.0, 26.0),
-                          fontFamily: 'Michroma',
+                      child: FittedBox(
+                        child: Text(
+                          feedback.isEmpty 
+                              ? quiz[currentQuestion]['question'] 
+                              : feedback,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: (sh * 0.035).clamp(18.0, 26.0),
+                            fontFamily: 'Michroma',
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -440,7 +452,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
               ],
             ),
           ),
-          if (isPaused)
+          if (isPaused) 
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
             ),
@@ -476,6 +488,7 @@ class AsteroidChoice extends StatelessWidget {
     required this.alignWidth,
   });
 
+  // Build method for individual asteroid choices
   @override
   Widget build(BuildContext context) {
     if (y == -50) return const SizedBox.shrink();
@@ -492,13 +505,13 @@ class AsteroidChoice extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white24,
+            color: Colors.white24, 
             width: 2,
           ),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black45,
-              blurRadius: 5,
+              color: Colors.black45, 
+              blurRadius: 5, 
               offset: Offset(0, 3),
             )
           ],
@@ -542,19 +555,19 @@ class ShootButton extends StatelessWidget {
           color: const Color(0xFF232B32),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.cyanAccent,
+            color: Colors.cyanAccent, 
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withOpacity(0.2),
+              color: Colors.cyanAccent.withValues(alpha: 0.2), 
               blurRadius: 8,
             )
           ],
         ),
         child: Icon(
-          Icons.flash_on,
-          color: Colors.cyanAccent,
+          Icons.flash_on, 
+          color: Colors.cyanAccent, 
           size: size * 0.55,
         ),
       ),
@@ -569,23 +582,23 @@ class PauseMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final sw = MediaQuery.of(context).size.width;
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: Container(
-            width: (screenWidth * 0.65).clamp(220.0, 300.0),
+            width: (sw * 0.65).clamp(220.0, 300.0),
             padding: const EdgeInsets.symmetric(
-              vertical: 30,
+              vertical: 30, 
               horizontal: 25,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1B35).withOpacity(0.95),
+              color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.cyanAccent.withOpacity(0.5),
+                color: Colors.cyanAccent.withValues(alpha: 0.5), 
                 width: 2,
               ),
             ),
@@ -595,9 +608,9 @@ class PauseMenu extends StatelessWidget {
                 const Text(
                   'PAUSED',
                   style: TextStyle(
-                    fontFamily: 'Michroma',
-                    color: Colors.white,
-                    fontSize: 22,
+                    fontFamily: 'Michroma', 
+                    color: Colors.white, 
+                    fontSize: 22, 
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -605,10 +618,10 @@ class PauseMenu extends StatelessWidget {
                 _menuButton(context, 'RESUME', onTap: onResume),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context,
-                  'CUSTOMIZATION',
+                  context, 
+                  'CUSTOMIZATION', 
                   onTap: () => Navigator.push(
-                    context,
+                    context, 
                     MaterialPageRoute(
                       builder: (_) => const CharacCustPage(),
                     ),
@@ -616,14 +629,14 @@ class PauseMenu extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context,
-                  'EXIT',
-                  isExit: true,
+                  context, 
+                  'EXIT', 
+                  isExit: true, 
                   onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
+                    context, 
                     MaterialPageRoute(
                       builder: (_) => const TitlePage(),
-                    ),
+                    ), 
                     (route) => false,
                   ),
                 ),
@@ -636,11 +649,10 @@ class PauseMenu extends StatelessWidget {
   }
 
   Widget _menuButton(
-    BuildContext context,
-    String label, {
-    required VoidCallback onTap,
-    bool isExit = false,
-  }) {
+    BuildContext context, 
+    String label, 
+    {required VoidCallback onTap, bool isExit = false}
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 48,
@@ -651,17 +663,17 @@ class PauseMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
             side: BorderSide(
-              color: isExit
-                  ? Colors.redAccent.withOpacity(0.5)
-                  : Colors.cyan.withOpacity(0.5),
+              color: isExit 
+                  ? Colors.redAccent.withValues(alpha: 0.5) 
+                  : Colors.cyan.withValues(alpha: 0.5), 
               width: 1.5,
             ),
           ),
         ),
         child: Text(
-          label,
+          label, 
           style: TextStyle(
-            color: isExit ? Colors.redAccent : Colors.white,
+            color: isExit ? Colors.redAccent : Colors.white, 
             fontWeight: FontWeight.bold,
           ),
         ),

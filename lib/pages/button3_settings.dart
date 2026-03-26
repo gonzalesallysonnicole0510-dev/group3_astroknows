@@ -160,7 +160,7 @@ class _VolumeRowState extends State<VolumeRow> {
                     boxShadow: active
                         ? [
                             BoxShadow(
-                              color: Colors.cyanAccent.withOpacity(0.7),
+                              color: Colors.cyanAccent.withValues(alpha: 0.7),
                               blurRadius: 8,
                               spreadRadius: 1,
                             )

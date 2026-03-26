@@ -31,54 +31,54 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
   final List<Map<String, dynamic>> quiz = [
     {
-      'question': 'Earth Question 1', 
-      'answers': ['x', 'yes', 'x'], 
-      'correct': 1
+      'question': '1.  Earth is the only known world in the solar system to support what?', 
+      'answers': ['Life', 'Rings', 'Gas'], 
+      'correct': 0  //Life
     },
     {
-      'question': 'Earth Question 2', 
-      'answers': ['x', 'x', 'yes'], 
-      'correct': 2
+      'question': '2.  What percentage of Earth’s surface is covered by oceans?', 
+      'answers': ['30%', '50%', '70%'], 
+      'correct': 2  //70%
     },
     {
-      'question': 'Earth Question 3', 
-      'answers': ['yes', 'x', 'x'], 
-      'correct': 0
+      'question': '3.  Earth is the densest planet because of its large core made of…?', 
+      'answers': ['Gold', 'Iron', 'Rock'], 
+      'correct': 1  //Iron
     },
     {
-      'question': 'Earth Question 4', 
-      'answers': ['x', 'yes', 'x'], 
-      'correct': 1
+      'question': '4.  Earth’s axis is tilted at 23.45°, which results in what?', 
+      'answers': ['4 Seasons', 'Tides', 'Day & Night'], 
+      'correct': 0  //4 Seasons
     },
     {
-      'question': 'Earth Question 5', 
-      'answers': ['x', 'x', 'yes'], 
-      'correct': 2
+      'question': '5.  Near the surface, our atmosphere is 78% of which gas?', 
+      'answers': ['Oxygen', 'Hydrogen', 'Nitrogen'], 
+      'correct': 2  //Nitrogen
     },
     {
-      'question': 'Earth Question 6', 
-      'answers': ['yes', 'x', 'x'], 
-      'correct': 0
+      'question': '6.  Where does the name “Earth” originate from?', 
+      'answers': ['Greek Myth', 'Old English', 'Roman Myth'], 
+      'correct': 1  //Old English
     },
     {
-      'question': 'Earth Question 7', 
-      'answers': ['x', 'yes', 'x'], 
-      'correct': 1
+      'question': '7.  What percentage of Earth’s water is fresh water?', 
+      'answers': ['3%', '10%', '25%'], 
+      'correct': 0  //3%
     },
     {
-      'question': 'Earth Question 8', 
-      'answers': ['x', 'x', 'yes'], 
-      'correct': 2
+      'question': '8.  What shields Earth from harmful radiation and burns up falling meteors?', 
+      'answers': ['Moon', 'Atmosphere', 'Oceans'], 
+      'correct': 1  //Atmosphere
     },
     {
-      'question': 'Earth Question 9', 
-      'answers': ['yes', 'x', 'x'], 
-      'correct': 0
+      'question': '9.  Earth is the ____ planet from the Sun.', 
+      'answers': ['First', 'Second', 'Third'], 
+      'correct': 2  //Third
     },
     {
-      'question': 'Earth Question 10', 
-      'answers': ['x', 'yes', 'x'], 
-      'correct': 1
+      'question': '10.  Which hemisphere is tilted toward the Sun during the northern summer?', 
+      'answers': ['Northern', 'Southern', 'Both'], 
+      'correct': 0 //Nothern
     },
   ];
 
@@ -264,9 +264,16 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     );
   }
 
+  // Reset asteroid positions and movement directions
   void _resetAsteroids() {
     setState(() {
+      asteroidX = [-0.52, 0, 0.52];
       asteroidY = [-0.6, -0.6, -0.6];
+      asteroidFloat = [
+        AsteroidDirection.up,
+        AsteroidDirection.down,
+        AsteroidDirection.up
+  ];
     });
   }
 
@@ -326,7 +333,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                           color: Colors.cyanAccent,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.cyanAccent.withOpacity(0.8),
+                              color: Colors.cyanAccent.withValues(alpha: 0.8),
                               blurRadius: 10,
                               spreadRadius: 1,
                             )
@@ -336,7 +343,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                     ),
                   ),
                 ),
-                // Spaceship
+                // Spaceship (player)
                 AnimatedAlign(
                   alignment: Alignment(playerX, 0.9),
                   duration: const Duration(milliseconds: 150),
@@ -367,7 +374,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.3), 
+                      color: Colors.cyanAccent.withValues(alpha: 0.3), 
                       blurRadius: 10,
                     )
                   ],
@@ -391,6 +398,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    // Lives display
                     Row(
                       children: List.generate(
                         lives,
@@ -404,10 +412,12 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                         ),
                       ),
                     ),
+                    // Shoot button
                     ShootButton(onTap: fireLaser),
                   ],
                 ),
                 const SizedBox(height: 25),
+                // Question container
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   width: double.infinity,
@@ -423,16 +433,18 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        feedback.isEmpty 
-                            ? quiz[currentQuestion]['question'] 
-                            : feedback,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                          fontFamily: 'Michroma',
+                      child: FittedBox(
+                        child: Text(
+                          feedback.isEmpty 
+                              ? quiz[currentQuestion]['question'] 
+                              : feedback,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: (sh * 0.035).clamp(18.0, 26.0),
+                            fontFamily: 'Michroma',
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -548,7 +560,7 @@ class ShootButton extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withOpacity(0.2), 
+              color: Colors.cyanAccent.withValues(alpha: 0.2), 
               blurRadius: 8,
             )
           ],
@@ -574,7 +586,7 @@ class PauseMenu extends StatelessWidget {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: Container(
             width: (sw * 0.65).clamp(220.0, 300.0),
@@ -583,10 +595,10 @@ class PauseMenu extends StatelessWidget {
               horizontal: 25,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1B35).withOpacity(0.95),
+              color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.cyanAccent.withOpacity(0.5), 
+                color: Colors.cyanAccent.withValues(alpha: 0.5), 
                 width: 2,
               ),
             ),
@@ -652,8 +664,8 @@ class PauseMenu extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
             side: BorderSide(
               color: isExit 
-                  ? Colors.redAccent.withOpacity(0.5) 
-                  : Colors.cyan.withOpacity(0.5), 
+                  ? Colors.redAccent.withValues(alpha: 0.5) 
+                  : Colors.cyan.withValues(alpha: 0.5), 
               width: 1.5,
             ),
           ),
