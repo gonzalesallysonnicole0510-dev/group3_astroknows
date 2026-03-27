@@ -89,7 +89,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
               _buildSecondaryButton(
                 context,
                 label: 'SHOP',
-                destination: const ShopPage(star: 0),
+                destination: const ShopPage(),
                 width: screenWidth * 0.34,
                 height: screenHeight * 0.10,
               ),

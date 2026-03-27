@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
-
-int totalStar = 0;
-Set<String> claimedQuizzes = {};
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopPage extends StatefulWidget {
-  final int star;
-  const ShopPage({super.key, required this.star});
-
+  const ShopPage({super.key});
 
   @override
   State<ShopPage> createState() => _ShopPageState();
 }
 
 class _ShopPageState extends State<ShopPage> {
+  int totalStar = 0;
 
-  void _showDialog (int price) {
+  @override
+  void initState() {
+    super.initState();
+    _loadStars();
+  }
+
+  // New Logic: Load stars from local storage
+  Future<void> _loadStars() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      totalStar = prefs.getInt('totalStars') ?? 0;
+    });
+  }
+
+  // New Logic: Save stars to local storage
+  Future<void> _saveStars(int newBalance) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('totalStars', newBalance);
+  }
+
+  void _showDialog(int price) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Confirm Purchase'),
-          content: Text ('Spend $price ⭐?'),
+          title: const Text('Confirm Purchase'),
+          content: Text('Spend $price ⭐?'),
           actions: [
-
             // Purchase Button
             MaterialButton(
               onPressed: () {
                 Navigator.pop(context);
                 buyItem(price);
               },
-              child: Text('Purchase'),
+              child: const Text('Purchase'),
             ),
-
             // Cancel Button
             MaterialButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         );
@@ -46,99 +60,91 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-
   void buyItem(int price) {
-  if (totalStar >= price) {
-    setState(() {
-      totalStar -= price;
-    });
+    if (totalStar >= price) {
+      int newBalance = totalStar - price;
+      setState(() {
+        totalStar = newBalance;
+      });
+      _saveStars(newBalance); // Keeps memory updated
 
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Purchase Successful ⭐'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 1)
-      ),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Not Enough Stars :('),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 1)
-      ),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Purchase Successful ⭐'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Not Enough Stars :('),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: Colors.black,
-
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0.0,
-         
-          // Back Arrow Button
-          leadingWidth: 70,
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.lightBlueAccent,
-                  width: 1,            
-                ),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0.0,
+        // Old Layout: Back Arrow Circle Styling
+        leadingWidth: 70,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.lightBlueAccent,
+                width: 1,
               ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context, totalStar);
-                },
-                ),
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
-
-          // Star Currency/Points
-          actions: [
-            Container(
-              height: 30,
-              width: 110,
-              margin: EdgeInsets.only(right: 25, top: 5),
-              alignment: Alignment.center,
-
-
-              decoration: BoxDecoration(
-                color: Colors.blueGrey.shade800,
-                borderRadius: BorderRadius.circular(100),
-                border: Border.all(
-                  color: Colors.lightBlue,
-                  width: 1,
-                )
-              ),
-              child: Text(
-                '⭐ $totalStar',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              )
-            ),
-          ],
         ),
-
-
+        // Old Layout: Star Currency Pill Design
+        actions: [
+          Container(
+            height: 30,
+            width: 110,
+            margin: const EdgeInsets.only(right: 25, top: 5),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.shade800,
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: Colors.lightBlue,
+                width: 1,
+              ),
+            ),
+            child: Text(
+              '⭐ $totalStar',
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           children: [
-
-            // Premium Spaceships
+            // Row 1: Premium Spaceships
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -162,7 +168,7 @@ class _ShopPageState extends State<ShopPage> {
 
             const SizedBox(height: 25),
 
-            // Extra Lives
+            // Row 2: Extra Lives
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -189,6 +195,8 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 }
+
+// --- Old Layout Helper Widgets Restored ---
 
 class Merchandise extends StatelessWidget {
   final int price;

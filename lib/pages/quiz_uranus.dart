@@ -248,7 +248,7 @@ class _QuizGame_UranusState extends State<QuizGame_Uranus> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'uranus',
               ),
             ),
           );

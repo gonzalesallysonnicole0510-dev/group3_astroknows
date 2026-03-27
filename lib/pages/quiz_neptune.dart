@@ -248,7 +248,7 @@ class _QuizGame_NeptuneState extends State<QuizGame_Neptune> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'netune',
               ),
             ),
           );

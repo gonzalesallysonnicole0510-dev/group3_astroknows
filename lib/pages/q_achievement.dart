@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'button2_shop.dart'; // Assuming this holds your globals like totalStar and claimedQuizzes
+import 'package:shared_preferences/shared_preferences.dart';
 import 'title.dart';
 
 class AchievementPage extends StatefulWidget {
@@ -14,20 +14,41 @@ class AchievementPage extends StatefulWidget {
 
 class _AchievementPageState extends State<AchievementPage>
     with SingleTickerProviderStateMixin {
+  // Local state to handle data instead of globals
+  int totalStar = 0;
+  List<String> claimedQuizzes = [];
   late int rewardStar;
   late AnimationController _starController;
+  late String normalizedPlanetName;
 
   @override
   void initState() {
     super.initState();
-    // Check if they already claimed this planet's reward
-    rewardStar = claimedQuizzes.contains(widget.planet) ? 0 : widget.star;
+
+    normalizedPlanetName = widget.planet.toLowerCase().trim();
+    rewardStar = widget.star; // Default until check is done
 
     // Star twinkling effect background
     _starController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2500),
     )..repeat(reverse: true);
+
+    _loadData();
+  }
+
+  // Fetch current stats from storage
+  Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      totalStar = prefs.getInt('totalStars') ?? 0;
+      claimedQuizzes = prefs.getStringList('claimedQuizzes') ?? [];
+
+      // Check if they already claimed this planet's reward
+      if (claimedQuizzes.contains(normalizedPlanetName)) {
+        rewardStar = 0;
+      }
+    });
   }
 
   @override
@@ -36,37 +57,44 @@ class _AchievementPageState extends State<AchievementPage>
     super.dispose();
   }
 
-  void claimPoints() {
-    if (claimedQuizzes.contains(widget.planet)) return;
+  Future<void> claimPoints() async {
+    if (rewardStar == 0) return;
 
-    // Capture the points before setting rewardStar to 0
+    final prefs = await SharedPreferences.getInstance();
     int pointsToClaim = rewardStar;
 
     setState(() {
       totalStar += pointsToClaim;
-      claimedQuizzes.add(widget.planet);
-      rewardStar = 0; // Update state so the UI reflects the claim
+      claimedQuizzes.add(normalizedPlanetName);
+      rewardStar = 0; // Prevent double claiming in the same session
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.star_rounded, color: Colors.amber),
-            const SizedBox(width: 8),
-            Text(
-              '⭐ $pointsToClaim Claimed!',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
+    // Save updated data to storage
+    await prefs.setInt('totalStars', totalStar);
+    await prefs.setStringList('claimedQuizzes', claimedQuizzes);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.star_rounded, color: Colors.amber),
+              const SizedBox(width: 8),
+              Text(
+                '⭐ $pointsToClaim Claimed!',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green.shade700,
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          duration: const Duration(seconds: 2),
         ),
-        backgroundColor: Colors.green.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -78,7 +106,7 @@ class _AchievementPageState extends State<AchievementPage>
       backgroundColor: const Color(0xFF040B14),
       body: Stack(
         children: [
-          // 1. Deep Space Gradient Background
+          // Deep Space Gradient Background
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -91,7 +119,7 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
 
-          // 2. Animated Star Field
+          // Animated Star Field
           Positioned.fill(
             child: AnimatedBuilder(
               animation: _starController,
@@ -103,7 +131,7 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
 
-          // 3. Main HUD Interface
+          // Main HUD Interface
           SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -112,7 +140,7 @@ class _AchievementPageState extends State<AchievementPage>
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: 500, // Slightly wider to accommodate the alien
+                        maxWidth: 500,
                         maxHeight: constraints.maxHeight * 0.95,
                       ),
                       child: Container(
@@ -123,12 +151,14 @@ class _AchievementPageState extends State<AchievementPage>
                           color: const Color(0xFF0D121A).withValues(alpha: 0.85),
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
-                            color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
+                            color:
+                                const Color(0xFF00E5FF).withValues(alpha: 0.4),
                             width: 2,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF00E5FF).withValues(alpha: 0.15),
+                              color: const Color(0xFF00E5FF)
+                                  .withValues(alpha: 0.15),
                               blurRadius: 25,
                               spreadRadius: 2,
                             )
@@ -140,21 +170,21 @@ class _AchievementPageState extends State<AchievementPage>
                           children: [
                             _buildHUDHeader(),
                             SizedBox(height: isSmallScreen ? 15 : 25),
-                            
-                            // 4. Alien & Message Section
+
+                            // Alien & Message Section
                             Flexible(
                               flex: 3,
                               child: _buildTransmission(isSmallScreen),
                             ),
-                            
+
                             SizedBox(height: isSmallScreen ? 15 : 25),
-                            
-                            // 5. Reward Display
+
+                            // Reward Display
                             _buildRewardBadge(isSmallScreen),
-                            
+
                             SizedBox(height: isSmallScreen ? 20 : 35),
-                            
-                            // 6. Action Buttons
+
+                            // Action Buttons
                             _buildActionButtons(context, isSmallScreen),
                           ],
                         ),
@@ -205,15 +235,14 @@ class _AchievementPageState extends State<AchievementPage>
             height: isSmallScreen ? 80 : 100,
             width: isSmallScreen ? 80 : 100,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFF00E5FF).withValues(alpha: 0.1),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
-                  blurRadius: 15,
-                )
-              ]
-            ),
+                shape: BoxShape.circle,
+                color: const Color(0xFF00E5FF).withValues(alpha: 0.1),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                    blurRadius: 15,
+                  )
+                ]),
             child: Image.asset(
               'images/alien.png',
               fit: BoxFit.contain,
@@ -253,7 +282,7 @@ class _AchievementPageState extends State<AchievementPage>
 
   Widget _buildRewardBadge(bool isSmallScreen) {
     bool isClaimed = rewardStar == 0;
-    
+
     return TweenAnimationBuilder(
       tween: Tween(begin: 0.8, end: 1.0),
       duration: const Duration(milliseconds: 800),
@@ -264,23 +293,25 @@ class _AchievementPageState extends State<AchievementPage>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             decoration: BoxDecoration(
-              color: isClaimed 
-                  ? Colors.grey.withValues(alpha: 0.2) 
+              color: isClaimed
+                  ? Colors.grey.withValues(alpha: 0.2)
                   : Colors.amber.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isClaimed 
-                    ? Colors.grey.withValues(alpha: 0.5) 
+                color: isClaimed
+                    ? Colors.grey.withValues(alpha: 0.5)
                     : Colors.amber.withValues(alpha: 0.5),
                 width: 2,
               ),
-              boxShadow: isClaimed ? [] : [
-                BoxShadow(
-                  color: Colors.amber.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 1,
-                )
-              ],
+              boxShadow: isClaimed
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Colors.amber.withValues(alpha: 0.3),
+                        blurRadius: 20,
+                        spreadRadius: 1,
+                      )
+                    ],
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -320,9 +351,8 @@ class _AchievementPageState extends State<AchievementPage>
           child: ElevatedButton.icon(
             onPressed: canClaim ? claimPoints : null,
             icon: Icon(
-              canClaim ? Icons.auto_awesome_rounded : Icons.lock_rounded, 
-              size: 24
-            ),
+                canClaim ? Icons.auto_awesome_rounded : Icons.lock_rounded,
+                size: 24),
             label: Text(
               canClaim ? "CLAIM REWARD" : "REWARD SECURED",
               style: TextStyle(
@@ -335,8 +365,9 @@ class _AchievementPageState extends State<AchievementPage>
               backgroundColor: Colors.amber,
               disabledBackgroundColor: Colors.grey.shade800,
               disabledForegroundColor: Colors.grey.shade400,
-              foregroundColor: const Color(0xFF040B14), 
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              foregroundColor: const Color(0xFF040B14),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               elevation: canClaim ? 6 : 0,
               shadowColor: Colors.amber.withValues(alpha: 0.5),
             ),
@@ -363,8 +394,10 @@ class _AchievementPageState extends State<AchievementPage>
             ),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white.withValues(alpha: 0.85),
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.25), width: 2),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              side: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.25), width: 2),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ),
         ),
@@ -379,8 +412,12 @@ class _AchievementPageState extends State<AchievementPage>
       decoration: BoxDecoration(
         border: Border(
           top: const BorderSide(color: Color(0xFF00E5FF), width: 2),
-          left: side == 0 ? const BorderSide(color: Color(0xFF00E5FF), width: 2) : BorderSide.none,
-          right: side == 1 ? const BorderSide(color: Color(0xFF00E5FF), width: 2) : BorderSide.none,
+          left: side == 0
+              ? const BorderSide(color: Color(0xFF00E5FF), width: 2)
+              : BorderSide.none,
+          right: side == 1
+              ? const BorderSide(color: Color(0xFF00E5FF), width: 2)
+              : BorderSide.none,
         ),
       ),
     );
@@ -393,17 +430,17 @@ class StarFieldPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Random random = Random(42); 
+    final Random random = Random(42);
     final Paint paint = Paint();
 
     for (int i = 0; i < 120; i++) {
       double x = random.nextDouble() * size.width;
       double y = random.nextDouble() * size.height;
       double s = random.nextDouble() * 2.0;
-      
+
       double opacity = (i % 2 == 0) ? blink : (1.0 - (blink * 0.5));
       paint.color = Colors.white.withValues(alpha: opacity.clamp(0.1, 0.9));
-      
+
       canvas.drawCircle(Offset(x, y), s, paint);
     }
   }

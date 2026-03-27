@@ -248,7 +248,7 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'jupiter',
               ),
             ),
           );

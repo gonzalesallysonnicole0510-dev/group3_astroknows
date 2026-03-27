@@ -248,7 +248,7 @@ class _QuizGame_VenusState extends State<QuizGame_Venus> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'venus',
               ),
             ),
           );

@@ -248,7 +248,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'sun',
               ),
             ),
           );

@@ -248,7 +248,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
             MaterialPageRoute(
               builder: (_) => const AchievementPage(
                 star: 500, 
-                planet: 'earth',
+                planet: 'mercury',
               ),
             ),
           );

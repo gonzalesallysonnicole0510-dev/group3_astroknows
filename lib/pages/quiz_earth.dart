@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'button0_charac.dart';
 import 'title.dart';
@@ -238,16 +239,31 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     // Delay before moving to next question or ending game
     Future.delayed(
       const Duration(seconds: 1), 
-      () {
+      () async {
         if (!mounted) return;
         bool isLast = currentQuestion >= quiz.length - 1;
 
         if (isCorrect && isLast) {
+          // First-time achievement logic using SharedPreferences
+          final prefs = await SharedPreferences.getInstance();
+          
+          // Check if 'earth_claimed' exists, default to false if not
+          bool hasClaimedEarth = prefs.getBool('earth_claimed') ?? false;
+          
+          int awardedStars = 0;
+          
+          if (!hasClaimedEarth) {
+            awardedStars = 500;
+            await prefs.setBool('earth_claimed', true);
+          }
+
+          if (!mounted) return;
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => const AchievementPage(
-                star: 500, 
+              builder: (_) => AchievementPage(
+                star: awardedStars, // Sends 500 if first time, 0 if replaying
                 planet: 'earth',
               ),
             ),
@@ -273,7 +289,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
         AsteroidDirection.up,
         AsteroidDirection.down,
         AsteroidDirection.up
-  ];
+      ];
     });
   }
 
