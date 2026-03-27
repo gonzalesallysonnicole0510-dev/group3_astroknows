@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/button2_shop.dart';
 
 class MissionFailedPage extends StatefulWidget {
   const MissionFailedPage({super.key});
@@ -225,7 +226,11 @@ class _MissionFailedPageState extends State<MissionFailedPage>
           height: isSmallScreen ? 50 : 60,
           child: ElevatedButton.icon(
             onPressed: () {
-              // Action for repair
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ShopPage(),
+                ),
+              );
             },
             icon: const Icon(Icons.build_circle_outlined, size: 24),
             label: Text(

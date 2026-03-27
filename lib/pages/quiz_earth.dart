@@ -108,7 +108,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
   void startQuizGame() {
     gameTimer = Timer.periodic(
-      const Duration(milliseconds: 50), 
+      const Duration(milliseconds: 70), 
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
@@ -118,13 +118,13 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
             if (asteroidY[i] < -0.8) {
               asteroidFloat[i] = AsteroidDirection.down;
-            } else if (asteroidY[i] > 0.1) {
+            } else if (asteroidY[i] > -0.5) {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.03 
-                : 0.03;
+                ? -0.02 
+                : 0.02;
           }
         });
       },
