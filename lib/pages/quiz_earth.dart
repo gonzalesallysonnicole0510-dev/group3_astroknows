@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'button0_charac.dart';
 import 'title.dart';
@@ -16,13 +15,14 @@ class QuizGame_Earth extends StatefulWidget {
 }
 
 enum AsteroidDirection { up, down }
+enum PlayerDirection { up, down }
 
 class _QuizGame_EarthState extends State<QuizGame_Earth> {
-  // Movement and game state variables
-  double playerX = 0;
+  // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
+
   bool isPaused = false;
   int lives = 3;
 
@@ -92,6 +92,10 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     AsteroidDirection.up
   ];
 
+  double playerX = 0;
+  double playerY = 4.0;
+  var playerFloat = PlayerDirection.up;
+
   Timer? gameTimer;
 
   @override
@@ -112,6 +116,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
+        // up and down animation of asteroids
         setState(() {
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
@@ -123,10 +128,23 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
             }
 
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.02 
-                : 0.02;
+                ? -0.01 
+                : 0.01;
           }
         });
+
+        // up and down animation of player (spaceship)
+        if (playerY < 3.8) {
+          setState(() {
+            playerFloat = PlayerDirection.down;
+          });
+        } else if (playerY == 4.0) {
+          playerFloat = PlayerDirection.up;
+        }
+        
+        playerY += (playerFloat == PlayerDirection.up) 
+            ? -0.015 
+            : 0.015;
       },
     );
   }
@@ -134,7 +152,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
   // Player movement functions
   void moveLeft() {
     setState(() {
-      playerX = -0.52;
+      playerX = -0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -148,7 +166,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
   void moveRight() {
     setState(() {
-      playerX = 0.52;
+      playerX = 0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -239,31 +257,16 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     // Delay before moving to next question or ending game
     Future.delayed(
       const Duration(seconds: 1), 
-      () async {
+      () {
         if (!mounted) return;
         bool isLast = currentQuestion >= quiz.length - 1;
 
         if (isCorrect && isLast) {
-          // First-time achievement logic using SharedPreferences
-          final prefs = await SharedPreferences.getInstance();
-          
-          // Check if 'earth_claimed' exists, default to false if not
-          bool hasClaimedEarth = prefs.getBool('earth_claimed') ?? false;
-          
-          int awardedStars = 0;
-          
-          if (!hasClaimedEarth) {
-            awardedStars = 500;
-            await prefs.setBool('earth_claimed', true);
-          }
-
-          if (!mounted) return;
-
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => AchievementPage(
-                star: awardedStars, // Sends 500 if first time, 0 if replaying
+              builder: (_) => const AchievementPage(
+                star: 500, 
                 planet: 'earth',
               ),
             ),
@@ -300,8 +303,8 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     final sh = MediaQuery.of(context).size.height;
 
   // Calculate rocket size based on screen dimensions
-    final double rocketWidth = (sw * 0.20).clamp(60.0, 95.0);
-    final double rocketHeight = (sh * 0.15).clamp(60.0, 95.0);
+    final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
+    final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -361,7 +364,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                 ),
                 // Spaceship (player)
                 AnimatedAlign(
-                  alignment: Alignment(playerX, 0.9),
+                  alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
                   child: Image.asset(
                     'images/spaceship.png',
@@ -423,7 +426,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                           child: Icon(
                             Icons.favorite, 
                             color: const Color(0xFFFFD1DC), 
-                            size: (sw * 0.09).clamp(28.0, 40.0),
+                            size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
                       ),
