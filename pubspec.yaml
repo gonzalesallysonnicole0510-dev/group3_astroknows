@@ -31,14 +31,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/Avatar1.png
-    - images/Avatar2.png
-    - images/Avatar3.png
-    - images/Avatar4.png
-    - images/Avatar5.png
-    - images/Avatar6.png
-    - images/Avatar7.png
-    - images/AlienAvatar.png
+    - images/1Avatar.png
+    - images/2Avatar.png
+    - images/3Avatar.png
+    - images/4Avatar.png
+    - images/5Avatar.png
+    - images/6Avatar.png
+    - images/7Avatar.png
+    - images/AvatarAlien.png
     - images/icon.png
     - images/transicon.png
     - images/earth.png
@@ -54,18 +54,24 @@ flutter:
     - images/premium1.png
     - images/premium2.png
     - images/premium3.png
-    - images/x2.png
-    - images/x3.png
-    - images/x5.png
+    - images/livesx2.png
+    - images/livesx3.png
+    - images/livesx5.png
     - images/alien.png
 
   fonts:
     - family: Michroma
       fonts:
         - asset: fonts/Michroma-Regular.ttf
+
     - family: Russo One
       fonts:
         - asset: fonts/RussoOne-Regular.ttf
+
     - family: Exo 2
       fonts:
         - asset: fonts/Exo2-VariableFont_wght.ttf
+
+    - family: Share Tech
+      fonts:
+        - asset: fonts/ShareTech-Regular.ttf
