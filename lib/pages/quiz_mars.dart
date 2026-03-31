@@ -460,7 +460,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Michroma',
+                            fontFamily: 'Share Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),
