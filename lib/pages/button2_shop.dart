@@ -196,7 +196,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-// --- Old Layout Helper Widgets Restored ---
+// 3 Premium Spaceship Designs
 
 class Merchandise extends StatelessWidget {
   final int price;
@@ -227,8 +227,8 @@ class Merchandise extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 imagePath,
-                width: 55,
-                height: 55,
+                width: 88,
+                height: 88,
               ),
             ),
           ),
@@ -244,6 +244,10 @@ class Merchandise extends StatelessWidget {
     );
   }
 }
+
+
+
+// 3 Extra Lives
 
 class ExtraLives extends StatelessWidget {
   final int price;
@@ -274,8 +278,8 @@ class ExtraLives extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 imagePath,
-                width: 50,
-                height: 50,
+                width: 70,
+                height: 70,
               ),
             ),
           ),
