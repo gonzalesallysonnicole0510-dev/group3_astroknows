@@ -15,13 +15,14 @@ class QuizGame_Mars extends StatefulWidget {
 }
 
 enum AsteroidDirection { up, down }
+enum PlayerDirection { up, down }
 
 class _QuizGame_MarsState extends State<QuizGame_Mars> {
-  // Movement and game state variables
-  double playerX = 0;
+  // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
+
   bool isPaused = false;
   int lives = 3;
 
@@ -91,6 +92,10 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
     AsteroidDirection.up
   ];
 
+  double playerX = 0;
+  double playerY = 4.0;
+  var playerFloat = PlayerDirection.up;
+
   Timer? gameTimer;
 
   @override
@@ -111,6 +116,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
+        // up and down animation of asteroids
         setState(() {
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
@@ -122,10 +128,23 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
             }
 
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.02 
-                : 0.02;
+                ? -0.01 
+                : 0.01;
           }
         });
+
+        // up and down animation of player (spaceship)
+        if (playerY < 3.8) {
+          setState(() {
+            playerFloat = PlayerDirection.down;
+          });
+        } else if (playerY == 4.0) {
+          playerFloat = PlayerDirection.up;
+        }
+        
+        playerY += (playerFloat == PlayerDirection.up) 
+            ? -0.015 
+            : 0.015;
       },
     );
   }
@@ -133,7 +152,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
   // Player movement functions
   void moveLeft() {
     setState(() {
-      playerX = -0.52;
+      playerX = -0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -147,7 +166,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
 
   void moveRight() {
     setState(() {
-      playerX = 0.52;
+      playerX = 0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -273,7 +292,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
         AsteroidDirection.up,
         AsteroidDirection.down,
         AsteroidDirection.up
-  ];
+      ];
     });
   }
 
@@ -284,8 +303,8 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
     final sh = MediaQuery.of(context).size.height;
 
   // Calculate rocket size based on screen dimensions
-    final double rocketWidth = (sw * 0.20).clamp(60.0, 95.0);
-    final double rocketHeight = (sh * 0.15).clamp(60.0, 95.0);
+    final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
+    final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -345,7 +364,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
                 ),
                 // Spaceship (player)
                 AnimatedAlign(
-                  alignment: Alignment(playerX, 0.9),
+                  alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
                   child: Image.asset(
                     'images/spaceship.png',
@@ -407,7 +426,7 @@ class _QuizGame_MarsState extends State<QuizGame_Mars> {
                           child: Icon(
                             Icons.favorite, 
                             color: const Color(0xFFFFD1DC), 
-                            size: (sw * 0.09).clamp(28.0, 40.0),
+                            size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
                       ),
