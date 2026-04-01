@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-import 'star_animation.dart';
+
 import 'package:flutter/material.dart';
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
 import 'q_mission-failed.dart';
+import 'star_animation.dart';
 
 class QuizGame_Sun extends StatefulWidget {
   const QuizGame_Sun({super.key});
@@ -15,13 +16,14 @@ class QuizGame_Sun extends StatefulWidget {
 }
 
 enum AsteroidDirection { up, down }
+enum PlayerDirection { up, down }
 
 class _QuizGame_SunState extends State<QuizGame_Sun> {
-  // Movement and game state variables
-  double playerX = 0;
+  // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
+
   bool isPaused = false;
   int lives = 3;
 
@@ -91,41 +93,127 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
     AsteroidDirection.up
   ];
 
+  double playerX = 0;
+  double playerY = 4.0;
+  var playerFloat = PlayerDirection.up;
+
   Timer? gameTimer;
+  Timer? animationSpeed;
 
   @override
   void initState() {
     super.initState();
+    quizgameTimer();
     startQuizGame();
   }
 
   @override
   void dispose() {
     gameTimer?.cancel();
+    animationSpeed?.cancel();
     super.dispose();
   }
 
+
+
+// Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+  int timeLeft = 20;
+
+  void quizgameTimer() {
+    gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isPaused || feedback.isNotEmpty || !mounted) return;
+
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+        if (timeLeft == 0) {
+          setState(() {
+            feedback = "Time's Up!";
+            boxBorderColor = Colors.redAccent;
+            lives--;
+          });
+          if (lives <= 0) {
+              Future.delayed(
+                const Duration(milliseconds: 800), 
+                () {
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MissionFailedPage(),
+                      ),
+                    );
+                  }
+                },
+              );
+          } else {
+            Future.delayed(
+              const Duration(seconds: 1), 
+              () {
+                if (!mounted) return;
+                bool isLast = currentQuestion >= quiz.length - 1;
+                if (isLast) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MissionFailedPage(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    currentQuestion++;
+                    feedback = '';
+                    boxBorderColor = Colors.lightBlueAccent;
+                    _resetAsteroids();
+                    timeLeft = 20;
+                  });
+                }
+              },
+            );
+          }
+        }
+      } 
+    });
+  }
+
+
+
   void startQuizGame() {
-    gameTimer = Timer.periodic(
-      const Duration(milliseconds: 50), 
+    animationSpeed = Timer.periodic(
+      const Duration(milliseconds: 70), 
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
+        // up and down animation of asteroids
         setState(() {
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
 
             if (asteroidY[i] < -0.8) {
               asteroidFloat[i] = AsteroidDirection.down;
-            } else if (asteroidY[i] > 0.1) {
+            } else if (asteroidY[i] > -0.5) {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.03 
-                : 0.03;
+                ? -0.01 
+                : 0.01;
           }
         });
+
+        // up and down animation of player (spaceship)
+        if (playerY < 3.8) {
+          setState(() {
+            playerFloat = PlayerDirection.down;
+          });
+        } else if (playerY == 4.0) {
+          playerFloat = PlayerDirection.up;
+        }
+        
+        playerY += (playerFloat == PlayerDirection.up) 
+            ? -0.015 
+            : 0.015;
       },
     );
   }
@@ -133,7 +221,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
   // Player movement functions
   void moveLeft() {
     setState(() {
-      playerX = -0.52;
+      playerX = -0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -147,7 +235,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
 
   void moveRight() {
     setState(() {
-      playerX = 0.52;
+      playerX = 0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -258,6 +346,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
             feedback = '';
             boxBorderColor = Colors.lightBlueAccent;
             _resetAsteroids();
+            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
           });
         }
       },
@@ -273,7 +362,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
         AsteroidDirection.up,
         AsteroidDirection.down,
         AsteroidDirection.up
-  ];
+      ];
     });
   }
 
@@ -284,8 +373,8 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
     final sh = MediaQuery.of(context).size.height;
 
   // Calculate rocket size based on screen dimensions
-    final double rocketWidth = (sw * 0.20).clamp(60.0, 95.0);
-    final double rocketHeight = (sh * 0.15).clamp(60.0, 95.0);
+    final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
+    final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -346,7 +435,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
                 ),
                 // Spaceship (player)
                 AnimatedAlign(
-                  alignment: Alignment(playerX, 0.9),
+                  alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
                   child: Image.asset(
                     'images/spaceship.png',
@@ -357,6 +446,28 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
               ],
             ),
           ),
+
+
+
+          // Timer on top of the screen
+          Positioned(
+            top: 0,  
+            left: 0,
+            child: AnimatedContainer(
+              duration: timeLeft == 20
+                  ? Duration.zero
+                  : const Duration(seconds: 1),
+              curve: Curves.linear,
+              width: ((timeLeft - 1).clamp(0, 19) / 19) * sw,
+              height: 2,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 36, 90, 183),
+              ),
+            ),
+          ),
+
+
+
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
@@ -408,7 +519,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
                           child: Icon(
                             Icons.favorite, 
                             color: const Color(0xFFFFD1DC), 
-                            size: (sw * 0.09).clamp(28.0, 40.0),
+                            size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
                       ),
@@ -442,7 +553,7 @@ class _QuizGame_SunState extends State<QuizGame_Sun> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Share-Tech',
+                            fontFamily: 'Share Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-import 'star_animation.dart';
+
 import 'package:flutter/material.dart';
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
 import 'q_mission-failed.dart';
+import 'star_animation.dart';
 
 class QuizGame_Jupiter extends StatefulWidget {
   const QuizGame_Jupiter({super.key});
@@ -97,21 +98,89 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
   var playerFloat = PlayerDirection.up;
 
   Timer? gameTimer;
+  Timer? animationSpeed;
 
   @override
   void initState() {
     super.initState();
+    quizgameTimer();
     startQuizGame();
   }
 
   @override
   void dispose() {
     gameTimer?.cancel();
+    animationSpeed?.cancel();
     super.dispose();
   }
 
+
+
+// Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+  int timeLeft = 20;
+
+  void quizgameTimer() {
+    gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isPaused || feedback.isNotEmpty || !mounted) return;
+
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+        if (timeLeft == 0) {
+          setState(() {
+            feedback = "Time's Up!";
+            boxBorderColor = Colors.redAccent;
+            lives--;
+          });
+          if (lives <= 0) {
+              Future.delayed(
+                const Duration(milliseconds: 800), 
+                () {
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MissionFailedPage(),
+                      ),
+                    );
+                  }
+                },
+              );
+          } else {
+            Future.delayed(
+              const Duration(seconds: 1), 
+              () {
+                if (!mounted) return;
+                bool isLast = currentQuestion >= quiz.length - 1;
+                if (isLast) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MissionFailedPage(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    currentQuestion++;
+                    feedback = '';
+                    boxBorderColor = Colors.lightBlueAccent;
+                    _resetAsteroids();
+                    timeLeft = 20;
+                  });
+                }
+              },
+            );
+          }
+        }
+      } 
+    });
+  }
+
+
+
   void startQuizGame() {
-    gameTimer = Timer.periodic(
+    animationSpeed = Timer.periodic(
       const Duration(milliseconds: 70), 
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
@@ -277,6 +346,7 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
             feedback = '';
             boxBorderColor = Colors.lightBlueAccent;
             _resetAsteroids();
+            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
           });
         }
       },
@@ -376,6 +446,28 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
               ],
             ),
           ),
+
+
+
+          // Timer on top of the screen
+          Positioned(
+            top: 0,  
+            left: 0,
+            child: AnimatedContainer(
+              duration: timeLeft == 20
+                  ? Duration.zero
+                  : const Duration(seconds: 1),
+              curve: Curves.linear,
+              width: ((timeLeft - 1).clamp(0, 19) / 19) * sw,
+              height: 2,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 36, 90, 183),
+              ),
+            ),
+          ),
+
+
+
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
@@ -461,7 +553,7 @@ class _QuizGame_JupiterState extends State<QuizGame_Jupiter> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Share-Tech',
+                            fontFamily: 'Share Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),

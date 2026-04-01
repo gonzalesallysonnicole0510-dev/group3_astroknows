@@ -46,7 +46,7 @@ class _AchievementPageState extends State<AchievementPage>
 
       // Check if they already claimed this planet's reward
       if (claimedQuizzes.contains(normalizedPlanetName)) {
-        rewardStar = 0;
+        rewardStar = 100;
       }
     });
   }
@@ -82,7 +82,7 @@ class _AchievementPageState extends State<AchievementPage>
               const Icon(Icons.star_rounded, color: Colors.amber),
               const SizedBox(width: 8),
               Text(
-                '⭐ $pointsToClaim Claimed!',
+                '$pointsToClaim Claimed!',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],

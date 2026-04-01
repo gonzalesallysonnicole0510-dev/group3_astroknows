@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'star_animation.dart';
+
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
 import 'q_mission-failed.dart';
+import 'star_animation.dart';
 
 class QuizGame_Earth extends StatefulWidget {
   const QuizGame_Earth({super.key});
@@ -16,13 +16,14 @@ class QuizGame_Earth extends StatefulWidget {
 }
 
 enum AsteroidDirection { up, down }
+enum PlayerDirection { up, down }
 
 class _QuizGame_EarthState extends State<QuizGame_Earth> {
-  // Movement and game state variables
-  double playerX = 0;
+  // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
+
   bool isPaused = false;
   int lives = 3;
 
@@ -37,7 +38,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
       'correct': 0  //Life
     },
     {
-      'question': '2.  What percentage of Earth’s surface is covered by oceans?', 
+      'question': '''2.  What percentage of Earth's surface is covered by oceans?''', 
       'answers': ['30%', '50%', '70%'], 
       'correct': 2  //70%
     },
@@ -47,7 +48,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
       'correct': 1  //Iron
     },
     {
-      'question': '4.  Earth’s axis is tilted at 23.45°, which results in what?', 
+      'question': '''4.  Earth's axis is tilted at 23.45°, which results in what?''', 
       'answers': ['4 Seasons', 'Tides', 'Day & Night'], 
       'correct': 0  //4 Seasons
     },
@@ -62,7 +63,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
       'correct': 1  //Old English
     },
     {
-      'question': '7.  What percentage of Earth’s water is fresh water?', 
+      'question': '''7.  What percentage of Earth's water is fresh water?''', 
       'answers': ['3%', '10%', '25%'], 
       'correct': 0  //3%
     },
@@ -92,41 +93,127 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     AsteroidDirection.up
   ];
 
+  double playerX = 0;
+  double playerY = 4.0;
+  var playerFloat = PlayerDirection.up;
+
   Timer? gameTimer;
+  Timer? animationSpeed;
 
   @override
   void initState() {
     super.initState();
+    quizgameTimer();
     startQuizGame();
   }
 
   @override
   void dispose() {
     gameTimer?.cancel();
+    animationSpeed?.cancel();
     super.dispose();
   }
 
+
+
+// Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+  int timeLeft = 20;
+
+  void quizgameTimer() {
+    gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isPaused || feedback.isNotEmpty || !mounted) return;
+
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+        if (timeLeft == 0) {
+          setState(() {
+            feedback = "Time's Up!";
+            boxBorderColor = Colors.redAccent;
+            lives--;
+          });
+          if (lives <= 0) {
+              Future.delayed(
+                const Duration(milliseconds: 800), 
+                () {
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MissionFailedPage(),
+                      ),
+                    );
+                  }
+                },
+              );
+          } else {
+            Future.delayed(
+              const Duration(seconds: 1), 
+              () {
+                if (!mounted) return;
+                bool isLast = currentQuestion >= quiz.length - 1;
+                if (isLast) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MissionFailedPage(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    currentQuestion++;
+                    feedback = '';
+                    boxBorderColor = Colors.lightBlueAccent;
+                    _resetAsteroids();
+                    timeLeft = 20;
+                  });
+                }
+              },
+            );
+          }
+        }
+      } 
+    });
+  }
+
+
+
   void startQuizGame() {
-    gameTimer = Timer.periodic(
-      const Duration(milliseconds: 50), 
+    animationSpeed = Timer.periodic(
+      const Duration(milliseconds: 70), 
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
+        // up and down animation of asteroids
         setState(() {
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
 
             if (asteroidY[i] < -0.8) {
               asteroidFloat[i] = AsteroidDirection.down;
-            } else if (asteroidY[i] > 0.1) {
+            } else if (asteroidY[i] > -0.5) {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.03 
-                : 0.03;
+                ? -0.01 
+                : 0.01;
           }
         });
+
+        // up and down animation of player (spaceship)
+        if (playerY < 3.8) {
+          setState(() {
+            playerFloat = PlayerDirection.down;
+          });
+        } else if (playerY == 4.0) {
+          playerFloat = PlayerDirection.up;
+        }
+        
+        playerY += (playerFloat == PlayerDirection.up) 
+            ? -0.015 
+            : 0.015;
       },
     );
   }
@@ -134,7 +221,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
   // Player movement functions
   void moveLeft() {
     setState(() {
-      playerX = -0.52;
+      playerX = -0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -148,7 +235,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
   void moveRight() {
     setState(() {
-      playerX = 0.52;
+      playerX = 0.61;
       if (!midShot) laserX = playerX;
     });
   }
@@ -239,31 +326,16 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     // Delay before moving to next question or ending game
     Future.delayed(
       const Duration(seconds: 1), 
-      () async {
+      () {
         if (!mounted) return;
         bool isLast = currentQuestion >= quiz.length - 1;
 
         if (isCorrect && isLast) {
-          // First-time achievement logic using SharedPreferences
-          final prefs = await SharedPreferences.getInstance();
-          
-          // Check if 'earth_claimed' exists, default to false if not
-          bool hasClaimedEarth = prefs.getBool('earth_claimed') ?? false;
-          
-          int awardedStars = 0;
-          
-          if (!hasClaimedEarth) {
-            awardedStars = 500;
-            await prefs.setBool('earth_claimed', true);
-          }
-
-          if (!mounted) return;
-
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => AchievementPage(
-                star: awardedStars, // Sends 500 if first time, 0 if replaying
+              builder: (_) => const AchievementPage(
+                star: 500, 
                 planet: 'earth',
               ),
             ),
@@ -274,6 +346,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
             feedback = '';
             boxBorderColor = Colors.lightBlueAccent;
             _resetAsteroids();
+            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
           });
         }
       },
@@ -300,8 +373,8 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     final sh = MediaQuery.of(context).size.height;
 
   // Calculate rocket size based on screen dimensions
-    final double rocketWidth = (sw * 0.20).clamp(60.0, 95.0);
-    final double rocketHeight = (sh * 0.15).clamp(60.0, 95.0);
+    final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
+    final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -362,7 +435,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                 ),
                 // Spaceship (player)
                 AnimatedAlign(
-                  alignment: Alignment(playerX, 0.9),
+                  alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
                   child: Image.asset(
                     'images/spaceship.png',
@@ -373,6 +446,38 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
               ],
             ),
           ),
+
+
+          // Timer on top of the screen
+          Positioned(
+            top: 0,  
+            left: 0,
+            child: AnimatedContainer(
+              duration: timeLeft == 20
+                  ? Duration.zero
+                  : const Duration(seconds: 1),
+              curve: Curves.linear,
+              width: ((timeLeft - 1).clamp(0, 19) / 19) * sw,
+              height: 2,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 36, 90, 183),
+              ),
+            ),
+          ),
+
+          Positioned(     // for guide lang itech, para makita na from 10 (not final max time) to 0 siya
+            top: 20,  
+            left: 20,
+            child: Text(
+             timeLeft.toString(),
+             style: TextStyle(
+              color: Colors.white,
+              fontSize: 40,
+             ), 
+            )
+          ),
+
+
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
@@ -424,7 +529,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                           child: Icon(
                             Icons.favorite, 
                             color: const Color(0xFFFFD1DC), 
-                            size: (sw * 0.09).clamp(28.0, 40.0),
+                            size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
                       ),
@@ -458,7 +563,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Share-Tech',
+                            fontFamily: 'Share Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),

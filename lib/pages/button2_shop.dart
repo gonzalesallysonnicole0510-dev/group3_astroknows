@@ -173,17 +173,17 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ExtraLives(
-                  imagePath: 'images/live1.png',
+                  imagePath: 'images/livesx2.png',
                   price: 3000,
                   onBuy: () => _showDialog(3000),
                 ),
                 ExtraLives(
-                  imagePath: 'images/lives2.png',
+                  imagePath: 'images/livesx3.png',
                   price: 5000,
                   onBuy: () => _showDialog(5000),
                 ),
                 ExtraLives(
-                  imagePath: 'images/lives3.png',
+                  imagePath: 'images/livesx5.png',
                   price: 7000,
                   onBuy: () => _showDialog(7000),
                 ),
@@ -196,7 +196,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-// --- Old Layout Helper Widgets Restored ---
+// 3 Premium Spaceship Designs
 
 class Merchandise extends StatelessWidget {
   final int price;
@@ -227,8 +227,8 @@ class Merchandise extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 imagePath,
-                width: 55,
-                height: 55,
+                width: 88,
+                height: 88,
               ),
             ),
           ),
@@ -244,6 +244,10 @@ class Merchandise extends StatelessWidget {
     );
   }
 }
+
+
+
+// 3 Extra Lives
 
 class ExtraLives extends StatelessWidget {
   final int price;
@@ -274,8 +278,8 @@ class ExtraLives extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 imagePath,
-                width: 50,
-                height: 50,
+                width: 70,
+                height: 70,
               ),
             ),
           ),
