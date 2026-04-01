@@ -38,8 +38,12 @@ flutter:
     - images/5Avatar.png
     - images/6Avatar.png
     - images/7Avatar.png
+    - images/AvatarAlien.png
+
     - images/icon.png
     - images/transicon.png
+    - images/alien.png
+    
     - images/earth.png
     - images/mercury.png
     - images/venus.png
@@ -50,14 +54,14 @@ flutter:
     - images/neptune.png
     - images/sun.png
     - images/spaceship.png
+    
     - images/premium1.png
     - images/premium2.png
     - images/premium3.png
-    - images/live1.png
-    - images/lives2.png
-    - images/lives3.png
-    - images/alien.png
-    - images/AvatarAlien.png
+    - images/livesx2.png
+    - images/livesx3.png
+    - images/livesx5.png
+
 
   fonts:
     - family: Michroma

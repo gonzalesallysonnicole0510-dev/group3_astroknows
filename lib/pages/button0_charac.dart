@@ -45,25 +45,25 @@ class _CharacCustPageState extends State<CharacCustPage> {
       body: Padding(
         padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02, top: screenHeight * 0.02, bottom: screenHeight * 0.02),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FittedBox(
-              child: Text(
+               Text(
                 'CHARACTER CUSTOMIZATION:',
-                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
+                    fontFamily: 'Russo One',
                     fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                    letterSpacing: 1.2,
+                    ),
               ),
-            ),
             const SizedBox(height: 20),
 
             /// MAIN CONTAINER
             Container(
-              width: screenWidth * 5.0,
-              height: screenHeight * 0.6,
-              padding: EdgeInsets.only(left: screenWidth * 0.03, right: screenWidth * 0.03, top: screenHeight * 0.02, bottom: screenHeight * 0.01),
+              width: screenWidth,
+              height: screenHeight * 0.65,
+              margin: EdgeInsets.only(left: screenWidth * 0.01, right: screenWidth * 0.01),
+              padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02, top: screenHeight * 0.02, bottom: screenHeight * 0.02),
               decoration: BoxDecoration(
                 color: const Color(0xFF001A33),
                 borderRadius: BorderRadius.circular(20),
@@ -87,7 +87,7 @@ class _CharacCustPageState extends State<CharacCustPage> {
                         _avatarBtn('images/5Avatar.png'),
                         _avatarBtn('images/6Avatar.png'),
                         _avatarBtn('images/7Avatar.png'),
-                        _avatarBtn('images/AlienAvatar.png'),
+                        _avatarBtn('images/AvatarAlien.png'),
                       ],
                     ),
                   ),
@@ -154,12 +154,17 @@ class AvatarPreview extends StatelessWidget {
       children: [
         FittedBox(
           child: Text("PREVIEW",
-              style: TextStyle(color: Colors.white, fontSize: 14)),
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Russo One', 
+                fontSize: 14,
+                letterSpacing: 1.2,
+                )),
         ),
         const SizedBox(height: 10),
         Container(
-          height: screenHeight * 0.05,
-          width: screenWidth * 0.05,
+          height: screenHeight * 0.5,
+          width: screenWidth * 0.3,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.cyanAccent),
             borderRadius: BorderRadius.circular(20),
