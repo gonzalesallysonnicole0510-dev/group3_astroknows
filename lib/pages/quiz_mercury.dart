@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-
+import 'star_animation.dart';
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
@@ -291,6 +291,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
+          const SpaceWarpScreen(),
           Positioned.fill(
             bottom: sh * 0.2,
             child: Row(
@@ -441,7 +442,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Michroma',
+                            fontFamily: 'Share-Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),

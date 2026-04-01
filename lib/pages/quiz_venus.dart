@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-
+import 'star_animation.dart';
 import 'package:flutter/material.dart';
 import 'button0_charac.dart';
 import 'title.dart';
@@ -291,6 +291,7 @@ class _QuizGame_VenusState extends State<QuizGame_Venus> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
+          const SpaceWarpScreen(),
           Positioned.fill(
             bottom: sh * 0.2,
             child: Row(
@@ -441,7 +442,7 @@ class _QuizGame_VenusState extends State<QuizGame_Venus> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Michroma',
+                            fontFamily: 'Share-Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+String selectedAvatar = "images/1Avatar.png";
+
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -15,7 +17,7 @@ class CharacCustPage extends StatefulWidget {
 }
 
 class _CharacCustPageState extends State<CharacCustPage> {
-  String selectedAvatar = "images/Avatar1.png";
+  
 
   void _updateAvatar(String avatarPath) {
     setState(() {
@@ -25,6 +27,9 @@ class _CharacCustPageState extends State<CharacCustPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -38,22 +43,27 @@ class _CharacCustPageState extends State<CharacCustPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02, top: screenHeight * 0.02, bottom: screenHeight * 0.02),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'CHARACTER CUSTOMIZATION:',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+            FittedBox(
+              child: Text(
+                'CHARACTER CUSTOMIZATION:',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 20),
 
             /// MAIN CONTAINER
             Container(
-              padding: const EdgeInsets.all(20),
+              width: screenWidth * 5.0,
+              height: screenHeight * 0.6,
+              padding: EdgeInsets.only(left: screenWidth * 0.03, right: screenWidth * 0.03, top: screenHeight * 0.02, bottom: screenHeight * 0.01),
               decoration: BoxDecoration(
                 color: const Color(0xFF001A33),
                 borderRadius: BorderRadius.circular(20),
@@ -70,13 +80,13 @@ class _CharacCustPageState extends State<CharacCustPage> {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       children: [
-                        _avatarBtn('images/Avatar1.png'),
-                        _avatarBtn('images/Avatar2.png'),
-                        _avatarBtn('images/Avatar3.png'),
-                        _avatarBtn('images/Avatar4.png'),
-                        _avatarBtn('images/Avatar5.png'),
-                        _avatarBtn('images/Avatar6.png'),
-                        _avatarBtn('images/Avatar7.png'),
+                        _avatarBtn('images/1Avatar.png'),
+                        _avatarBtn('images/2Avatar.png'),
+                        _avatarBtn('images/3Avatar.png'),
+                        _avatarBtn('images/4Avatar.png'),
+                        _avatarBtn('images/5Avatar.png'),
+                        _avatarBtn('images/6Avatar.png'),
+                        _avatarBtn('images/7Avatar.png'),
                         _avatarBtn('images/AlienAvatar.png'),
                       ],
                     ),
@@ -102,11 +112,15 @@ class _CharacCustPageState extends State<CharacCustPage> {
 
   /// BUTTON BUILDER
   Widget _avatarBtn(String fileName) {
-    String path = "images/$fileName";
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    String path = fileName;
 
     return GestureDetector(
       onTap: () => _updateAvatar(path),
       child: Container(
+        width: screenWidth * 0.08,
+        height: screenHeight * 0.08,
         decoration: BoxDecoration(
           border: Border.all(
             color: selectedAvatar == path
@@ -118,7 +132,7 @@ class _CharacCustPageState extends State<CharacCustPage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Image.asset(path, fit: BoxFit.cover),
+          child: Image.asset(path, fit: BoxFit.contain),
         ),
       ),
     );
@@ -133,14 +147,19 @@ class AvatarPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
-        const Text("PREVIEW",
-            style: TextStyle(color: Colors.white, fontSize: 14)),
+        FittedBox(
+          child: Text("PREVIEW",
+              style: TextStyle(color: Colors.white, fontSize: 14)),
+        ),
         const SizedBox(height: 10),
         Container(
-          height: 150,
-          width: 150,
+          height: screenHeight * 0.05,
+          width: screenWidth * 0.05,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.cyanAccent),
             borderRadius: BorderRadius.circular(20),
@@ -149,7 +168,7 @@ class AvatarPreview extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             child: Image.asset(
               avatarPath,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
         ),
