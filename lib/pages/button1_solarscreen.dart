@@ -1,6 +1,9 @@
 import 'dart:math';
+
 import 'splashscreen_countdown.dart';
 import 'package:flutter/material.dart';
+import 'quiz_QnA.dart';
+import 'quiz_review.dart';
 
 
 //STAR DATA MODEL
@@ -28,6 +31,7 @@ class Star {
 
 
 class SolarSystemInterface extends StatefulWidget {
+ 
   const SolarSystemInterface({super.key});
 
   @override
@@ -61,11 +65,15 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     String info,
     String path,
   ) {
+    final quizKey = '${name.toLowerCase()}_quiz';
+    final selectedQuiz =
+        allQuizzes[quizKey] ?? allQuizzes['earth_quiz']!;
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            SoloPlanetPage(name: name, info: info, imagePath: path),
+            SoloPlanetPage(name: name, info: info, imagePath: path, quiz: selectedQuiz['questions'], planet: selectedQuiz['planet']),
       ),
     );
   }
@@ -78,7 +86,16 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0.0),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+       
+        // back arrow
+        leading: IconButton(
+         icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 51, 51, 51)),
+         onPressed: () => Navigator.pop(context),
+        ),
+        ),
       body: Stack(
         children: [
           // Background Star Field
@@ -135,23 +152,11 @@ Since the Sun is not solid, different parts rotate at different rates. At the eq
             path: 'images/mercury.png',
             name: 'Mercury',
             info:
-                '''Mercury is the closest planet to the Sun that does not have any atmosphere to retain the heat. Instead, Mercury possesses a thin exosphere made up of atoms blasted off the surface by the solar wind and striking micrometeoroids.
+                '''Mercury is the closest planet to the Sun. However, it is not the hottest planet in the solar system because this planet does not have any atmosphere to trap the Sun’s heat. Mercury is usually hidden by the intense bright light of the Sun. The best way to visibly see Mercury is during dawn or twilight time. An event called a transit that happens about 13 times in a century, observers on Earth can watch and visibly see Mercury pass across the Sun looking like a small black dot.
 
-At daytime, the temperature surface can reach highs of 800°F (430°C). Whereas, nighttime temperatures on the surface can drop as low as -290°F (-180°C). Despite its proximity to the Sun, Mercury is not the hottest planet in our solar system.
-
-The only way to observe Mercury from Earth is during dawn or twilight time and the planet makes an appearance indirectly.  However, an event called transit that happens about 13 times in a century, observers on Earth can watch and visibly see Mercury pass across the Sun.
-
-From the surface of Mercury, the Sun would appear more than three times as large as it does when viewed from Earth, and the sunlight would be as much as seven times brighter. One Mercury solar day is equal to 175.97 Earth days.
+Measuring just 3,032 miles wide at its equator, Mercury is the smallest planet in the solar system. To imagine its size, Mercury is only slightly larger than Earth’s Moon. Mercury also resembles the look of Earth’s moon with its surface involving many impact craters from collisions of meteoroids and comets. Additionally, Mercury does not have its own moons nor rings.
 
 Mercury speeds around the Sun every 88 days, traveling through space at nearly 50 kilometers (31 miles) per second, making the planet the fastest in the solar system to orbit the Sun.
-
-Mercury is also the smallest planet in the solar system, measuring just 3,032 miles wide at its equator. To imagine its size, Mercury is only slightly larger than Earth’s Moon.
-
-Correspondingly, Mercury resembles the look of Earth’s moon, with its surface involving many impact craters from collisions with meteoroids and comets. Additionally, Mercury doesn't have its own moons nor rings.
-
-Mercury is the second densest planet after Earth, with a large metallic core having a radius of about 2,000 kilometers (1,240 miles), which is about 80 percent of the planet’s radius.
-
-Mercury’s outer shell, comparable to Earth’s outer shell (called the mantle and crust), is only about 400 kilometers (250 miles) thick.
 ''',
           ),
 
@@ -408,17 +413,22 @@ Neptune also possesses at least 5 main rings and 4 prominent ring arcs, which ar
 }
 
 
+
 // --- SOLO PLANET PAGE ---
 class SoloPlanetPage extends StatelessWidget {
   final String name;
   final String info;
   final String imagePath;
+  final List<Map<String, dynamic>> quiz;
+  final String planet;
 
   const SoloPlanetPage({
     super.key,
     required this.name,
     required this.info,
     required this.imagePath,
+    required this.quiz,
+    required this.planet,
   });
 
   @override
@@ -434,6 +444,11 @@ class SoloPlanetPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
           ),
+        ),
+        // back arrow
+        leading: IconButton(
+         icon: const Icon(Icons.arrow_back, color: Colors.white),
+         onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
@@ -489,14 +504,35 @@ class SoloPlanetPage extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(width: 15),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(color: Colors.cyanAccent, fontSize: 16),
+
+                SizedBox(width: 10),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyanAccent,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
+                    onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Quiz_Review(quiz: quiz, planet: planet),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Review",
+                    style: TextStyle(fontSize: 16),
+                  ),                
+                )
               ],
             ),
           ],
