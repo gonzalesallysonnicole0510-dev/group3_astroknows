@@ -290,7 +290,7 @@
 
 
 
-  'saturn_quiiz': {
+  'saturn_quiz': {
     'planet': 'saturn',
     'questions': [
     {
