@@ -8,17 +8,21 @@ import 'q_achievement.dart';
 import 'q_mission-failed.dart';
 import 'star_animation.dart';
 
-class QuizGame_Mercury extends StatefulWidget {
-  const QuizGame_Mercury({super.key});
+
+class Quizteroid_Quest extends StatefulWidget {
+  final List<Map<String, dynamic>> quiz;
+  final String planet;
+
+  const Quizteroid_Quest({super.key, required this.quiz, required this.planet});
 
   @override
-  State<QuizGame_Mercury> createState() => _QuizGame_MercuryState();
+  State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
 }
 
 enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
-class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
+class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
@@ -30,60 +34,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
-
-  final List<Map<String, dynamic>> quiz = [
-    {
-      'question': '1.  What is the equivalent number of Earth days in one mercury solar day (Day-Night cycle)?', 
-      'answers': ['160.25', '175.97', '186.97'], 
-      'correct': 1  //175.97
-    },
-    {
-      'question': '''2.  Mercury doesn't have any atmosphere to retain Sun heat. Instead, it has this thin -sphere.''', 
-      'answers': ['Mesosphere', 'Thermosphere', 'Exosphere'], 
-      'correct': 2  //Exosphere
-    },
-    {
-      'question': '3.  At what time can people only observe Mercury from Earth?', 
-      'answers': ['Afternoon', 'Dawn', 'Midnight'], 
-      'correct': 1  //Dawn
-    },
-    {
-      'question': '4.  What makes up 80 percent of Mercury’s radius?', 
-      'answers': ['Metallic \nCore', 'Outer \nShell', 'Mantle'], 
-      'correct': 0  //Metallic Core
-    },
-    {
-      'question': '5.  Mercury is slightly larger than which natural object in the solar system?', 
-      'answers': ['Mars', 'Earth', '''Earth's Moon'''], 
-      'correct': 2  //Earth's Moon
-    },
-    {
-      'question': '6.  What is the term of an event where Mercury can be observed from Earth as a black figure passing across the Sun?', 
-      'answers': ['Eclipse', 'Transit', 'Occulation'], 
-      'correct': 1  //Transit
-    },
-    {
-      'question': '7.  Which natural object in the solar system does Mercury resemble due to its cratered look to its surface?', 
-      'answers': ['''Earth's Moon''', 'Mars', 'Venus'], 
-      'correct': 0  //Earth's Moon
-    },
-    {
-      'question': '8.  How many moons or rings does Mercury have?', 
-      'answers': ['Zero', 'One', 'Two'], 
-      'correct': 0  //Zero
-    },
-    {
-      'question': '9.  How many days does it take for Mercury to orbit the Sun?', 
-      'answers': ['365 days', '30 days', '88 days'], 
-      'correct': 2  //88 days
-    },
-    {
-      'question': '10.  Despite being closest to the Sun, why is Mercury not the hottest planet?', 
-      'answers': ['''It's too\nsmall''', 'It has no\natmosphere to\ntrap heat', '''It's made\nof ice'''], 
-      'correct': 1 //It has no atmosphere to trap heat
-    },
-  ];
-
+ 
   // Asteroid positions and movement directions
   List<double> asteroidX = [-0.52, 0, 0.52];
   List<double> asteroidY = [-0.6, -0.6, -0.6];
@@ -119,6 +70,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
 // Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
   int timeLeft = 20;
 
+
   void quizgameTimer() {
     gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (isPaused || feedback.isNotEmpty || !mounted) return;
@@ -135,7 +87,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
           });
           if (lives <= 0) {
               Future.delayed(
-                const Duration(milliseconds: 800), 
+                const Duration(milliseconds: 800),
                 () {
                   if (mounted) {
                     Navigator.pushReplacement(
@@ -149,10 +101,10 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
               );
           } else {
             Future.delayed(
-              const Duration(seconds: 1), 
+              const Duration(seconds: 1),
               () {
                 if (!mounted) return;
-                bool isLast = currentQuestion >= quiz.length - 1;
+                bool isLast = currentQuestion >= widget.quiz.length - 1;
                 if (isLast) {
                   Navigator.pushReplacement(
                     context,
@@ -173,15 +125,14 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
             );
           }
         }
-      } 
+      }
     });
   }
 
 
-
   void startQuizGame() {
     animationSpeed = Timer.periodic(
-      const Duration(milliseconds: 70), 
+      const Duration(milliseconds: 70),
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
@@ -196,8 +147,8 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
-            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.01 
+            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
+                ? -0.01
                 : 0.01;
           }
         });
@@ -210,9 +161,9 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
         } else if (playerY == 4.0) {
           playerFloat = PlayerDirection.up;
         }
-        
-        playerY += (playerFloat == PlayerDirection.up) 
-            ? -0.015 
+       
+        playerY += (playerFloat == PlayerDirection.up)
+            ? -0.015
             : 0.015;
       },
     );
@@ -250,7 +201,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
     });
 
     Timer.periodic(
-      const Duration(milliseconds: 15), 
+      const Duration(milliseconds: 15),
       (timer) {
         if (!mounted) {
           timer.cancel();
@@ -271,6 +222,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
             laserHeight + (maxHeight * 0.1),
           );
           bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
+
 
           if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
             asteroidY[i] = -50;
@@ -298,7 +250,8 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
 
   // Answer checking and feedback
   void checkAnswer(int index) {
-    bool isCorrect = index == quiz[currentQuestion]['correct'];
+    bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
+
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
@@ -308,7 +261,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
 
     if (lives <= 0) {
       Future.delayed(
-        const Duration(milliseconds: 800), 
+        const Duration(milliseconds: 800),
         () {
           if (mounted) {
             Navigator.pushReplacement(
@@ -325,18 +278,19 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
 
     // Delay before moving to next question or ending game
     Future.delayed(
-      const Duration(seconds: 1), 
+      const Duration(seconds: 1),
       () {
         if (!mounted) return;
-        bool isLast = currentQuestion >= quiz.length - 1;
+        bool isLast = currentQuestion >= widget.quiz.length - 1;
+
 
         if (isCorrect && isLast) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => const AchievementPage(
-                star: 500, 
-                planet: 'mercury',
+              builder: (_) => AchievementPage(
+                star: 500,
+                planet: widget.planet,
               ),
             ),
           );
@@ -403,10 +357,10 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                   AsteroidChoice(
                     x: asteroidX[i],
                     y: asteroidY[i],
-                    color: i == 1 
-                        ? const Color(0xFF3B4043) 
+                    color: i == 1
+                        ? const Color(0xFF3B4043)
                         : const Color(0xFF5A6064),
-                    label: quiz[currentQuestion]['answers'][i],
+                    label: widget.quiz[currentQuestion]['answers'][i],
                     alignWidth: rocketWidth,
                   ),
                 // Laser and spaceship
@@ -449,6 +403,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
 
 
 
+
           // Timer on top of the screen
           Positioned(
             top: 0,  
@@ -481,19 +436,19 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                   color: const Color(0xFF131B26),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.cyanAccent, 
+                    color: Colors.cyanAccent,
                     width: 2.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withValues(alpha: 0.3), 
+                      color: Colors.cyanAccent.withValues(alpha: 0.3),
                       blurRadius: 10,
                     )
                   ],
                 ),
                 child: Icon(
-                  Icons.pause, 
-                  color: Colors.white, 
+                  Icons.pause,
+                  color: Colors.white,
                   size: (sw * 0.06).clamp(24.0, 32.0),
                 ),
               ),
@@ -517,8 +472,8 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                         (i) => Padding(
                           padding: const EdgeInsets.only(right: 6),
                           child: Icon(
-                            Icons.favorite, 
-                            color: const Color(0xFFFFD1DC), 
+                            Icons.favorite,
+                            color: const Color(0xFFFFD1DC),
                             size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
@@ -538,7 +493,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                     color: const Color(0xFF131B26),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: boxBorderColor, 
+                      color: boxBorderColor,
                       width: 2.5,
                     ),
                   ),
@@ -547,8 +502,8 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
                       padding: const EdgeInsets.all(8.0),
                       child: FittedBox(
                         child: Text(
-                          feedback.isEmpty 
-                              ? quiz[currentQuestion]['question'] 
+                          feedback.isEmpty
+                              ? widget.quiz[currentQuestion]['question']
                               : feedback,
                           style: TextStyle(
                             color: Colors.white,
@@ -564,7 +519,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
               ],
             ),
           ),
-          if (isPaused) 
+          if (isPaused)
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
             ),
@@ -583,6 +538,7 @@ class _QuizGame_MercuryState extends State<QuizGame_Mercury> {
     );
   }
 }
+
 
 // Widget for individual asteroid choices
 class AsteroidChoice extends StatelessWidget {
@@ -617,13 +573,13 @@ class AsteroidChoice extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white24, 
+            color: Colors.white24,
             width: 2,
           ),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black45, 
-              blurRadius: 5, 
+              color: Colors.black45,
+              blurRadius: 5,
               offset: Offset(0, 3),
             )
           ],
@@ -649,6 +605,7 @@ class AsteroidChoice extends StatelessWidget {
   }
 }
 
+
 // Widget for the shoot button
 class ShootButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -667,25 +624,26 @@ class ShootButton extends StatelessWidget {
           color: const Color(0xFF232B32),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.cyanAccent, 
+            color: Colors.cyanAccent,
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withValues(alpha: 0.2), 
+              color: Colors.cyanAccent.withValues(alpha: 0.2),
               blurRadius: 8,
             )
           ],
         ),
         child: Icon(
-          Icons.flash_on, 
-          color: Colors.cyanAccent, 
+          Icons.flash_on,
+          color: Colors.cyanAccent,
           size: size * 0.55,
         ),
       ),
     );
   }
 }
+
 
 // Widget for the pause menu
 class PauseMenu extends StatelessWidget {
@@ -703,14 +661,14 @@ class PauseMenu extends StatelessWidget {
           child: Container(
             width: (sw * 0.65).clamp(220.0, 300.0),
             padding: const EdgeInsets.symmetric(
-              vertical: 30, 
+              vertical: 30,
               horizontal: 25,
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.cyanAccent.withValues(alpha: 0.5), 
+                color: Colors.cyanAccent.withValues(alpha: 0.5),
                 width: 2,
               ),
             ),
@@ -720,9 +678,9 @@ class PauseMenu extends StatelessWidget {
                 const Text(
                   'PAUSED',
                   style: TextStyle(
-                    fontFamily: 'Michroma', 
-                    color: Colors.white, 
-                    fontSize: 22, 
+                    fontFamily: 'Michroma',
+                    color: Colors.white,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -730,10 +688,10 @@ class PauseMenu extends StatelessWidget {
                 _menuButton(context, 'RESUME', onTap: onResume),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context, 
-                  'CUSTOMIZATION', 
+                  context,
+                  'CUSTOMIZATION',
                   onTap: () => Navigator.push(
-                    context, 
+                    context,
                     MaterialPageRoute(
                       builder: (_) => const CharacCustPage(),
                     ),
@@ -741,14 +699,14 @@ class PauseMenu extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context, 
-                  'EXIT', 
-                  isExit: true, 
+                  context,
+                  'EXIT',
+                  isExit: true,
                   onTap: () => Navigator.pushAndRemoveUntil(
-                    context, 
+                    context,
                     MaterialPageRoute(
                       builder: (_) => const TitlePage(),
-                    ), 
+                    ),
                     (route) => false,
                   ),
                 ),
@@ -761,8 +719,8 @@ class PauseMenu extends StatelessWidget {
   }
 
   Widget _menuButton(
-    BuildContext context, 
-    String label, 
+    BuildContext context,
+    String label,
     {required VoidCallback onTap, bool isExit = false}
   ) {
     return SizedBox(
@@ -775,17 +733,17 @@ class PauseMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
             side: BorderSide(
-              color: isExit 
-                  ? Colors.redAccent.withValues(alpha: 0.5) 
-                  : Colors.cyan.withValues(alpha: 0.5), 
+              color: isExit
+                  ? Colors.redAccent.withValues(alpha: 0.5)
+                  : Colors.cyan.withValues(alpha: 0.5),
               width: 1.5,
             ),
           ),
         ),
         child: Text(
-          label, 
+          label,
           style: TextStyle(
-            color: isExit ? Colors.redAccent : Colors.white, 
+            color: isExit ? Colors.redAccent : Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
