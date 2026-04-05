@@ -8,7 +8,6 @@ import 'q_achievement.dart';
 import 'q_mission-failed.dart';
 import 'star_animation.dart';
 
-
 class Quizteroid_Quest extends StatefulWidget {
   final List<Map<String, dynamic>> quiz;
   final String planet;
@@ -34,7 +33,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
- 
+  
   // Asteroid positions and movement directions
   List<double> asteroidX = [-0.52, 0, 0.52];
   List<double> asteroidY = [-0.6, -0.6, -0.6];
@@ -65,11 +64,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     super.dispose();
   }
 
-
-
-// Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+  // Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
   int timeLeft = 20;
-
 
   void quizgameTimer() {
     gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -129,7 +125,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-
   void startQuizGame() {
     animationSpeed = Timer.periodic(
       const Duration(milliseconds: 70),
@@ -161,7 +156,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         } else if (playerY == 4.0) {
           playerFloat = PlayerDirection.up;
         }
-       
+        
         playerY += (playerFloat == PlayerDirection.up)
             ? -0.015
             : 0.015;
@@ -223,7 +218,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           );
           bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
 
-
           if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
             asteroidY[i] = -50;
             _stopLaser(timer);
@@ -251,7 +245,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   // Answer checking and feedback
   void checkAnswer(int index) {
     bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
-
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
@@ -282,7 +275,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       () {
         if (!mounted) return;
         bool isLast = currentQuestion >= widget.quiz.length - 1;
-
 
         if (isCorrect && isLast) {
           Navigator.pushReplacement(
@@ -401,27 +393,77 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             ),
           ),
 
-
-
-
-          // Timer on top of the screen
+          // Timer on top of the screen (with spark effect)
           Positioned(
-            top: 0,  
+            top: 0,
             left: 0,
-            child: AnimatedContainer(
-              duration: timeLeft == 20
-                  ? Duration.zero
-                  : const Duration(seconds: 1),
-              curve: Curves.linear,
-              width: ((timeLeft - 1).clamp(0, 19) / 19) * sw,
-              height: 2,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 36, 90, 183),
+            right: 0, // Stretch across the screen
+            child: SizedBox(
+              height: 20, // Hitbox height to accommodate the spark's glow
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // 1. The glowing line shrinking to the left
+                  AnimatedContainer(
+                    duration: timeLeft == 20
+                        ? Duration.zero
+                        : const Duration(seconds: 1),
+                    curve: Curves.linear,
+                    // Calculates width smoothly based on a perfect 20 seconds
+                    width: (timeLeft.clamp(0, 20) / 20) * sw,
+                    height: 4,
+                    margin: const EdgeInsets.only(top: 8), // Centers the line vertically
+                    decoration: BoxDecoration(
+                      color: Colors.cyanAccent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withValues(alpha: 0.8),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  // 2. The Spark Effect attached to the tip of the line
+                  AnimatedPositioned(
+                    duration: timeLeft == 20
+                        ? Duration.zero
+                        : const Duration(seconds: 1),
+                    curve: Curves.linear,
+                    // Anchors the spark exactly at the end of the shrinking line
+                    left: (timeLeft.clamp(0, 20) / 20) * sw - 10, 
+                    top: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white, // Hot center of the spark
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.yellowAccent,
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                          BoxShadow(
+                            color: Colors.orange,
+                            blurRadius: 15,
+                            spreadRadius: 5,
+                          ),
+                          BoxShadow(
+                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            blurRadius: 20,
+                            spreadRadius: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-
-
 
           // Pause button
           Positioned(
@@ -539,7 +581,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 }
 
-
 // Widget for individual asteroid choices
 class AsteroidChoice extends StatelessWidget {
   final double x, y;
@@ -605,7 +646,6 @@ class AsteroidChoice extends StatelessWidget {
   }
 }
 
-
 // Widget for the shoot button
 class ShootButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -643,7 +683,6 @@ class ShootButton extends StatelessWidget {
     );
   }
 }
-
 
 // Widget for the pause menu
 class PauseMenu extends StatelessWidget {
