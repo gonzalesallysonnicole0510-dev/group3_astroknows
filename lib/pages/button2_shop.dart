@@ -149,7 +149,7 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Merchandise(
-                  imagePath: 'images/premium1.png',
+                  imagePath: 'images/premium1_ufo.png',
                   price: 3000,
                   onBuy: () => _showDialog(3000),
                 ),
