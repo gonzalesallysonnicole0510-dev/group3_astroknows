@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'title.dart';
 
 void main() {
@@ -34,7 +35,7 @@ class _SplashScreenState_Intro extends State<SplashScreen_Intro> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const TitlePage()),
+        MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
       );
     });
   }

@@ -6,7 +6,8 @@ import 'button3_settings.dart';
 import 'package:flutter/material.dart';
 
 class TitlePage extends StatefulWidget {
-  const TitlePage({super.key});
+  final String astroknowt;
+  const TitlePage({super.key, required this.astroknowt});
 
   @override
   State<TitlePage> createState() => _TitlePageState();
@@ -183,7 +184,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
   Widget _buildCharacterButton(BuildContext context, double h) {
     return GestureDetector(
       onTap: () async {
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => const CharacCustPage()));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const CharacCustPage(type: CustomizationType.astroknowt)));
         refreshCharacter();
       },
       child: Container(
@@ -194,10 +195,11 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
           border: Border.all(color: Colors.cyan, width: 2),
           boxShadow: [BoxShadow(color: Colors.cyan.withValues(alpha: 0.4), blurRadius: 10)],
         ),
-        child: const CircleAvatar(
-          backgroundColor: Colors.black26,
-          child: Icon(Icons.person, color: Colors.white),
-        ),
+        child: Image.asset(widget.astroknowt),
+        // child: const CircleAvatar(
+        //   backgroundColor: Colors.black26,
+        //   child: Icon(Icons.person, color: Colors.white),
+        // ),
       ),
     );
   }

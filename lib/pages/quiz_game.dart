@@ -6,18 +6,24 @@ import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
 import 'q_mission-failed.dart';
+import 'star_animation.dart';
 
-class QuizGame_Earth extends StatefulWidget {
-  const QuizGame_Earth({super.key});
+class Quizteroid_Quest extends StatefulWidget {
+  final List<Map<String, dynamic>> quiz;
+  final String planet;
+  final String astroknowt;
+  final String spaceship;
+
+  const Quizteroid_Quest({super.key, required this.quiz, required this.planet, required this.astroknowt, required this.spaceship});
 
   @override
-  State<QuizGame_Earth> createState() => _QuizGame_EarthState();
+  State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
 }
 
 enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
-class _QuizGame_EarthState extends State<QuizGame_Earth> {
+class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
@@ -29,60 +35,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
-
-  final List<Map<String, dynamic>> quiz = [
-    {
-      'question': '1.  Earth is the only known world in the solar system to support what?', 
-      'answers': ['Life', 'Rings', 'Gas'], 
-      'correct': 0  //Life
-    },
-    {
-      'question': '2.  What percentage of Earth’s surface is covered by oceans?', 
-      'answers': ['30%', '50%', '70%'], 
-      'correct': 2  //70%
-    },
-    {
-      'question': '3.  Earth is the densest planet because of its large core made of…?', 
-      'answers': ['Gold', 'Iron', 'Rock'], 
-      'correct': 1  //Iron
-    },
-    {
-      'question': '4.  Earth’s axis is tilted at 23.45°, which results in what?', 
-      'answers': ['4 Seasons', 'Tides', 'Day & Night'], 
-      'correct': 0  //4 Seasons
-    },
-    {
-      'question': '5.  Near the surface, our atmosphere is 78% of which gas?', 
-      'answers': ['Oxygen', 'Hydrogen', 'Nitrogen'], 
-      'correct': 2  //Nitrogen
-    },
-    {
-      'question': '6.  Where does the name “Earth” originate from?', 
-      'answers': ['Greek Myth', 'Old English', 'Roman Myth'], 
-      'correct': 1  //Old English
-    },
-    {
-      'question': '7.  What percentage of Earth’s water is fresh water?', 
-      'answers': ['3%', '10%', '25%'], 
-      'correct': 0  //3%
-    },
-    {
-      'question': '8.  What shields Earth from harmful radiation and burns up falling meteors?', 
-      'answers': ['Moon', 'Atmosphere', 'Oceans'], 
-      'correct': 1  //Atmosphere
-    },
-    {
-      'question': '9.  Earth is the ____ planet from the Sun.', 
-      'answers': ['First', 'Second', 'Third'], 
-      'correct': 2  //Third
-    },
-    {
-      'question': '10.  Which hemisphere is tilted toward the Sun during the northern summer?', 
-      'answers': ['Northern', 'Southern', 'Both'], 
-      'correct': 0 //Nothern
-    },
-  ];
-
+  
   // Asteroid positions and movement directions
   List<double> asteroidX = [-0.52, 0, 0.52];
   List<double> asteroidY = [-0.6, -0.6, -0.6];
@@ -97,22 +50,86 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
   var playerFloat = PlayerDirection.up;
 
   Timer? gameTimer;
+  Timer? animationSpeed;
 
   @override
   void initState() {
     super.initState();
+    quizgameTimer();
     startQuizGame();
   }
 
   @override
   void dispose() {
     gameTimer?.cancel();
+    animationSpeed?.cancel();
     super.dispose();
   }
 
+  // Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+  int timeLeft = 20;
+
+  void quizgameTimer() {
+    gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isPaused || feedback.isNotEmpty || !mounted) return;
+
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+        if (timeLeft == 0) {
+          setState(() {
+            feedback = "Time's Up!";
+            boxBorderColor = Colors.redAccent;
+            lives--;
+          });
+          if (lives <= 0) {
+              Future.delayed(
+                const Duration(milliseconds: 800),
+                () {
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MissionFailedPage(),
+                      ),
+                    );
+                  }
+                },
+              );
+          } else {
+            Future.delayed(
+              const Duration(seconds: 1),
+              () {
+                if (!mounted) return;
+                bool isLast = currentQuestion >= widget.quiz.length - 1;
+                if (isLast) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MissionFailedPage(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    currentQuestion++;
+                    feedback = '';
+                    boxBorderColor = Colors.lightBlueAccent;
+                    _resetAsteroids();
+                    timeLeft = 20;
+                  });
+                }
+              },
+            );
+          }
+        }
+      }
+    });
+  }
+
   void startQuizGame() {
-    gameTimer = Timer.periodic(
-      const Duration(milliseconds: 70), 
+    animationSpeed = Timer.periodic(
+      const Duration(milliseconds: 70),
       (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
@@ -127,8 +144,8 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
-            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) 
-                ? -0.01 
+            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
+                ? -0.01
                 : 0.01;
           }
         });
@@ -142,8 +159,8 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
           playerFloat = PlayerDirection.up;
         }
         
-        playerY += (playerFloat == PlayerDirection.up) 
-            ? -0.015 
+        playerY += (playerFloat == PlayerDirection.up)
+            ? -0.015
             : 0.015;
       },
     );
@@ -181,7 +198,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
     });
 
     Timer.periodic(
-      const Duration(milliseconds: 15), 
+      const Duration(milliseconds: 15),
       (timer) {
         if (!mounted) {
           timer.cancel();
@@ -229,7 +246,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
   // Answer checking and feedback
   void checkAnswer(int index) {
-    bool isCorrect = index == quiz[currentQuestion]['correct'];
+    bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
@@ -239,7 +256,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
     if (lives <= 0) {
       Future.delayed(
-        const Duration(milliseconds: 800), 
+        const Duration(milliseconds: 800),
         () {
           if (mounted) {
             Navigator.pushReplacement(
@@ -256,18 +273,18 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
 
     // Delay before moving to next question or ending game
     Future.delayed(
-      const Duration(seconds: 1), 
+      const Duration(seconds: 1),
       () {
         if (!mounted) return;
-        bool isLast = currentQuestion >= quiz.length - 1;
+        bool isLast = currentQuestion >= widget.quiz.length - 1;
 
         if (isCorrect && isLast) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => const AchievementPage(
-                star: 500, 
-                planet: 'earth',
+              builder: (_) => AchievementPage(
+                star: 500,
+                planet: widget.planet,
               ),
             ),
           );
@@ -277,6 +294,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
             feedback = '';
             boxBorderColor = Colors.lightBlueAccent;
             _resetAsteroids();
+            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
           });
         }
       },
@@ -310,6 +328,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
+          const SpaceWarpScreen(),
           Positioned.fill(
             bottom: sh * 0.2,
             child: Row(
@@ -332,10 +351,10 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                   AsteroidChoice(
                     x: asteroidX[i],
                     y: asteroidY[i],
-                    color: i == 1 
-                        ? const Color(0xFF3B4043) 
+                    color: i == 1
+                        ? const Color(0xFF3B4043)
                         : const Color(0xFF5A6064),
-                    label: quiz[currentQuestion]['answers'][i],
+                    label: widget.quiz[currentQuestion]['answers'][i],
                     alignWidth: rocketWidth,
                   ),
                 // Laser and spaceship
@@ -366,15 +385,103 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                 AnimatedAlign(
                   alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
-                  child: Image.asset(
-                    'images/spaceship.png',
-                    width: rocketWidth,
-                    height: rocketHeight,
-                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Spaceship
+                      Image.asset(
+                        widget.spaceship,
+                        width: rocketWidth,
+                        height: rocketHeight,
+                      ),
+                      // Astroknowt
+                      Positioned(
+                        top: 50,
+                        child: Image.asset(
+                          widget.astroknowt,
+                          width: 20,
+                          height: 20,
+                        ),
+                      )
+                    ],
+                  )
                 ),
               ],
             ),
           ),
+
+          // Timer on top of the screen (with spark effect)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0, // Stretch across the screen
+            child: SizedBox(
+              height: 20, // Hitbox height to accommodate the spark's glow
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // 1. The glowing line shrinking to the left
+                  AnimatedContainer(
+                    duration: timeLeft == 20
+                        ? Duration.zero
+                        : const Duration(seconds: 1),
+                    curve: Curves.linear,
+                    // Calculates width smoothly based on a perfect 20 seconds
+                    width: (timeLeft.clamp(0, 20) / 20) * sw,
+                    height: 4,
+                    margin: const EdgeInsets.only(top: 8), // Centers the line vertically
+                    decoration: BoxDecoration(
+                      color: Colors.cyanAccent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withValues(alpha: 0.8),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  // 2. The Spark Effect attached to the tip of the line
+                  AnimatedPositioned(
+                    duration: timeLeft == 20
+                        ? Duration.zero
+                        : const Duration(seconds: 1),
+                    curve: Curves.linear,
+                    // Anchors the spark exactly at the end of the shrinking line
+                    left: (timeLeft.clamp(0, 20) / 20) * sw - 10, 
+                    top: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white, // Hot center of the spark
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.yellowAccent,
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                          BoxShadow(
+                            color: Colors.orange,
+                            blurRadius: 15,
+                            spreadRadius: 5,
+                          ),
+                          BoxShadow(
+                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            blurRadius: 20,
+                            spreadRadius: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
@@ -388,19 +495,19 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                   color: const Color(0xFF131B26),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.cyanAccent, 
+                    color: Colors.cyanAccent,
                     width: 2.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withValues(alpha: 0.3), 
+                      color: Colors.cyanAccent.withValues(alpha: 0.3),
                       blurRadius: 10,
                     )
                   ],
                 ),
                 child: Icon(
-                  Icons.pause, 
-                  color: Colors.white, 
+                  Icons.pause,
+                  color: Colors.white,
                   size: (sw * 0.06).clamp(24.0, 32.0),
                 ),
               ),
@@ -424,8 +531,8 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                         (i) => Padding(
                           padding: const EdgeInsets.only(right: 6),
                           child: Icon(
-                            Icons.favorite, 
-                            color: const Color(0xFFFFD1DC), 
+                            Icons.favorite,
+                            color: const Color(0xFFFFD1DC),
                             size: (sw * 0.09).clamp(23.0, 35.0),
                           ),
                         ),
@@ -445,7 +552,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                     color: const Color(0xFF131B26),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: boxBorderColor, 
+                      color: boxBorderColor,
                       width: 2.5,
                     ),
                   ),
@@ -454,13 +561,13 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
                       padding: const EdgeInsets.all(8.0),
                       child: FittedBox(
                         child: Text(
-                          feedback.isEmpty 
-                              ? quiz[currentQuestion]['question'] 
+                          feedback.isEmpty
+                              ? widget.quiz[currentQuestion]['question']
                               : feedback,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Michroma',
+                            fontFamily: 'Share Tech',
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -471,7 +578,7 @@ class _QuizGame_EarthState extends State<QuizGame_Earth> {
               ],
             ),
           ),
-          if (isPaused) 
+          if (isPaused)
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
             ),
@@ -524,13 +631,13 @@ class AsteroidChoice extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white24, 
+            color: Colors.white24,
             width: 2,
           ),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black45, 
-              blurRadius: 5, 
+              color: Colors.black45,
+              blurRadius: 5,
               offset: Offset(0, 3),
             )
           ],
@@ -574,19 +681,19 @@ class ShootButton extends StatelessWidget {
           color: const Color(0xFF232B32),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.cyanAccent, 
+            color: Colors.cyanAccent,
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withValues(alpha: 0.2), 
+              color: Colors.cyanAccent.withValues(alpha: 0.2),
               blurRadius: 8,
             )
           ],
         ),
         child: Icon(
-          Icons.flash_on, 
-          color: Colors.cyanAccent, 
+          Icons.flash_on,
+          color: Colors.cyanAccent,
           size: size * 0.55,
         ),
       ),
@@ -610,14 +717,14 @@ class PauseMenu extends StatelessWidget {
           child: Container(
             width: (sw * 0.65).clamp(220.0, 300.0),
             padding: const EdgeInsets.symmetric(
-              vertical: 30, 
+              vertical: 30,
               horizontal: 25,
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.cyanAccent.withValues(alpha: 0.5), 
+                color: Colors.cyanAccent.withValues(alpha: 0.5),
                 width: 2,
               ),
             ),
@@ -627,9 +734,9 @@ class PauseMenu extends StatelessWidget {
                 const Text(
                   'PAUSED',
                   style: TextStyle(
-                    fontFamily: 'Michroma', 
-                    color: Colors.white, 
-                    fontSize: 22, 
+                    fontFamily: 'Michroma',
+                    color: Colors.white,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -637,25 +744,25 @@ class PauseMenu extends StatelessWidget {
                 _menuButton(context, 'RESUME', onTap: onResume),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context, 
-                  'CUSTOMIZATION', 
+                  context,
+                  'CUSTOMIZATION',
                   onTap: () => Navigator.push(
-                    context, 
+                    context,
                     MaterialPageRoute(
-                      builder: (_) => const CharacCustPage(),
+                      builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
                     ),
                   ),
                 ),
                 const SizedBox(height: 15),
                 _menuButton(
-                  context, 
-                  'EXIT', 
-                  isExit: true, 
+                  context,
+                  'EXIT',
+                  isExit: true,
                   onTap: () => Navigator.pushAndRemoveUntil(
-                    context, 
+                    context,
                     MaterialPageRoute(
-                      builder: (_) => const TitlePage(),
-                    ), 
+                      builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
+                    ),
                     (route) => false,
                   ),
                 ),
@@ -668,8 +775,8 @@ class PauseMenu extends StatelessWidget {
   }
 
   Widget _menuButton(
-    BuildContext context, 
-    String label, 
+    BuildContext context,
+    String label,
     {required VoidCallback onTap, bool isExit = false}
   ) {
     return SizedBox(
@@ -682,17 +789,17 @@ class PauseMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
             side: BorderSide(
-              color: isExit 
-                  ? Colors.redAccent.withValues(alpha: 0.5) 
-                  : Colors.cyan.withValues(alpha: 0.5), 
+              color: isExit
+                  ? Colors.redAccent.withValues(alpha: 0.5)
+                  : Colors.cyan.withValues(alpha: 0.5),
               width: 1.5,
             ),
           ),
         ),
         child: Text(
-          label, 
+          label,
           style: TextStyle(
-            color: isExit ? Colors.redAccent : Colors.white, 
+            color: isExit ? Colors.redAccent : Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),

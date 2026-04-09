@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'title.dart';
 
 class AchievementPage extends StatefulWidget {
@@ -380,7 +381,7 @@ class _AchievementPageState extends State<AchievementPage>
           child: OutlinedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const TitlePage()),
+                MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
               );
             },
             icon: const Icon(Icons.rocket_launch_rounded, size: 20),
