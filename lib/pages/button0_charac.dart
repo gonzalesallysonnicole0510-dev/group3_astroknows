@@ -118,7 +118,7 @@ class _CharacCustPageState extends State<CharacCustPage> {
                       mainAxisSpacing: 10,
                       children: (isAvatar
                       ? [ 
-                        // Astroknowts 
+                        // Astroknowts
                         'images/1Avatar.png',
                         'images/2Avatar.png',
                         'images/3Avatar.png',

@@ -65,7 +65,7 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
 
     final quizList =
         selectedQuiz['levels'][levelKey] ??
-        selectedQuiz['levels']['basic'];
+        selectedQuiz['levels']['basic']; 
 
     Navigator.pushReplacement(
       context,
