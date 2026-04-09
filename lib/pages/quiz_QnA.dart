@@ -11,48 +11,48 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2.  The Sun is shaped like a…',
-          'answers': ['Oblong', 'Sphere', 'Circle'],
-          'correct': 1 //Sphere
+          'answers': ['Sphere', 'Oblong', 'Circle'],
+          'correct': 0 //Sphere
         },
         {
           'question': '3.  What gases make up most of the Sun?',
-          'answers': ['Carbon Dioxide and Helium', 'Neon and Helium', 'Hydrogen and Helium'],
-          'correct': 2  //Hydrogen and Helium
+          'answers': ['Neon and\n  Helium', ' Hydrogen\nand Helium', 'Carbon Dioxide\n   and Helium'],
+          'correct': 1  //Hydrogen and Helium
         },
         {
           'question': '4.  Does the Sun have a solid surface?',
-          'answers': ['Yes', 'Only at the center', 'No'],
+          'answers': ['Yes', '   Only at\n the center', 'No'],
           'correct': 2  //No
         },
         {
           'question': '5.  What is the reason that keeps everything surrounding the Sun in orbit?',
-          'answers': ['Sun’s radiation', 'Sun’s gravity', 'Sun’s energy'],
+          'answers': ['  Sun’s\nradiation', ' Sun’s\ngravity', ' Sun’s\nenergy'],
           'correct': 1 //Sun’s gravity
         },
         {
           'question': '6.  The Sun is the _____ object in the solar system.',
-          'answers': ['Fastest', 'Biggest', 'Reddest'],
-          'correct': 1 //Biggest
+          'answers': ['Biggest', 'Fastest', 'Reddest'],
+          'correct': 0 //Biggest
         },
         {
           'question': '7.  What streams of charged particles does the Sun send out?',
-          'answers': ['Solar wind', 'Comets', 'Meteor showers'],
-          'correct': 0  //Solar wind
+          'answers': [' Meteor\nshowers', 'Comets', 'Solar\nwind'],
+          'correct': 2  //Solar wind
         },
         {
           'question': '8.  Where can you see the auroras caused by the Sun?',
-          'answers': ['North and South Poles', 'Equator', 'Tropical countries'],
+          'answers': [' North and\nSouth Poles', 'Equator', ' Tropical\ncountries'],
           'correct': 0  //North and South Poles
         },
         {
           'question': '9.  Compared to other stars, the Sun is considered _________.',
-          'answers': ['Tiny', 'Huge', 'Medium-sized'],
-          'correct': 2  //Medium-sized
+          'answers': ['Tiny', 'Medium\n -sized', 'Huge'],
+          'correct': 1  //Medium-sized
         },
         {
           'question': '10.  Why is the Sun important for life on Earth?',
-          'answers': ['It makes Earth spin', 'It provides light and heat', 'It creates moon phases'],
-          'correct': 1 //It provides light and heat
+          'answers': ['  It provides\nlight and heat', ' It makes\nEarth spin', '  It creates\nmoon phases'],
+          'correct': 0 //It provides light and heat
         },
       ],
       // Sun intermediate level
@@ -69,32 +69,32 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What process produces the Sun’s energy?',
-          'answers': ['Photosynthesis', 'Nuclear fusion', 'Combustion'],
+          'answers': ['  Photo-\nsynthesis', 'Nuclear\n fusion', 'Combustion'],
           'correct': 1  //Nuclear fusion
         },
         {
           'question': '4.  How long does the Sun take to rotate at the equator?',
-          'answers': ['25 days', '36 days', '39 days'],
+          'answers': ['25 days', '39 days', '36 days'],
           'correct': 0  //25 days
         },
         {
           'question': '5.  How long does it take to rotate near the poles?',
-          'answers': ['26 days', '36 days', '39 days'],
+          'answers': ['33 days', '36 days', '39 days'],
           'correct': 1 //36 days
         },
         {
           'question': '6.  What do the rings of dust around the Sun show?',
-          'answers': ['Paths of planets', 'Comets', 'Asteroids'],
+          'answers': ['Paths of\n planets', 'Comets', 'Asteroids'],
           'correct': 0 //Paths of planets
         },
         {
           'question': '7.  How fast does the Sun move through the Milky Way?',
-          'answers': ['720,000 km/h', '850,000 km/h', '1,000,000 km/h'],
-          'correct': 0  //720,000 km/h
+          'answers': [' 100,000 \n   km/h ', ' 850,000 \n   km/h ', ' 720,000 \n   km/h '],
+          'correct': 2  //720,000 km/h
         },
         {
           'question': '8.  How long does it take the Sun to orbit the galaxy?',
-          'answers': ['135 million years', '230 million years', '500 million years'],
+          'answers': ['  135M  \n  years  ', '  230M  \n  years  ', '  500M  \n  years  '],
           'correct': 1  //230 million years
         },
         {
@@ -104,7 +104,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. Plasma is special because it is:',
-          'answers': ['Electrically charged', 'Frozen', 'Solid'],
+          'answers': ['Electrically\n  charged', 'Frozen', 'Solid'],
           'correct': 0 //Electrically charged
         },
       ],
@@ -112,13 +112,13 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'advanced': [
         {
           'question': '1.  The Sun is what type of star?',
-          'answers': ['G-type Main-Sequence', 'Red Giant', 'F-type Main-Sequence'],
+          'answers': ['G-type Main\n Sequence', 'Red Giant', 'F-type Main\n Sequence'],
           'correct': 0  //G-type Main-Sequence
         },
         {
           'question': '2.  What is another name for this type of star?',
-          'answers': ['Yellow dwarf', 'Blue dwarf', 'White giant'],
-          'correct': 0 //Yellow dwarf
+          'answers': ['White giant', 'Blue dwarf', '  Yellow  \n  dwarf  '],
+          'correct': 2 //Yellow dwarf
         },
         {
           'question': '3. What is the visible surface of the Sun called?',
@@ -127,13 +127,13 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  About how hot is the Sun’s photosphere?',
-          'answers': ['5,500 °C', '2 million °C', '15 million °C'],
-          'correct': 0  //5,500 °C
+          'answers': ['2,500 °C', '5,500 °C', '15M °C'],
+          'correct': 1  //5,500 °C
         },
         {
           'question': '5.  Which part of the Sun is hotter than the photosphere?',
-          'answers': ['Core', 'Corona', 'Surface'],
-          'correct': 1 //Corona
+          'answers': ['Core', 'Surface', 'Corona'],
+          'correct': 2 //Corona
         },
         {
           'question': '6.  What percentage of the solar system’s mass does the Sun hold?',
@@ -147,17 +147,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8.  What is the Sun’s final stage after becoming a red giant?',
-          'answers': ['Black hole', 'Neutron star', 'White dwarf'],
+          'answers': ['Black hole', 'Neutron\n   star', 'White dwarf'],
           'correct': 2  //White dwarf
         },
         {
           'question': '9.  Which process on Earth depends on the Sun for plants to make food?',
-          'answers': ['Photosynthesis', 'Respiration', 'Digestion'],
+          'answers': ['  Photo-\nsynthesis', 'Respiration', 'Digestion'],
           'correct': 0  //Photosynthesis
         },
         {
           'question': '10. What are some signs that the Sun is active?',
-          'answers': ['Rings and rocks', 'Sunspots and solar flares', 'Gas and dust'],
+          'answers': [' Rings & \n   rocks ', 'Sunspots &\n solar flares', '  Gas &  \n   dust  '],
           'correct': 1 //Sunspots and solar flares
         },
       ],
@@ -222,7 +222,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'intermediate': [
         {
           'question': '1.  How long does Mercury take to orbit around the Sun?',
-          'answers': ['365 days, 88 days, 30 days'],
+          'answers': ['365 days', '88 days', '30 days'],
           'correct': 1  //88 days
         },
         {
@@ -232,7 +232,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3.  What is the equivalent number of Earth days in one mercury solar day (Day-Night cycle)?',
-          'answers': ['160.25 days, 175.97 days, 186.97 days'],
+          'answers': ['160.25 days', '175.97 days', '186.97 days'],
           'correct': 1  //175.97 days
         },
         {
@@ -424,12 +424,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. What is it like to stand on Venus because of pressure?',
-          'answers': ['Like flying, Like being in space, Like being deep underwater'],
+          'answers': ['Like flying', 'Like being in space', 'Like being deep underwater'],
           'correct': 2  //Like being deep underwater
         },
         {
           'question': '10.  What is the event called when Venus passes in front of the Sun?',
-          'answers': ['Transit, Eclipse, Rotation'],
+          'answers': ['Transit', 'Eclipse', 'Rotation'],
           'correct': 0  //Transit
         },
       ],
@@ -461,7 +461,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6.  How does Venus compare to Mercury in temperature?',
-          'answers': ['Colder, Same, Hotter'],
+          'answers': ['Colder', 'Same', 'Hotter'],
           'correct': 2  //Hotter
         },
         {
@@ -566,7 +566,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '5. What happens six months after one hemisphere experiences summer?',
-          'answers': ['It stays the same, The opposite hemisphere experiences summer, The Sun stops moving'],
+          'answers': ['It stays the same', 'The opposite hemisphere experiences summer', 'The Sun stops moving'],
           'correct': 1  //The opposite hemisphere experiences summer
         },
         {
@@ -576,7 +576,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. What percentage of Earth’s surface is covered by water?',
-          'answers': ['30%, 50%, 71%'],
+          'answers': ['30%', '50%', '71%'],
           'correct': 2  //71%
         },
         {
@@ -603,7 +603,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. What percentage of Earth’s water is fresh water?',
-          'answers': ['3%, 10%, 25%'],
+          'answers': ['3%', '10%', '25%'],
           'correct': 0  //3%
         },
         {
@@ -613,7 +613,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. Near the surface, our atmosphere is 78% of which gas?',
-          'answers': ['Oxygen, Hydrogen, Nitrogen'],
+          'answers': ['Oxygen', 'Hydrogen', 'Nitrogen'],
           'correct': 2  //Nitrogen
         },
         {
@@ -633,7 +633,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. How many moons does Earth have?',
-          'answers': ['Zero, One, Two'],
+          'answers': ['Zero', 'One', 'Two'],
           'correct': 1  //One
         },
         {
@@ -643,7 +643,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. Besides nitrogen and oxygen, what percentage of the atmosphere is made of “other ingredients”?',
-          'answers': ['1%, 10%, 21%'],
+          'answers': ['1%', '10%', '21%'],
           'correct': 0  //1%
         },
       ],
@@ -713,7 +713,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. How long is one sol on Mars?',
-          'answers': ['24 hours, 24.6 hours, 25.6 hours'],
+          'answers': ['24 hours', '24.6 hours', '25.6 hours'],
           'correct': 1  //24.6 hours
         },
         {
