@@ -54,9 +54,9 @@ flutter:
     - images/premium1.png
     - images/premium2.png
     - images/premium3.png
-    - images/x2.png
-    - images/x3.png
-    - images/x5.png
+    - images/livesx2.png
+    - images/livesx3.png
+    - images/livesx5.png
     - images/alien.png
 
   fonts:

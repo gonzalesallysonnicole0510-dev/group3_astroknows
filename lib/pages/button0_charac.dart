@@ -132,7 +132,7 @@ class _CharacCustPageState extends State<CharacCustPage> {
                         // Spaceships
                         'images/spaceship.png',
                         'images/sun.png',
-                        'images/premium3.png',
+                        'images/premium2.png',
                       ])
                       .map((avatarPath) => _avatarBtn(avatarPath))
                       .toList(),
