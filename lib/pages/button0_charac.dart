@@ -271,52 +271,6 @@ class AvatarPreview extends StatelessWidget {
 }
 
 
-
-// // Preview Widget
-// class AvatarPreview extends StatelessWidget {
-//   final String avatarPath;
-//   final String spaceshipPath;
-
-//   const AvatarPreview({super.key, required this.avatarPath, required this.spaceshipPath});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     final screenHeight = MediaQuery.of(context).size.height;
-
-//     return Column(
-//       children: [
-//         FittedBox(
-//           child: Text("PREVIEW",
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontFamily: 'Russo One', 
-//                 fontSize: 14,
-//                 letterSpacing: 1.2,
-//                 )),
-//         ),
-//         const SizedBox(height: 10),
-//         Container(
-//           height: screenHeight * 0.5,
-//           width: screenWidth * 0.3,
-//           decoration: BoxDecoration(
-//             border: Border.all(color: Colors.cyanAccent),
-//             borderRadius: BorderRadius.circular(20),
-//           ),
-//           child: ClipRRect(
-//             borderRadius: BorderRadius.circular(18),
-//             child: Image.asset(
-//               avatarPath,
-//               fit: BoxFit.contain,
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
 class AstroknowtDesigns extends StatelessWidget {
   final VoidCallback onTap;
   final bool isSelected;
