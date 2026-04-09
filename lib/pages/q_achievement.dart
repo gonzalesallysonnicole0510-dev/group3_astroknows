@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'title.dart';
 
 class AchievementPage extends StatefulWidget {
@@ -200,6 +201,7 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
+
   Widget _buildHUDHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,6 +220,7 @@ class _AchievementPageState extends State<AchievementPage>
       ],
     );
   }
+
 
   Widget _buildTransmission(bool isSmallScreen) {
     return Container(
@@ -280,6 +283,7 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
+
   Widget _buildRewardBadge(bool isSmallScreen) {
     bool isClaimed = rewardStar == 0;
 
@@ -339,6 +343,7 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
+
   Widget _buildActionButtons(BuildContext context, bool isSmallScreen) {
     bool canClaim = rewardStar > 0;
 
@@ -380,7 +385,7 @@ class _AchievementPageState extends State<AchievementPage>
           child: OutlinedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const TitlePage()),
+                MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
               );
             },
             icon: const Icon(Icons.rocket_launch_rounded, size: 20),
@@ -423,6 +428,7 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 }
+
 
 class StarFieldPainter extends CustomPainter {
   final double blink;

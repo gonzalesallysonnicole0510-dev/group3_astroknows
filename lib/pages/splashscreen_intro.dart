@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'title.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class SplashScreen_Intro extends StatefulWidget {
   const SplashScreen_Intro({super.key});
 
@@ -34,7 +36,7 @@ class _SplashScreenState_Intro extends State<SplashScreen_Intro> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const TitlePage()),
+        MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
       );
     });
   }
@@ -42,7 +44,7 @@ class _SplashScreenState_Intro extends State<SplashScreen_Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D1925), 
+      backgroundColor: const Color(0xFF0D1925),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +69,6 @@ class _SplashScreenState_Intro extends State<SplashScreen_Intro> {
 
             const SizedBox(height: 10),
 
-           
             const Text(
               'Loading...',
               style: TextStyle(
@@ -81,4 +82,3 @@ class _SplashScreenState_Intro extends State<SplashScreen_Intro> {
     );
   }
 }
- 
