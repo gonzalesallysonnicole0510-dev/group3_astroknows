@@ -31,14 +31,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/Avatar1.png
-    - images/Avatar2.png
-    - images/Avatar3.png
-    - images/Avatar4.png
-    - images/Avatar5.png
-    - images/Avatar6.png
-    - images/Avatar7.png
-    - images/AlienAvatar.png
+    - images/1Avatar.png
+    - images/2Avatar.png
+    - images/3Avatar.png
+    - images/4Avatar.png
+    - images/5Avatar.png
+    - images/6Avatar.png
+    - images/7Avatar.png
+    - images/AvatarAlien.png
     - images/icon.png
     - images/transicon.png
     - images/earth.png
