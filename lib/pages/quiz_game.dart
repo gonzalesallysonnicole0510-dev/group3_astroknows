@@ -11,8 +11,10 @@ import 'star_animation.dart';
 class Quizteroid_Quest extends StatefulWidget {
   final List<Map<String, dynamic>> quiz;
   final String planet;
+  final String astroknowt;
+  final String spaceship;
 
-  const Quizteroid_Quest({super.key, required this.quiz, required this.planet});
+  const Quizteroid_Quest({super.key, required this.quiz, required this.planet, required this.astroknowt, required this.spaceship});
 
   @override
   State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
@@ -33,7 +35,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
-  
+ 
   // Asteroid positions and movement directions
   List<double> asteroidX = [-0.52, 0, 0.52];
   List<double> asteroidY = [-0.6, -0.6, -0.6];
@@ -156,7 +158,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         } else if (playerY == 4.0) {
           playerFloat = PlayerDirection.up;
         }
-        
+       
         playerY += (playerFloat == PlayerDirection.up)
             ? -0.015
             : 0.015;
@@ -185,6 +187,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       if (!midShot) laserX = playerX;
     });
   }
+
 
   // Shooting function
   void fireLaser() {
@@ -236,6 +239,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       midShot = false;
     });
   }
+
 
   double heightToCoordinate(double height) {
     double arenaHeight = MediaQuery.of(context).size.height * 0.7;
@@ -312,6 +316,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
+
   // Main build method for the quiz game UI
   @override
   Widget build(BuildContext context) {
@@ -383,11 +388,26 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                 AnimatedAlign(
                   alignment: Alignment(playerX, playerY),
                   duration: const Duration(milliseconds: 150),
-                  child: Image.asset(
-                    'images/spaceship.png',
-                    width: rocketWidth,
-                    height: rocketHeight,
-                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Spaceship
+                      Image.asset(
+                        widget.spaceship,
+                        width: rocketWidth,
+                        height: rocketHeight,
+                      ),
+                      // Astroknowt
+                      Positioned(
+                        top: 50,
+                        child: Image.asset(
+                          widget.astroknowt,
+                          width: 20,
+                          height: 20,
+                        ),
+                      )
+                    ],
+                  )
                 ),
               ],
             ),
@@ -424,7 +444,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       ],
                     ),
                   ),
-                  
+                 
                   // 2. The Spark Effect attached to the tip of the line
                   AnimatedPositioned(
                     duration: timeLeft == 20
@@ -432,7 +452,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                         : const Duration(seconds: 1),
                     curve: Curves.linear,
                     // Anchors the spark exactly at the end of the shrinking line
-                    left: (timeLeft.clamp(0, 20) / 20) * sw - 10, 
+                    left: (timeLeft.clamp(0, 20) / 20) * sw - 10,
                     top: 0,
                     child: Container(
                       width: 20,
@@ -580,6 +600,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 }
+
 
 // Widget for individual asteroid choices
 class AsteroidChoice extends StatelessWidget {
@@ -732,7 +753,7 @@ class PauseMenu extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const CharacCustPage(),
+                      builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
                     ),
                   ),
                 ),
@@ -744,7 +765,7 @@ class PauseMenu extends StatelessWidget {
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const TitlePage(),
+                      builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
                     ),
                     (route) => false,
                   ),

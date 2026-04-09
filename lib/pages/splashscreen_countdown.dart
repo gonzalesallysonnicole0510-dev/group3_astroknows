@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'quiz_QnA.dart';
 import 'quiz_game.dart';
 
@@ -39,7 +40,6 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
     });
   }
 
-
   void goToQuiz(BuildContext context, String planet, int level) {
     final quizKey = '${planet.toLowerCase()}_quiz';
 
@@ -72,6 +72,8 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
         builder: (_) => Quizteroid_Quest(
           quiz: quizList,
           planet: selectedQuiz['planet'],
+          astroknowt: selectedAstroknowt,
+          spaceship: selectedSpaceship,
         ),
       ),
     );
