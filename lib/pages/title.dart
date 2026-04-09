@@ -184,7 +184,7 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
   Widget _buildCharacterButton(BuildContext context, double h) {
     return GestureDetector(
       onTap: () async {
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => const CharacCustPage(type: CustomizationType.astroknowt)));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => CharacCustPage(type: CustomizationType.astroknowt)));
         refreshCharacter();
       },
       child: Container(

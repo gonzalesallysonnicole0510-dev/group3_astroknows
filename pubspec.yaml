@@ -39,8 +39,11 @@ flutter:
     - images/6Avatar.png
     - images/7Avatar.png
     - images/AvatarAlien.png
+
     - images/icon.png
     - images/transicon.png
+    - images/alien.png
+    
     - images/earth.png
     - images/mercury.png
     - images/venus.png
@@ -51,13 +54,14 @@ flutter:
     - images/neptune.png
     - images/sun.png
     - images/spaceship.png
+    
     - images/premium1.png
     - images/premium2.png
     - images/premium3.png
     - images/livesx2.png
     - images/livesx3.png
     - images/livesx5.png
-    - images/alien.png
+
 
   fonts:
     - family: Michroma
@@ -69,3 +73,6 @@ flutter:
     - family: Exo 2
       fonts:
         - asset: fonts/Exo2-VariableFont_wght.ttf
+    - family: Share-Tech
+      fonts:
+        - asset: fonts/ShareTech-Regular.ttf
