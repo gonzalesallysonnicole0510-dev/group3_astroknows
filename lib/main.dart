@@ -10,13 +10,15 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); // Hides status and navigation bars for a full-screen experience
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  ); // Hides status and navigation bars for a full-screen experience
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});                     
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

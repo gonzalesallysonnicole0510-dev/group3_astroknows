@@ -7,6 +7,7 @@ import 'title.dart';
 import 'q_achievement.dart';
 import 'q_mission-failed.dart';
 import 'star_animation.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Quizteroid_Quest extends StatefulWidget {
   final List<Map<String, dynamic>> quiz;
@@ -14,17 +15,27 @@ class Quizteroid_Quest extends StatefulWidget {
   final String astroknowt;
   final String spaceship;
 
-  const Quizteroid_Quest({super.key, required this.quiz, required this.planet, required this.astroknowt, required this.spaceship});
+  const Quizteroid_Quest({
+    super.key,
+    required this.quiz,
+    required this.planet,
+    required this.astroknowt,
+    required this.spaceship,
+  });
 
   @override
   State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
 }
 
 enum AsteroidDirection { up, down }
+
 enum PlayerDirection { up, down }
 
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
-  // position and game state variables
+  String avatarPath = selectedAstroknowt;
+  String spaceshipPath = selectedSpaceship;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
@@ -35,14 +46,14 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
- 
+
   // Asteroid positions and movement directions
   List<double> asteroidX = [-0.52, 0, 0.52];
   List<double> asteroidY = [-0.6, -0.6, -0.6];
   List<AsteroidDirection> asteroidFloat = [
     AsteroidDirection.up,
     AsteroidDirection.down,
-    AsteroidDirection.up
+    AsteroidDirection.up,
   ];
 
   double playerX = 0;
@@ -55,12 +66,19 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   @override
   void initState() {
     super.initState();
+    _playMusic();
     quizgameTimer();
     startQuizGame();
   }
 
+  void _playMusic() async {
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    await _audioPlayer.play(AssetSource('bg_music.mp3'));
+  }
+
   @override
   void dispose() {
+    _audioPlayer.dispose();
     gameTimer?.cancel();
     animationSpeed?.cancel();
     super.dispose();
@@ -84,43 +102,33 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             lives--;
           });
           if (lives <= 0) {
-              Future.delayed(
-                const Duration(milliseconds: 800),
-                () {
-                  if (mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const MissionFailedPage(),
-                      ),
-                    );
-                  }
-                },
-              );
+            Future.delayed(const Duration(milliseconds: 800), () {
+              if (mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MissionFailedPage()),
+                );
+              }
+            });
           } else {
-            Future.delayed(
-              const Duration(seconds: 1),
-              () {
-                if (!mounted) return;
-                bool isLast = currentQuestion >= widget.quiz.length - 1;
-                if (isLast) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const MissionFailedPage(),
-                    ),
-                  );
-                } else {
-                  setState(() {
-                    currentQuestion++;
-                    feedback = '';
-                    boxBorderColor = Colors.lightBlueAccent;
-                    _resetAsteroids();
-                    timeLeft = 20;
-                  });
-                }
-              },
-            );
+            Future.delayed(const Duration(seconds: 1), () {
+              if (!mounted) return;
+              bool isLast = currentQuestion >= widget.quiz.length - 1;
+              if (isLast) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MissionFailedPage()),
+                );
+              } else {
+                setState(() {
+                  currentQuestion++;
+                  feedback = '';
+                  boxBorderColor = Colors.lightBlueAccent;
+                  _resetAsteroids();
+                  timeLeft = 20;
+                });
+              }
+            });
           }
         }
       }
@@ -128,42 +136,37 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
   void startQuizGame() {
-    animationSpeed = Timer.periodic(
-      const Duration(milliseconds: 70),
-      (timer) {
-        if (isPaused || feedback.isNotEmpty || !mounted) return;
+    animationSpeed = Timer.periodic(const Duration(milliseconds: 70), (timer) {
+      if (isPaused || feedback.isNotEmpty || !mounted) return;
 
-        // up and down animation of asteroids
-        setState(() {
-          for (int i = 0; i < 3; i++) {
-            if (asteroidY[i] == -50) continue;
+      // up and down animation of asteroids
+      setState(() {
+        for (int i = 0; i < 3; i++) {
+          if (asteroidY[i] == -50) continue;
 
-            if (asteroidY[i] < -0.8) {
-              asteroidFloat[i] = AsteroidDirection.down;
-            } else if (asteroidY[i] > -0.5) {
-              asteroidFloat[i] = AsteroidDirection.up;
-            }
-
-            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
-                ? -0.01
-                : 0.01;
+          if (asteroidY[i] < -0.8) {
+            asteroidFloat[i] = AsteroidDirection.down;
+          } else if (asteroidY[i] > -0.5) {
+            asteroidFloat[i] = AsteroidDirection.up;
           }
-        });
 
-        // up and down animation of player (spaceship)
-        if (playerY < 3.8) {
-          setState(() {
-            playerFloat = PlayerDirection.down;
-          });
-        } else if (playerY == 4.0) {
-          playerFloat = PlayerDirection.up;
+          asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
+              ? -0.01
+              : 0.01;
         }
-       
-        playerY += (playerFloat == PlayerDirection.up)
-            ? -0.015
-            : 0.015;
-      },
-    );
+      });
+
+      // up and down animation of player (spaceship)
+      if (playerY < 3.8) {
+        setState(() {
+          playerFloat = PlayerDirection.down;
+        });
+      } else if (playerY >= 4.0) {
+        playerFloat = PlayerDirection.up;
+      }
+
+      playerY += (playerFloat == PlayerDirection.up) ? -0.015 : 0.015;
+    });
   }
 
   // Player movement functions
@@ -188,7 +191,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-
   // Shooting function
   void fireLaser() {
     if (midShot || isPaused || feedback.isNotEmpty) return;
@@ -198,38 +200,33 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       laserX = playerX;
     });
 
-    Timer.periodic(
-      const Duration(milliseconds: 15),
-      (timer) {
-        if (!mounted) {
-          timer.cancel();
-          return;
-        }
+    Timer.periodic(const Duration(milliseconds: 15), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
 
-        setState(() {
-          laserHeight += 25;
-        });
+      setState(() {
+        laserHeight += 25;
+      });
 
-        double maxHeight = MediaQuery.of(context).size.height;
-        if (laserHeight > maxHeight) {
+      double maxHeight = MediaQuery.of(context).size.height;
+      if (laserHeight > maxHeight) {
+        _stopLaser(timer);
+      }
+
+      for (int i = 0; i < 3; i++) {
+        double hitPos = heightToCoordinate(laserHeight + (maxHeight * 0.1));
+        bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
+
+        if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
+          asteroidY[i] = -50;
           _stopLaser(timer);
+          checkAnswer(i);
+          break;
         }
-
-        for (int i = 0; i < 3; i++) {
-          double hitPos = heightToCoordinate(
-            laserHeight + (maxHeight * 0.1),
-          );
-          bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
-
-          if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
-            asteroidY[i] = -50;
-            _stopLaser(timer);
-            checkAnswer(i);
-            break;
-          }
-        }
-      },
-    );
+      }
+    });
   }
 
   void _stopLaser(Timer t) {
@@ -239,7 +236,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       midShot = false;
     });
   }
-
 
   double heightToCoordinate(double height) {
     double arenaHeight = MediaQuery.of(context).size.height * 0.7;
@@ -257,50 +253,40 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
 
     if (lives <= 0) {
-      Future.delayed(
-        const Duration(milliseconds: 800),
-        () {
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const MissionFailedPage(),
-              ),
-            );
-          }
-        },
-      );
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const MissionFailedPage()),
+          );
+        }
+      });
       return;
     }
 
     // Delay before moving to next question or ending game
-    Future.delayed(
-      const Duration(seconds: 1),
-      () {
-        if (!mounted) return;
-        bool isLast = currentQuestion >= widget.quiz.length - 1;
+    Future.delayed(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      bool isLast = currentQuestion >= widget.quiz.length - 1;
 
-        if (isCorrect && isLast) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AchievementPage(
-                star: 500,
-                planet: widget.planet,
-              ),
-            ),
-          );
-        } else {
-          setState(() {
-            if (isCorrect) currentQuestion++;
-            feedback = '';
-            boxBorderColor = Colors.lightBlueAccent;
-            _resetAsteroids();
-            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
-          });
-        }
-      },
-    );
+      if (isCorrect && isLast) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AchievementPage(star: 500, planet: widget.planet),
+          ),
+        );
+      } else {
+        setState(() {
+          if (isCorrect) currentQuestion++;
+          feedback = '';
+          boxBorderColor = Colors.lightBlueAccent;
+          _resetAsteroids();
+          timeLeft =
+              20; // dagdag na ma-rreset ang timer once napili ang correct answer
+        });
+      }
+    });
   }
 
   // Reset asteroid positions and movement directions
@@ -311,11 +297,10 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       asteroidFloat = [
         AsteroidDirection.up,
         AsteroidDirection.down,
-        AsteroidDirection.up
+        AsteroidDirection.up,
       ];
     });
   }
-
 
   // Main build method for the quiz game UI
   @override
@@ -323,7 +308,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
 
-  // Calculate rocket size based on screen dimensions
+    // Calculate rocket size based on screen dimensions
     final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
     final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
@@ -377,7 +362,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                               color: Colors.cyanAccent.withValues(alpha: 0.8),
                               blurRadius: 10,
                               spreadRadius: 1,
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -393,21 +378,17 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                     children: [
                       // Spaceship
                       Image.asset(
-                        widget.spaceship,
+                        spaceshipPath,
                         width: rocketWidth,
                         height: rocketHeight,
                       ),
                       // Astroknowt
                       Positioned(
                         top: 50,
-                        child: Image.asset(
-                          widget.astroknowt,
-                          width: 20,
-                          height: 20,
-                        ),
-                      )
+                        child: Image.asset(avatarPath, width: 20, height: 20),
+                      ),
                     ],
-                  )
+                  ),
                 ),
               ],
             ),
@@ -432,7 +413,9 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                     // Calculates width smoothly based on a perfect 20 seconds
                     width: (timeLeft.clamp(0, 20) / 20) * sw,
                     height: 4,
-                    margin: const EdgeInsets.only(top: 8), // Centers the line vertically
+                    margin: const EdgeInsets.only(
+                      top: 8,
+                    ), // Centers the line vertically
                     decoration: BoxDecoration(
                       color: Colors.cyanAccent,
                       boxShadow: [
@@ -444,7 +427,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       ],
                     ),
                   ),
-                 
+
                   // 2. The Spark Effect attached to the tip of the line
                   AnimatedPositioned(
                     duration: timeLeft == 20
@@ -490,22 +473,24 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             top: (sh * 0.05).clamp(30.0, 60.0),
             right: (sw * 0.05).clamp(15.0, 30.0),
             child: GestureDetector(
-              onTap: () => setState(() => isPaused = true),
+              onTap: () {
+                setState(() {
+                  isPaused = true;
+                });
+                _audioPlayer.pause(); // This must be inside the onTap block
+              },
               child: Container(
                 width: (sw * 0.12).clamp(45.0, 60.0),
                 height: (sw * 0.12).clamp(45.0, 60.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFF131B26),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.cyanAccent,
-                    width: 2.5,
-                  ),
+                  border: Border.all(color: Colors.cyanAccent, width: 2.5),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.cyanAccent.withValues(alpha: 0.3),
                       blurRadius: 10,
-                    )
+                    ),
                   ],
                 ),
                 child: Icon(
@@ -554,10 +539,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF131B26),
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: boxBorderColor,
-                      width: 2.5,
-                    ),
+                    border: Border.all(color: boxBorderColor, width: 2.5),
                   ),
                   child: Center(
                     child: Padding(
@@ -583,7 +565,19 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           ),
           if (isPaused)
             PauseMenu(
-              onResume: () => setState(() => isPaused = false),
+              onResume: () {
+                _audioPlayer.resume();
+                setState(() {
+                  isPaused = false;
+                  avatarPath = selectedAstroknowt;
+                });
+              },
+              onUpdateAvatar: (newPath) {
+                setState(() {
+                  avatarPath = newPath;
+                  spaceshipPath = selectedSpaceship;
+                });
+              },
             ),
         ],
       ),
@@ -600,7 +594,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 }
-
 
 // Widget for individual asteroid choices
 class AsteroidChoice extends StatelessWidget {
@@ -622,8 +615,7 @@ class AsteroidChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (y == -50) return const SizedBox.shrink();
-    double size = (MediaQuery.of(context).size.width * 0.18)
-        .clamp(60.0, 85.0);
+    double size = (MediaQuery.of(context).size.width * 0.18).clamp(60.0, 85.0);
 
     return AnimatedAlign(
       alignment: Alignment(x, y),
@@ -634,16 +626,13 @@ class AsteroidChoice extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white24,
-            width: 2,
-          ),
+          border: Border.all(color: Colors.white24, width: 2),
           boxShadow: const [
             BoxShadow(
               color: Colors.black45,
               blurRadius: 5,
               offset: Offset(0, 3),
-            )
+            ),
           ],
         ),
         child: Center(
@@ -674,8 +663,7 @@ class ShootButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double size = (MediaQuery.of(context).size.width * 0.15)
-        .clamp(50.0, 70.0);
+    double size = (MediaQuery.of(context).size.width * 0.15).clamp(50.0, 70.0);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -684,15 +672,12 @@ class ShootButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF232B32),
           shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.cyanAccent,
-            width: 2,
-          ),
+          border: Border.all(color: Colors.cyanAccent, width: 2),
           boxShadow: [
             BoxShadow(
               color: Colors.cyanAccent.withValues(alpha: 0.2),
               blurRadius: 8,
-            )
+            ),
           ],
         ),
         child: Icon(
@@ -708,7 +693,12 @@ class ShootButton extends StatelessWidget {
 // Widget for the pause menu
 class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
-  const PauseMenu({super.key, required this.onResume});
+  final Function(String) onUpdateAvatar;
+  const PauseMenu({
+    super.key,
+    required this.onResume,
+    required this.onUpdateAvatar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -720,10 +710,7 @@ class PauseMenu extends StatelessWidget {
         child: Center(
           child: Container(
             width: (sw * 0.65).clamp(220.0, 300.0),
-            padding: const EdgeInsets.symmetric(
-              vertical: 30,
-              horizontal: 25,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
             decoration: BoxDecoration(
               color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(20),
@@ -750,12 +737,17 @@ class PauseMenu extends StatelessWidget {
                 _menuButton(
                   context,
                   'CUSTOMIZATION',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
-                    ),
-                  ),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const CharacCustPage(
+                          type: CustomizationType.astroknowt,
+                        ),
+                      ),
+                    );
+                    onUpdateAvatar(selectedAstroknowt);
+                  },
                 ),
                 const SizedBox(height: 15),
                 _menuButton(
@@ -780,9 +772,10 @@ class PauseMenu extends StatelessWidget {
 
   Widget _menuButton(
     BuildContext context,
-    String label,
-    {required VoidCallback onTap, bool isExit = false}
-  ) {
+    String label, {
+    required VoidCallback onTap,
+    bool isExit = false,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: 48,
