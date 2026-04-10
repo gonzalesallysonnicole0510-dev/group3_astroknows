@@ -101,16 +101,10 @@ class _ShopPageState extends State<ShopPage> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.lightBlueAccent,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.lightBlueAccent, width: 1),
             ),
             child: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -127,16 +121,11 @@ class _ShopPageState extends State<ShopPage> {
             decoration: BoxDecoration(
               color: Colors.blueGrey.shade800,
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(
-                color: Colors.lightBlue,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.lightBlue, width: 1),
             ),
             child: Text(
               '⭐ $totalStar',
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -224,28 +213,17 @@ class Merchandise extends StatelessWidget {
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Center(
-              child: Image.asset(
-                imagePath,
-                width: 88,
-                height: 88,
-              ),
-            ),
+            child: Center(child: Image.asset(imagePath, width: 88, height: 88)),
           ),
           Text(
             '⭐ $price',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
         ],
       ),
     );
   }
 }
-
-
 
 // 3 Extra Lives
 
@@ -275,20 +253,11 @@ class ExtraLives extends StatelessWidget {
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Center(
-              child: Image.asset(
-                imagePath,
-                width: 70,
-                height: 70,
-              ),
-            ),
+            child: Center(child: Image.asset(imagePath, width: 70, height: 70)),
           ),
           Text(
             '⭐ $price',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
         ],
       ),
