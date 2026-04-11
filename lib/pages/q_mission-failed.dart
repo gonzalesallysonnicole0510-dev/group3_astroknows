@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'button2_shop.dart';
 
 class MissionFailedPage extends StatefulWidget {
   const MissionFailedPage({super.key});
@@ -142,7 +143,7 @@ class _MissionFailedPageState extends State<MissionFailedPage>
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontSize: 12,
-            fontFamily: 'Roboto', // Fallback, use Michroma if you have it in pubspec
+            fontFamily: 'Roboto', 
           ),
         ),
         _hudCorner(1),
@@ -225,7 +226,9 @@ class _MissionFailedPageState extends State<MissionFailedPage>
           height: isSmallScreen ? 50 : 60,
           child: ElevatedButton.icon(
             onPressed: () {
-              // Action for repair
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => ShopPage()),
+              );
             },
             icon: const Icon(Icons.build_circle_outlined, size: 24),
             label: Text(

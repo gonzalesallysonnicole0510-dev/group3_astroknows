@@ -62,7 +62,6 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final double h = MediaQuery.of(context).size.height;
@@ -90,8 +89,6 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
               );
             },
           ),
-
-
          
           _pos(
             context,
