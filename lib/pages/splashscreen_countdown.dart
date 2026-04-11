@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/button0_charac.dart';
+import 'package:flutter_application_1/pages/q_timer_lives.dart';
+import 'package:flutter_application_1/pages/q_timer_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'quiz_QnA.dart';
 import 'quiz_game.dart';
 
@@ -40,7 +43,32 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
     });
   }
 
-  void goToQuiz(BuildContext context, String planet, int level) {
+  void goToQuiz(BuildContext context, String planet, int level) async {
+    final hearts = await LivesTimerService.getHearts();
+    final remaining = await LivesTimerService.getRemainingTime();
+
+    // If user bought extra lives (hearts), it will skip timer
+    if (hearts > 0) {
+      remaining == 0; // ignore timer
+    }
+
+    // Block screen if no more lives
+    if (hearts <= 0 && remaining > 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => LivesTimerPage(
+            onFinished: () {
+              // after timer, go back to quiz
+              goToQuiz(context, planet, level);
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Go to Quizteroid Quest
     final quizKey = '${planet.toLowerCase()}_quiz';
 
     final selectedQuiz =
