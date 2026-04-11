@@ -100,8 +100,9 @@ class _AchievementPageState extends State<AchievementPage>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final bool isSmallScreen = size.height < 700;
+    // Implementing flexible MediaQuery sizing
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color(0xFF040B14),
@@ -132,68 +133,62 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
 
-          // Main HUD Interface
+          // Main HUD Interface - Made flexible with SingleChildScrollView
           SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: 500,
-                        maxHeight: constraints.maxHeight * 0.95,
+            child: Center(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 20.0),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 500, // Prevents stretching on tablets/web
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.06,
+                          vertical: screenHeight * 0.04),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0D121A).withValues(alpha: 0.85),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF00E5FF)
+                                .withValues(alpha: 0.15),
+                            blurRadius: 25,
+                            spreadRadius: 2,
+                          )
+                        ],
                       ),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: isSmallScreen ? 20 : 32),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0D121A).withValues(alpha: 0.85),
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color:
-                                const Color(0xFF00E5FF).withValues(alpha: 0.4),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF00E5FF)
-                                  .withValues(alpha: 0.15),
-                              blurRadius: 25,
-                              spreadRadius: 2,
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildHUDHeader(),
-                            SizedBox(height: isSmallScreen ? 15 : 25),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildHUDHeader(),
+                          SizedBox(height: screenHeight * 0.03),
 
-                            // Alien & Message Section
-                            Flexible(
-                              flex: 3,
-                              child: _buildTransmission(isSmallScreen),
-                            ),
+                          // Alien & Message Section
+                          _buildTransmission(screenWidth, screenHeight),
 
-                            SizedBox(height: isSmallScreen ? 15 : 25),
+                          SizedBox(height: screenHeight * 0.03),
 
-                            // Reward Display
-                            _buildRewardBadge(isSmallScreen),
+                          // Reward Display
+                          _buildRewardBadge(screenWidth),
 
-                            SizedBox(height: isSmallScreen ? 20 : 35),
+                          SizedBox(height: screenHeight * 0.04),
 
-                            // Action Buttons
-                            _buildActionButtons(context, isSmallScreen),
-                          ],
-                        ),
+                          // Action Buttons
+                          _buildActionButtons(context, screenWidth, screenHeight),
+                        ],
                       ),
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
         ],
@@ -207,13 +202,16 @@ class _AchievementPageState extends State<AchievementPage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _hudCorner(0),
-        const Text(
-          "MISSION ACCOMPLISHED",
-          style: TextStyle(
-            color: Color(0xFF00E5FF),
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            fontSize: 12,
+        const Expanded(
+          child: Text(
+            "MISSION ACCOMPLISHED",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF00E5FF),
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+              fontSize: 12,
+            ),
           ),
         ),
         _hudCorner(1),
@@ -222,9 +220,14 @@ class _AchievementPageState extends State<AchievementPage>
   }
 
 
-  Widget _buildTransmission(bool isSmallScreen) {
+  Widget _buildTransmission(double screenWidth, double screenHeight) {
+    double avatarSize = screenWidth * 0.2;
+    // Cap the max size of the avatar
+    if (avatarSize > 100) avatarSize = 100;
+    if (avatarSize < 60) avatarSize = 60;
+
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(screenWidth * 0.04),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
@@ -235,8 +238,8 @@ class _AchievementPageState extends State<AchievementPage>
         children: [
           // Alien Avatar
           Container(
-            height: isSmallScreen ? 80 : 100,
-            width: isSmallScreen ? 80 : 100,
+            height: avatarSize,
+            width: avatarSize,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: const Color(0xFF00E5FF).withValues(alpha: 0.1),
@@ -251,7 +254,7 @@ class _AchievementPageState extends State<AchievementPage>
               fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: screenWidth * 0.04),
           // Transmission Text
           Expanded(
             child: Column(
@@ -262,16 +265,16 @@ class _AchievementPageState extends State<AchievementPage>
                   "Great Job, Astroknowt!",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: isSmallScreen ? 16 : 18,
+                    fontSize: screenWidth < 360 ? 14 : 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: screenHeight * 0.01),
                 Text(
                   "You successfully completed the ${widget.planet} sector. Take this reward I've prepared for you!",
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
-                    fontSize: isSmallScreen ? 12 : 14,
+                    fontSize: screenWidth < 360 ? 12 : 14,
                     height: 1.4,
                   ),
                 ),
@@ -284,8 +287,10 @@ class _AchievementPageState extends State<AchievementPage>
   }
 
 
-  Widget _buildRewardBadge(bool isSmallScreen) {
+  Widget _buildRewardBadge(double screenWidth) {
     bool isClaimed = rewardStar == 0;
+    double paddingHorizontal = screenWidth * 0.06;
+    double paddingVertical = paddingHorizontal / 2;
 
     return TweenAnimationBuilder(
       tween: Tween(begin: 0.8, end: 1.0),
@@ -295,7 +300,8 @@ class _AchievementPageState extends State<AchievementPage>
         return Transform.scale(
           scale: value,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            padding: EdgeInsets.symmetric(
+                horizontal: paddingHorizontal, vertical: paddingVertical),
             decoration: BoxDecoration(
               color: isClaimed
                   ? Colors.grey.withValues(alpha: 0.2)
@@ -323,14 +329,14 @@ class _AchievementPageState extends State<AchievementPage>
                 Icon(
                   isClaimed ? Icons.check_circle_rounded : Icons.star_rounded,
                   color: isClaimed ? Colors.grey : Colors.amber,
-                  size: isSmallScreen ? 30 : 40,
+                  size: screenWidth < 360 ? 28 : 40,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: screenWidth * 0.03),
                 Text(
                   isClaimed ? "CLAIMED" : "+ $rewardStar",
                   style: TextStyle(
                     color: isClaimed ? Colors.grey : Colors.amber,
-                    fontSize: isSmallScreen ? 24 : 32,
+                    fontSize: screenWidth < 360 ? 20 : 32,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.5,
                   ),
@@ -344,26 +350,32 @@ class _AchievementPageState extends State<AchievementPage>
   }
 
 
-  Widget _buildActionButtons(BuildContext context, bool isSmallScreen) {
+  Widget _buildActionButtons(BuildContext context, double screenWidth, double screenHeight) {
     bool canClaim = rewardStar > 0;
+    double buttonHeight = screenHeight * 0.06;
+    if (buttonHeight < 45) buttonHeight = 45; // Minimum touch target size
+    if (buttonHeight > 60) buttonHeight = 60; // Max cap
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: double.infinity,
-          height: isSmallScreen ? 50 : 60,
+          height: buttonHeight,
           child: ElevatedButton.icon(
             onPressed: canClaim ? claimPoints : null,
             icon: Icon(
                 canClaim ? Icons.auto_awesome_rounded : Icons.lock_rounded,
-                size: 24),
-            label: Text(
-              canClaim ? "CLAIM REWARD" : "REWARD SECURED",
-              style: TextStyle(
-                fontSize: isSmallScreen ? 16 : 18,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.0,
+                size: screenWidth < 360 ? 20 : 24),
+            label: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                canClaim ? "CLAIM REWARD" : "REWARD SECURED",
+                style: TextStyle(
+                  fontSize: screenWidth < 360 ? 14 : 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                ),
               ),
             ),
             style: ElevatedButton.styleFrom(
@@ -378,23 +390,26 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: screenHeight * 0.015),
         SizedBox(
           width: double.infinity,
-          height: isSmallScreen ? 45 : 55,
+          height: buttonHeight * 0.9,
           child: OutlinedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
               );
             },
-            icon: const Icon(Icons.rocket_launch_rounded, size: 20),
-            label: Text(
-              "MAIN MENU",
-              style: TextStyle(
-                fontSize: isSmallScreen ? 14 : 16,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.8,
+            icon: Icon(Icons.rocket_launch_rounded, size: screenWidth < 360 ? 18 : 20),
+            label: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "MAIN MENU",
+                style: TextStyle(
+                  fontSize: screenWidth < 360 ? 12 : 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.8,
+                ),
               ),
             ),
             style: OutlinedButton.styleFrom(

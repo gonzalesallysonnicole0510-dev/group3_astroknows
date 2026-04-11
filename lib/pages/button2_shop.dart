@@ -90,7 +90,7 @@ class _ShopPageState extends State<ShopPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Spend $price ⭐?',
+                'Spend ⭐ $price?',
                 style: TextStyle(color: Colors.white70, fontSize: 16),
               ),
               if (itemType == 'hearts') ...[
