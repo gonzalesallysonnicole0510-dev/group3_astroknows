@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String selectedAstroknowt = 'images/1Avatar.png';
 String selectedSpaceship = 'images/spaceship.png';
@@ -23,15 +24,54 @@ class CharacCustPage extends StatefulWidget {
 class _CharacCustPageState extends State<CharacCustPage> {
   CustomizationType currentType = CustomizationType.astroknowt;
 
-  void _updateAvatar(String avatarPath) {
+  @override
+  void initState() {
+    super.initState();
+    _loadOwnedSpaceships();
+  }
+
+  List<String> ownedSpaceships = [];
+
+  // Load premium spaceship here once bought from shop
+  Future<void> _loadOwnedSpaceships() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<String> saved =
+        prefs.getStringList('ownedSpaceships') ?? [];
+
+    // Include basic spaceship designs
+    if (!saved.contains('images/spaceship.png' 'images/sun.png' 'images/earth.png')) {
+      saved.insert(0, 'images/spaceship.png');
+      saved.insert(1, 'images/sun.png');
+      saved.insert(2, 'images/earth.png');
+    }
+
+    setState(() {
+      ownedSpaceships = saved;
+    });
+  }
+
+
+  Future<void> _saveSelectedSpaceship(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedSpaceship', path);
+  }
+
+
+  void _updateAvatar(String avatarPath) async {
+    final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       if (currentType == CustomizationType.astroknowt) {
         selectedAstroknowt = avatarPath;
+        prefs.setString('selectedAstroknowt', avatarPath);
       } else {
         selectedSpaceship = avatarPath;
+        prefs.setString('selectedSpaceship', avatarPath);
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,12 +167,9 @@ class _CharacCustPageState extends State<CharacCustPage> {
                         'images/7Avatar.png',
                         'images/AvatarAlien.png',
                       ]
-                      : [
-                        // Spaceships
-                        'images/spaceship.png',
-                        'images/sun.png',
-                        'images/premium1_ufo.png',
-                      ])
+                      // Spaceships
+                      : ownedSpaceships
+                      )
                       .map((avatarPath) => _avatarBtn(avatarPath))
                       .toList(),
                     ),
@@ -161,6 +198,8 @@ class _CharacCustPageState extends State<CharacCustPage> {
 
   // Avatar Choices Button
   Widget _avatarBtn(String fileName) {
+    final isAvatar = currentType == CustomizationType.astroknowt;
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     String path = fileName;
@@ -172,21 +211,13 @@ class _CharacCustPageState extends State<CharacCustPage> {
         height: screenHeight * 0.08,
         decoration: BoxDecoration(
           border: Border.all(
-            color: selectedAstroknowt == path
-                ? Colors.cyanAccent
-                : Colors.transparent,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-      child: Container(
-        width: screenWidth * 0.08,
-        height: screenHeight * 0.08,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: selectedSpaceship == path
-                ? Colors.cyanAccent
-                : Colors.transparent,
+            color: isAvatar
+              ? (selectedAstroknowt == path
+                  ? Colors.cyanAccent
+                  : Colors.transparent)
+              : (selectedSpaceship == path
+                  ? Colors.cyanAccent
+                  : Colors.transparent),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -195,7 +226,6 @@ class _CharacCustPageState extends State<CharacCustPage> {
           borderRadius: BorderRadius.circular(10),
           child: Image.asset(path, fit: BoxFit.contain),
         ),
-      ),
       ),
     );
   }
