@@ -3,31 +3,28 @@ import 'splashscreen_countdown.dart';
 import 'package:flutter/material.dart';
 
 
-
-
+//STAR DATA MODEL
 class Star {
-  double x, y, z;
-  late double prevZ;
+  final double x;
+  final double y;
+  final double size;
+  final double twinklePhase; // Random starting point for the twinkle
+  final double twinkleSpeed; // How fast this specific star twinkles
+  final double minOpacity;   // The dimmest this star gets
+  final double maxOpacity;   // The brightest this star gets
 
 
-  Star() : x = _rng(), y = _rng(), z = Random().nextDouble() {
-    prevZ = z;
-  }
-
-
-  static double _rng() => Random().nextDouble() * 2 - 1;
-
-
-  void update({double speed = 0.0008}) {
-    prevZ = z;
-    z -= speed;
-    if (z <= 0) {
-      z = 1.0;
-      prevZ = z;
-      x = _rng();
-      y = _rng();
-    }
-  }
+  Star()
+      : x = Random().nextDouble(),
+        y = Random().nextDouble(),
+        // Multiplying two randoms skews the distribution so most stars are tiny, with a few larger ones for depth
+        size = Random().nextDouble() * Random().nextDouble() * 1.8 + 0.5,
+        twinklePhase = Random().nextDouble() * 2 * pi,
+        // Slower, more ambient twinkle speed to avoid distraction
+        twinkleSpeed = Random().nextDouble() * 1.0 + 0.5,
+        // Set distinct bounds for how dim/bright each star naturally gets
+        minOpacity = Random().nextDouble() * 0.2 + 0.05, // 0.05 to 0.25
+        maxOpacity = Random().nextDouble() * 0.4 + 0.4;  // 0.4 to 0.8
 }
 
 
@@ -50,9 +47,10 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
   void initState() {
     super.initState();
     _blinkController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat(reverse: true);
+      vsync: this, 
+      // Increased duration to 20 seconds for a much slower, calmer, continuous space ambient loop
+      duration: const Duration(seconds: 20),
+    )..repeat();
   }
 
 
@@ -71,18 +69,26 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0.0),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, 
+        elevation: 0.0,
+        
+        //back arrow
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 72, 72, 72)),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+
       body: Stack(
         children: [
+          // Background Star Field
           AnimatedBuilder(
             animation: _blinkController,
             builder: (context, child) {
-              for (var star in stars) {
-                star.update(speed: 0.001);
-              }
               return CustomPaint(
                 painter: StarFieldPainter(
-                  blinkValue: _blinkController.value,
+                  animationValue: _blinkController.value,
                   stars: stars,
                 ),
                 size: Size(w, h),
@@ -659,6 +665,11 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
             letterSpacing: 2,
           ),
         ),
+        //back arrow
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
@@ -748,26 +759,42 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
 }
 
 
-// PAINTER 
+// --- PAINTER ---
 class StarFieldPainter extends CustomPainter {
-  final double blinkValue;
+  final double animationValue; // This value will drive the continuous twinkle effect (from 0 to 1)
   final List<Star> stars;
-  StarFieldPainter({required this.blinkValue, required this.stars});
+ 
+  StarFieldPainter({required this.animationValue, required this.stars});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.2 + (blinkValue * 0.8));
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
+    final paint = Paint();
+   
+    // time variable to drive the continuous sine wave
+    double time = animationValue * 2 * pi;
 
     for (var star in stars) {
-      double sx = (star.x / star.z) * centerX + centerX;
-      double sy = (star.y / star.z) * centerY + centerY;
-      if (sx >= 0 && sx <= size.width && sy >= 0 && sy <= size.height) {
-        double radius = (1.0 - star.z) * 2.5 + 0.5;
-        canvas.drawCircle(Offset(sx, sy), radius, paint);
+      // Calculate a unique twinkle value for each star based on its own phase and speed
+      double normalizedSin = (sin(time * star.twinkleSpeed + star.twinklePhase) + 1) / 2;
+
+      // Smoothly interpolate between the star's unique minimum and maximum opacity
+      double currentOpacity = star.minOpacity + (normalizedSin * (star.maxOpacity - star.minOpacity));
+     
+      // Add a subtle glow effect for larger stars to enhance the visual depth
+      if (star.size > 1.2) {
+         paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.8);
+      } else {
+         paint.maskFilter = null;
       }
+
+      paint.color = Colors.white.withValues(alpha: currentOpacity.clamp(0.0, 1.0));
+
+      // Draw the star based on relative screen size
+      canvas.drawCircle(
+        Offset(star.x * size.width, star.y * size.height),
+        star.size,
+        paint,
+      );
     }
   }
 

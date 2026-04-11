@@ -109,7 +109,7 @@ class _HeartTimerPageState extends State<LivesTimerPage>
           Center(
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: 24,
+                horizontal: 50,
                 vertical: isSmallScreen ? 20 : 30,
               ),
               decoration: BoxDecoration(
@@ -139,7 +139,7 @@ class _HeartTimerPageState extends State<LivesTimerPage>
                   const SizedBox(height: 15),
 
                   const Text(
-                    "NO LIVESS LEFT",
+                    "NO LIVES LEFT",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -167,6 +167,8 @@ class _HeartTimerPageState extends State<LivesTimerPage>
                       color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
+                  SizedBox(height: isSmallScreen ? 20 : 30),
+                  _buildActionButtons(context, isSmallScreen),
                 ],
               ),
             ),
@@ -176,6 +178,35 @@ class _HeartTimerPageState extends State<LivesTimerPage>
     );
   }
 }
+
+ Widget _buildActionButtons(BuildContext context, bool isSmallScreen) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          // width: double.infinity,
+          height: isSmallScreen ? 45 : 55,
+          child: OutlinedButton.icon(
+            onPressed: () => Navigator.maybePop(context),
+            icon: const Icon(Icons.home_rounded, size: 20),
+            label: Text(
+              "RETURN",
+              style: TextStyle(
+                fontSize: isSmallScreen ? 14 : 16, 
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.8,
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white.withValues(alpha: 0.85),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.25), width: 2),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
 class StarFieldPainter extends CustomPainter {
   final double blink;

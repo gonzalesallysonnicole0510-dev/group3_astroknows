@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'button2_shop.dart';
 import 'dart:math' as math;
 
+import 'package:audioplayers/audioplayers.dart';
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
@@ -28,6 +29,7 @@ enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String avatarPath = 'images/default_avatar.png';
   String spaceshipPath = '';
   
@@ -65,9 +67,15 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     super.initState();
     avatarPath = widget.astroknowt;
     spaceshipPath = widget.spaceship;
+    _playMusic();
     _loadHearts();
     quizgameTimer();
     startQuizGame();
+  }
+
+  void _playMusic() async {
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loop music
+    await _audioPlayer.play(AssetSource('bg_music.mp3'));
   }
 
 // load hearts
@@ -114,6 +122,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     gameTimer?.cancel();
     animationSpeed?.cancel();
     super.dispose();
@@ -380,6 +389,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
     final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
 
+  // Determines the dynamic color of the timer
+  final Color timerColor = timeLeft > 10
+      ? Colors.cyanAccent
+      : (timeLeft > 5 ? Colors.orangeAccent : Colors.redAccent);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -465,74 +479,83 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             ),
           ),
 
-          // Timer on top of the screen (with spark effect)
+          // Timer on top of the screen (with floating orb effect)
           Positioned(
             top: 0,
             left: 0,
-            right: 0, // Stretch across the screen
-            child: SizedBox(
-              height: 20, // Hitbox height to accommodate the spark's glow
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // 1. The glowing line shrinking to the left
-                  AnimatedContainer(
-                    duration: timeLeft == 20
-                        ? Duration.zero
-                        : const Duration(seconds: 1),
-                    curve: Curves.linear,
-                    // Calculates width smoothly based on a perfect 20 seconds
-                    width: (timeLeft.clamp(0, 20) / 20) * sw,
-                    height: 4,
-                    margin: const EdgeInsets.only(top: 8), // Centers the line vertically
-                    decoration: BoxDecoration(
-                      color: Colors.cyanAccent,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withValues(alpha: 0.8),
-                          blurRadius: 8,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                 
-                  // 2. The Spark Effect attached to the tip of the line
-                  AnimatedPositioned(
-                    duration: timeLeft == 20
-                        ? Duration.zero
-                        : const Duration(seconds: 1),
-                    curve: Curves.linear,
-                    // Anchors the spark exactly at the end of the shrinking line
-                    left: (timeLeft.clamp(0, 20) / 20) * sw - 10,
-                    top: 0,
-                    child: Container(
-                      width: 20,
-                      height: 20,
+            right: 0,
+            child: SafeArea(
+              bottom: false,
+              child: SizedBox(
+                height: 40, // Height to accommodate the floating orb
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // 1. The glowing line shrinking to the left
+                    AnimatedContainer(
+                      duration: timeLeft == 20
+                          ? Duration.zero
+                          : const Duration(seconds: 1),
+                      curve: Curves.linear,
+                      width: (timeLeft.clamp(0, 20) / 20) * sw,
+                      height: 4,
+                      margin: const EdgeInsets.only(top: 18), // Centers the line with the orb
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white, // Hot center of the spark
+                        color: timerColor,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.yellowAccent,
-                            blurRadius: 10,
-                            spreadRadius: 2,
-                          ),
-                          BoxShadow(
-                            color: Colors.orange,
-                            blurRadius: 15,
-                            spreadRadius: 5,
-                          ),
-                          BoxShadow(
-                            color: Colors.redAccent.withValues(alpha: 0.8),
-                            blurRadius: 20,
-                            spreadRadius: 8,
+                            color: timerColor.withValues(alpha: 0.8),
+                            blurRadius: 8,
+                            spreadRadius: 1,
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                   
+                    // 2. The Orb Effect with Time Left Text
+                    AnimatedPositioned(
+                      duration: timeLeft == 20
+                          ? Duration.zero
+                          : const Duration(seconds: 1),
+                      curve: Curves.linear,
+                      // Anchors the orb perfectly at the tip of the line
+                      left: (timeLeft.clamp(0, 20) / 20) * sw - 18, // 18 is half of orb width (36)
+                      top: 2,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 500), // Smooth color transitions
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF131B26), // Dark futuristic center
+                          border: Border.all(
+                            color: timerColor,
+                            width: timeLeft <= 5 ? 3 : 2, // Thicker border when tense
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: timerColor.withValues(alpha: timeLeft <= 5 ? 0.8 : 0.4),
+                              blurRadius: timeLeft <= 5 ? 15 : 8, // Intense glow when time is low
+                              spreadRadius: timeLeft <= 5 ? 4 : 1,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 300),
+                            style: TextStyle(
+                              color: timeLeft <= 5 ? Colors.redAccent : Colors.white,
+                              fontSize: timeLeft <= 5 ? 18 : 14, // Text slightly bumps up at 5s
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Share Tech',
+                            ),
+                            child: Text('$timeLeft'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
