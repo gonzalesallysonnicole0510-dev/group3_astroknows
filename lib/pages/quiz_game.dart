@@ -28,6 +28,9 @@ enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
+  String avatarPath = 'images/default_avatar.png';
+  String spaceshipPath = '';
+  
   // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
@@ -47,7 +50,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   List<AsteroidDirection> asteroidFloat = [
     AsteroidDirection.up,
     AsteroidDirection.down,
-    AsteroidDirection.up
+    AsteroidDirection.up,
   ];
 
   double playerX = 0;
@@ -60,6 +63,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   @override
   void initState() {
     super.initState();
+    avatarPath = widget.astroknowt;
+    spaceshipPath = widget.spaceship;
     _loadHearts();
     quizgameTimer();
     startQuizGame();
@@ -133,30 +138,24 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             _saveHearts(lives);
           });
           if (lives <= 0) {
-              Future.delayed(
-                const Duration(milliseconds: 800),
-                () {
+              Future.delayed(const Duration(milliseconds: 800), () {
                   if (mounted) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const MissionFailedPage(),
+                      MaterialPageRoute(builder: (_) => const MissionFailedPage(),
                       ),
                     );
                   }
                 },
               );
           } else {
-            Future.delayed(
-              const Duration(seconds: 1),
-              () {
+            Future.delayed(const Duration(seconds: 1), () {
                 if (!mounted) return;
                 bool isLast = currentQuestion >= widget.quiz.length - 1;
                 if (isLast) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const MissionFailedPage(),
+                    MaterialPageRoute(builder: (_) => const MissionFailedPage(),
                     ),
                   );
                 } else {
@@ -177,9 +176,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
   void startQuizGame() {
-    animationSpeed = Timer.periodic(
-      const Duration(milliseconds: 70),
-      (timer) {
+    animationSpeed = Timer.periodic(const Duration(milliseconds: 70), (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
         // up and down animation of asteroids
@@ -247,9 +244,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       laserX = playerX;
     });
 
-    Timer.periodic(
-      const Duration(milliseconds: 15),
-      (timer) {
+    Timer.periodic(const Duration(milliseconds: 15), (timer) {
         if (!mounted) {
           timer.cancel();
           return;
@@ -319,14 +314,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     if (lives <= 0) {
       await LivesTimerService.startCooldown();
 
-      Future.delayed(
-        const Duration(milliseconds: 800),
-        () {
+      Future.delayed(const Duration(milliseconds: 800), () {
           if (mounted) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                builder: (_) => const MissionFailedPage(),
+              MaterialPageRoute(builder: (_) => const MissionFailedPage(),
               ),
             );
           }
@@ -345,8 +337,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         if (isCorrect && isLast) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (_) => AchievementPage(
+            MaterialPageRoute(builder: (_) => AchievementPage(
                 star: 500,
                 planet: widget.planet,
               ),
@@ -373,7 +364,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       asteroidFloat = [
         AsteroidDirection.up,
         AsteroidDirection.down,
-        AsteroidDirection.up
+        AsteroidDirection.up,
       ];
     });
   }
@@ -454,7 +445,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                     alignment: Alignment.center,
                     children: [
                       Image.asset(
-                        widget.spaceship,
+                        spaceshipPath,
                         width: rocketWidth,
                         height: rocketHeight,
                       ),
@@ -462,7 +453,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       Positioned(
                         top: 50,
                         child: Image.asset(
-                          widget.astroknowt,
+                          avatarPath,
                           width: 20,
                           height: 20,
                         ),
@@ -651,6 +642,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           if (isPaused)
             PauseMenu(
               onResume: () => setState(() => isPaused = false),
+              onUpdateAvatar: (newPath) {
+                setState(() {
+                  avatarPath = selectedAstroknowt;
+                  spaceshipPath = selectedSpaceship;
+                });
+              },
             ),
         ],
       ),
@@ -775,7 +772,8 @@ class ShootButton extends StatelessWidget {
 // Widget for the pause menu
 class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
-  const PauseMenu({super.key, required this.onResume});
+  final ValueSetter<String> onUpdateAvatar;
+  const PauseMenu({super.key, required this.onResume, required this.onUpdateAvatar,});
 
   @override
   Widget build(BuildContext context) {
@@ -817,12 +815,16 @@ class PauseMenu extends StatelessWidget {
                 _menuButton(
                   context,
                   'CUSTOMIZATION',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
-                    ),
-                  ),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
+                      ),
+                    );
+                    onUpdateAvatar(selectedAstroknowt);
+                    // 3. Resume the game
+                    onResume();
+                  },
                 ),
                 const SizedBox(height: 15),
                 _menuButton(
@@ -831,8 +833,7 @@ class PauseMenu extends StatelessWidget {
                   isExit: true,
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
+                    MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
                     ),
                     (route) => false,
                   ),

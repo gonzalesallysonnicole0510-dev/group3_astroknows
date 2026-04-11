@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'button0_charac.dart';
 import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
@@ -35,7 +37,6 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
   void refreshCharacter() {
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -194,16 +195,13 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       child: Container(
         width: h * 0.15,
         height: h * 0.15,
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: Colors.cyan, width: 2),
-          boxShadow: [BoxShadow(color: Colors.cyan.withValues(alpha: 0.4), blurRadius: 10)],
+          boxShadow: [BoxShadow(color: const Color.fromARGB(255, 49, 76, 79).withValues(alpha: 0.4), blurRadius: 10)],
         ),
-        child: Image.asset(widget.astroknowt),
-        // child: const CircleAvatar(
-        //   backgroundColor: Colors.black26,
-        //   child: Icon(Icons.person, color: Colors.white),
-        // ),
+        child: Image.asset(selectedAstroknowt),
       ),
     );
   }
