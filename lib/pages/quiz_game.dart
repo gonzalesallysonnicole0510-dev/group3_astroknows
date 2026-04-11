@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/q_timer_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'button2_shop.dart';
+import 'dart:math' as math;
 
 import 'button0_charac.dart';
 import 'title.dart';
@@ -30,7 +34,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   bool midShot = false;
 
   bool isPaused = false;
-  int lives = 3;
+  int lives = 5;
+  int totalPurchasedHearts = 0;
 
   int currentQuestion = 0;
   String feedback = '';
@@ -55,9 +60,52 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   @override
   void initState() {
     super.initState();
+    _loadHearts();
     quizgameTimer();
     startQuizGame();
   }
+
+// load hearts
+   Future<void> _loadHearts() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      lives = prefs.getInt('currentHearts') ?? 5;
+      totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0; 
+    });
+  }
+// save hearts
+  Future<void> _saveHearts(int newLives) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('currentHearts', newLives);
+    setState(() => lives = newLives);
+  }
+
+  Future<void> restoreHeartsFromPurchases() async {
+    await _loadHearts(); // reload from storage
+  }
+
+   Future<bool> buyHearts(int amount, double price) async {
+    try {
+      await Future.delayed(Duration(seconds: 1));
+      final prefs = await SharedPreferences.getInstance();
+     
+      int newPurchased = (prefs.getInt('totalPurchasedHearts') ?? 0) + amount;
+      int newCurrent = math.min(lives + amount, 99);
+     
+      await prefs.setInt('totalPurchasedHearts', newPurchased);
+      await prefs.setInt('currentHearts', newCurrent);
+     
+      setState(() {
+        lives = newCurrent;
+        totalPurchasedHearts = newPurchased;
+      });
+     
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
 
   @override
   void dispose() {
@@ -66,7 +114,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     super.dispose();
   }
 
-  // Heeeeeeeeeeeeeeeeeeeerrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeee le timer countdown codes
+
   int timeLeft = 20;
 
   void quizgameTimer() {
@@ -82,6 +130,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             feedback = "Time's Up!";
             boxBorderColor = Colors.redAccent;
             lives--;
+            _saveHearts(lives);
           });
           if (lives <= 0) {
               Future.delayed(
@@ -240,23 +289,36 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-
   double heightToCoordinate(double height) {
     double arenaHeight = MediaQuery.of(context).size.height * 0.7;
     return 1 - (2 * height / arenaHeight);
   }
 
   // Answer checking and feedback
-  void checkAnswer(int index) {
+  Future<void> checkAnswer(int index) async {
     bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
       boxBorderColor = isCorrect ? Colors.greenAccent : Colors.redAccent;
-      if (!isCorrect) lives--;
     });
+    
+      if (!isCorrect) {
+        int current = await LivesTimerService.getHearts();
+        int newLives = current - 1;
+
+        await LivesTimerService.setHearts(newLives);
+
+        setState(() {
+          lives = newLives;
+        });
+      }
+
+    
 
     if (lives <= 0) {
+      await LivesTimerService.startCooldown();
+
       Future.delayed(
         const Duration(milliseconds: 800),
         () {
@@ -296,7 +358,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             feedback = '';
             boxBorderColor = Colors.lightBlueAccent;
             _resetAsteroids();
-            timeLeft = 20;                                        // dagdag na ma-rreset ang timer once napili ang correct answer
+            timeLeft = 20;
           });
         }
       },
@@ -391,7 +453,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Spaceship
                       Image.asset(
                         widget.spaceship,
                         width: rocketWidth,
@@ -529,19 +590,25 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   children: [
                     // Lives display
                     Row(
-                      children: List.generate(
-                        lives,
-                        (i) => Padding(
-                          padding: const EdgeInsets.only(right: 6),
-                          child: Icon(
-                            Icons.favorite,
-                            color: const Color(0xFFFFD1DC),
-                            size: (sw * 0.09).clamp(23.0, 35.0),
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: const Color(0xFFFFD1DC),
+                          size: (sw * 0.09).clamp(23.0, 35.0),
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          '$lives',
+                          style: TextStyle(
+                            color: Color(0xFFFFD1DC),
+                            fontSize: (sw * 0.08).clamp(20.0, 28.0),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Share Tech',
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    // Shoot button
+                     // Shoot button
                     ShootButton(onTap: fireLaser),
                   ],
                 ),

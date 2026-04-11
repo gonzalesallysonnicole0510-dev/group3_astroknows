@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/q_timer_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'quiz_game.dart';
+import 'dart:math' as math;
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -9,49 +12,118 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  int totalStar = 0;
+  int totalStar = 10000;
+  int currentHearts = 5;
+  int totalPurchasedHearts = 0;
+
 
   @override
   void initState() {
     super.initState();
-    _loadStars();
+    _loadData();
   }
 
-  // New Logic: Load stars from local storage
-  Future<void> _loadStars() async {
+
+  // Load stars and hearts data
+  Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      totalStar = prefs.getInt('totalStars') ?? 0;
+      totalStar = prefs.getInt('totalStars') ?? 10000;
+      currentHearts = prefs.getInt('currentHearts') ?? 5;
+      totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0;
     });
   }
 
-  // New Logic: Save stars to local storage
   Future<void> _saveStars(int newBalance) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('totalStars', newBalance);
   }
 
-  void _showDialog(int price) {
+  // Save purchased hearts
+  Future<void> _saveHearts(int purchasedAmount) async {
+    await LivesTimerService.addHearts(purchasedAmount);
+
+    int updatedHearts = await LivesTimerService.getHearts();
+  
+    setState(() {
+      currentHearts = updatedHearts;
+      totalPurchasedHearts += purchasedAmount;
+    });
+  }
+  //   final prefs = await SharedPreferences.getInstance();
+  //   int newTotalPurchased = (prefs.getInt('totalPurchasedHearts') ?? 0) + purchasedAmount;
+  //   int newCurrentHearts = math.min(
+  //     (prefs.getInt('currentHearts') ?? 3) + purchasedAmount,
+  //     99 // max hearts
+  //   );
+   
+  //   await prefs.setInt('totalPurchasedHearts', newTotalPurchased);
+  //   await prefs.setInt('currentHearts', newCurrentHearts);
+   
+  //   setState(() {
+  //     totalPurchasedHearts = newTotalPurchased;
+  //     currentHearts = newCurrentHearts;
+  //   });
+  // }
+
+
+  void _showDialog(int price, String itemType, {int hearts = 0}) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Confirm Purchase'),
-          content: Text('Spend $price ⭐?'),
+          backgroundColor: Color(0xFF131B26),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            children: [
+              Icon(
+                itemType == 'hearts' ? Icons.favorite : Icons.rocket_launch,
+                color: itemType == 'hearts' ? Colors.redAccent : Colors.cyanAccent,
+              ),
+              SizedBox(width: 10),
+              Text(
+                itemType == 'hearts' ? 'Buy Hearts' : 'Confirm Purchase',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Spend $price ⭐?',
+                style: TextStyle(color: Colors.white70, fontSize: 16),
+              ),
+              if (itemType == 'hearts') ...[
+                SizedBox(height: 10),
+                Text(
+                  'Current: $currentHearts ❤️',
+                  style: TextStyle(color: Colors.redAccent),
+                ),
+                Text(
+                  'Total Purchased: $totalPurchasedHearts ❤️',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
+            ],
+          ),
           actions: [
             // Purchase Button
             MaterialButton(
               onPressed: () {
                 Navigator.pop(context);
-                buyItem(price);
+                _buyItem(price, itemType, hearts);
               },
-              child: const Text('Purchase'),
+              color: Colors.greenAccent,
+              textColor: Colors.black,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: const Text('Purchase', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
             // Cancel Button
             MaterialButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
+              textColor: Colors.white70,
               child: const Text('Cancel'),
             ),
           ],
@@ -60,21 +132,35 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  void buyItem(int price) {
+
+  // UPDATED: Handle both spaceship AND hearts purchases
+  void _buyItem(int price, String itemType, int hearts) {
     if (totalStar >= price) {
       int newBalance = totalStar - price;
       setState(() {
         totalStar = newBalance;
       });
-      _saveStars(newBalance); // Keeps memory updated
+      _saveStars(newBalance);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Purchase Successful ⭐'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1),
-        ),
-      );
+      if (itemType == 'hearts') {
+        _saveHearts(hearts);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('+$hearts hearts purchased! 💖 Ready for quiz!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        // Original spaceship purchase
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Spaceship purchased! ⭐'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -86,6 +172,7 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +180,6 @@ class _ShopPageState extends State<ShopPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0.0,
-        // Old Layout: Back Arrow Circle Styling
         leadingWidth: 70,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -101,91 +187,152 @@ class _ShopPageState extends State<ShopPage> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.lightBlueAccent,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.lightBlueAccent, width: 1),
             ),
             child: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
             ),
           ),
         ),
-        // Old Layout: Star Currency Pill Design
+        // stars AND hearts
         actions: [
+          // Stars balance
           Container(
             height: 30,
             width: 110,
-            margin: const EdgeInsets.only(right: 25, top: 5),
+            margin: const EdgeInsets.only(right: 10, top: 5),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Colors.blueGrey.shade800,
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(
-                color: Colors.lightBlue,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.lightBlue, width: 1),
             ),
             child: Text(
               '⭐ $totalStar',
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          // Hearts balance
+          Container(
+            height: 30,
+            width: 90,
+            margin: const EdgeInsets.only(right: 15, top: 5),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.redAccent.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: Colors.redAccent, width: 1),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.favorite, color: Colors.redAccent, size: 16),
+                SizedBox(width: 4),
+                Text('$currentHearts', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+              ],
             ),
           ),
         ],
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            // Row 1: Premium Spaceships
+            // Hearts Status Card
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.only(bottom: 30),
+              decoration: BoxDecoration(
+                color: Color(0xFF131B26),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.redAccent.withOpacity(0.5), width: 1),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.favorite, color: Colors.redAccent, size: 28),
+                      SizedBox(width: 10),
+                      Text(
+                        'Quiz Lives',
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text('$currentHearts', style: TextStyle(color: Colors.redAccent, fontSize: 24, fontWeight: FontWeight.bold)),
+                          Text('Current', style: TextStyle(color: Colors.white70)),
+                        ],
+                      ),
+                      Text('|', style: TextStyle(color: Colors.white70)),
+                      Column(
+                        children: [
+                          Text('$totalPurchasedHearts', style: TextStyle(color: Colors.greenAccent, fontSize: 24, fontWeight: FontWeight.bold)),
+                          Text('Purchased', style: TextStyle(color: Colors.white70)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Premium Spaceships
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Merchandise(
                   imagePath: 'images/premium1_ufo.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000),
+                  onBuy: () => _showDialog(3000, 'spaceship'),
                 ),
                 Merchandise(
                   imagePath: 'images/premium2.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000),
+                  onBuy: () => _showDialog(3000, 'spaceship'),
                 ),
                 Merchandise(
                   imagePath: 'images/premium3.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000),
+                  onBuy: () => _showDialog(3000, 'spaceship'),
                 ),
               ],
             ),
-
-            const SizedBox(height: 25),
+            SizedBox(height: 40),
 
             // Row 2: Extra Lives
+            Text(
+              'Extra Lives for Quiz',
+              style: TextStyle(color: Colors.redAccent, fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ExtraLives(
                   imagePath: 'images/livesx2.png',
-                  price: 3000,
-                  onBuy: () => _showDialog(3000),
+                  price: 1500,
+                  hearts: 2,
+                  onBuy: () => _showDialog(1500, 'hearts', hearts: 2),
                 ),
                 ExtraLives(
                   imagePath: 'images/livesx3.png',
-                  price: 5000,
-                  onBuy: () => _showDialog(5000),
+                  price: 3000,
+                  hearts: 3,
+                  onBuy: () => _showDialog(3000, 'hearts', hearts: 3),
                 ),
                 ExtraLives(
                   imagePath: 'images/livesx5.png',
-                  price: 7000,
-                  onBuy: () => _showDialog(7000),
+                  price: 5000,
+                  hearts: 5,
+                  onBuy: () => _showDialog(5000, 'hearts', hearts: 5),
                 ),
               ],
             ),
@@ -196,12 +343,86 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-// 3 Premium Spaceship Designs
 
+// ExtraLives
+class ExtraLives extends StatelessWidget {
+  final int price;
+  final int hearts; // NEW
+  final VoidCallback onBuy;
+  final String imagePath;
+
+  const ExtraLives({
+    super.key,
+    required this.price,
+    required this.hearts, // NEW
+    required this.onBuy,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onBuy,
+      child: Column(
+        children: [
+          Container(
+            height: 95,
+            width: 95,
+            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.redAccent.withOpacity(0.2), Colors.pink.withOpacity(0.1)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.redAccent, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.redAccent.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                Center(child: Image.asset(imagePath, width: 70, height: 70)),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '+$hearts',
+                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            '⭐ $price',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+// Merchandise remains UNCHANGED
 class Merchandise extends StatelessWidget {
   final int price;
   final VoidCallback onBuy;
   final String imagePath;
+
 
   const Merchandise({
     super.key,
@@ -225,70 +446,12 @@ class Merchandise extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(
-              child: Image.asset(
-                imagePath,
-                width: 88,
-                height: 88,
-              ),
+              child: Image.asset(imagePath, width: 88, height: 88),
             ),
           ),
           Text(
             '⭐ $price',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-
-// 3 Extra Lives
-
-class ExtraLives extends StatelessWidget {
-  final int price;
-  final VoidCallback onBuy;
-  final String imagePath;
-
-  const ExtraLives({
-    super.key,
-    required this.price,
-    required this.onBuy,
-    required this.imagePath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onBuy,
-      child: Column(
-        children: [
-          Container(
-            height: 95,
-            width: 95,
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Center(
-              child: Image.asset(
-                imagePath,
-                width: 70,
-                height: 70,
-              ),
-            ),
-          ),
-          Text(
-            '⭐ $price',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
         ],
       ),
