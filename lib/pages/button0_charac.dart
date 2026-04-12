@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bg_musics.dart';
 
 String selectedAstroknowt = 'images/1Avatar.png';
 String selectedSpaceship = 'images/spaceship.png';
@@ -15,7 +16,8 @@ enum CustomizationType { astroknowt, spaceship }
 
 class CharacCustPage extends StatefulWidget {
   final CustomizationType type;
-  const CharacCustPage({super.key, required this.type});
+  final bool playMusic;
+  const CharacCustPage({super.key, required this.type, this.playMusic = true});
 
   @override
   State<CharacCustPage> createState() => _CharacCustPageState();
@@ -28,6 +30,7 @@ class _CharacCustPageState extends State<CharacCustPage> {
   void initState() {
     super.initState();
     _loadOwnedSpaceships();
+    if (widget.playMusic) BgMusics.instance.play('main_bgm.mp3');
   }
 
   List<String> ownedSpaceships = [];

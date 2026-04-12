@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'button2_shop.dart';
 import 'dart:math' as math;
 
-import 'package:audioplayers/audioplayers.dart';
+import 'bg_musics.dart';
 import 'button0_charac.dart';
 import 'title.dart';
 import 'q_achievement.dart';
@@ -29,7 +29,6 @@ enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
   String avatarPath = 'images/default_avatar.png';
   String spaceshipPath = '';
   
@@ -73,9 +72,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     startQuizGame();
   }
 
-  void _playMusic() async {
-    await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loop music
-    await _audioPlayer.play(AssetSource('bg_music.mp3'));
+  void _playMusic() {
+    BgMusics.instance.play('bg_music.mp3');
   }
 
 // load hearts
@@ -122,7 +120,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
     gameTimer?.cancel();
     animationSpeed?.cancel();
     super.dispose();
@@ -841,7 +838,7 @@ class PauseMenu extends StatelessWidget {
                   onTap: () async {
                     await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
+                      MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt, playMusic: false),
                       ),
                     );
                     onUpdateAvatar(selectedAstroknowt);
@@ -854,12 +851,15 @@ class PauseMenu extends StatelessWidget {
                   context,
                   'EXIT',
                   isExit: true,
-                  onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
-                    ),
-                    (route) => false,
-                  ),
+                  onTap: () {
+                    BgMusics.instance.play('main_bgm.mp3');
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
+                      ),
+                      (route) => false,
+                    );
+                  },
                 ),
               ],
             ),

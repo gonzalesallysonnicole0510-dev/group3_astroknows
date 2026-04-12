@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/q_timer_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bg_musics.dart';
 import 'quiz_game.dart';
 import 'dart:math' as math;
 
@@ -16,13 +17,12 @@ class _ShopPageState extends State<ShopPage> {
   int currentHearts = 5;
   int totalPurchasedHearts = 0;
 
-
   @override
   void initState() {
     super.initState();
     _loadData();
+    BgMusics.instance.play('main_bgm.mp3');
   }
-
 
   // Load stars and hearts data
   Future<void> _loadData() async {
@@ -39,24 +39,21 @@ class _ShopPageState extends State<ShopPage> {
     await prefs.setInt('totalStars', newBalance);
   }
 
-  // Save purchased extra lives (hearts)
   Future<void> _saveHearts(int purchasedAmount) async {
     await LivesTimerService.addHearts(purchasedAmount);
 
     int updatedHearts = await LivesTimerService.getHearts();
- 
+
     setState(() {
       currentHearts = updatedHearts;
       totalPurchasedHearts += purchasedAmount;
     });
   }
 
-  // Save purchased premium spaceship
   Future<void> _saveOwnedSpaceship(String spaceshipPath) async {
     final prefs = await SharedPreferences.getInstance();
 
-    List<String> owned =
-        prefs.getStringList('ownedSpaceships') ?? [];
+    List<String> owned = prefs.getStringList('ownedSpaceships') ?? [];
 
     if (!owned.contains(spaceshipPath)) {
       owned.add(spaceshipPath);
@@ -64,19 +61,27 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
-
-  void _showDialog(int price, String itemType, {int hearts = 0, String? spaceshipPath}) {
+  void _showDialog(
+    int price,
+    String itemType, {
+    int hearts = 0,
+    String? spaceshipPath,
+  }) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: Color(0xFF131B26),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Row(
             children: [
               Icon(
                 itemType == 'hearts' ? Icons.favorite : Icons.rocket_launch,
-                color: itemType == 'hearts' ? Colors.redAccent : Colors.cyanAccent,
+                color: itemType == 'hearts'
+                    ? Colors.redAccent
+                    : Colors.cyanAccent,
               ),
               SizedBox(width: 10),
               Text(
@@ -115,10 +120,15 @@ class _ShopPageState extends State<ShopPage> {
               },
               color: Colors.greenAccent,
               textColor: Colors.black,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: const Text('Purchase', style: TextStyle(fontWeight: FontWeight.bold)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Purchase',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
-            // Cancel Button
+
             MaterialButton(
               onPressed: () => Navigator.pop(context),
               textColor: Colors.white70,
@@ -129,7 +139,6 @@ class _ShopPageState extends State<ShopPage> {
       },
     );
   }
-
 
   // Spaceship and extra lives purchases
   void _buyItem(int price, String itemType, int hearts, String? spaceshipPath) {
@@ -169,7 +178,6 @@ class _ShopPageState extends State<ShopPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +235,13 @@ class _ShopPageState extends State<ShopPage> {
               children: [
                 Icon(Icons.favorite, color: Colors.redAccent, size: 16),
                 SizedBox(width: 4),
-                Text('$currentHearts', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                Text(
+                  '$currentHearts',
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
@@ -247,7 +261,7 @@ class _ShopPageState extends State<ShopPage> {
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
                   color: Colors.redAccent.withValues(alpha: 0.5),
-                  width: 1
+                  width: 1,
                 ),
               ),
               child: Column(
@@ -261,7 +275,7 @@ class _ShopPageState extends State<ShopPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -277,23 +291,16 @@ class _ShopPageState extends State<ShopPage> {
                             style: TextStyle(
                               color: Colors.redAccent,
                               fontSize: 24,
-                              fontWeight: FontWeight.bold
-                              ),
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
                           Text(
                             'Current',
-                            style: TextStyle(
-                              color: Colors.white70
-                              ),
-                            ),
+                            style: TextStyle(color: Colors.white70),
+                          ),
                         ],
                       ),
-                      Text(
-                        '|',
-                        style: TextStyle(
-                          color: Colors.white70
-                          ),
-                        ),
+                      Text('|', style: TextStyle(color: Colors.white70)),
                       Column(
                         children: [
                           Text(
@@ -301,15 +308,13 @@ class _ShopPageState extends State<ShopPage> {
                             style: TextStyle(
                               color: Colors.greenAccent,
                               fontSize: 24,
-                              fontWeight: FontWeight.bold
-                              ),
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
                           Text(
                             'Purchased',
-                            style: TextStyle(
-                              color: Colors.white70
-                              ),
-                            ),
+                            style: TextStyle(color: Colors.white70),
+                          ),
                         ],
                       ),
                     ],
@@ -325,17 +330,29 @@ class _ShopPageState extends State<ShopPage> {
                 Merchandise(
                   imagePath: 'images/premium1_ufo.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000, 'spaceship', spaceshipPath: 'images/premium1_ufo.png'),
+                  onBuy: () => _showDialog(
+                    3000,
+                    'spaceship',
+                    spaceshipPath: 'images/premium1_ufo.png',
+                  ),
                 ),
                 Merchandise(
                   imagePath: 'images/premium2.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000, 'spaceship', spaceshipPath: 'images/premium2.png'),
+                  onBuy: () => _showDialog(
+                    3000,
+                    'spaceship',
+                    spaceshipPath: 'images/premium2.png',
+                  ),
                 ),
                 Merchandise(
                   imagePath: 'images/premium3.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000, 'spaceship', spaceshipPath: 'images/premium3.png'),
+                  onBuy: () => _showDialog(
+                    3000,
+                    'spaceship',
+                    spaceshipPath: 'images/premium3.png',
+                  ),
                 ),
               ],
             ),
@@ -344,7 +361,11 @@ class _ShopPageState extends State<ShopPage> {
             // Extra Lives
             Text(
               'Extra Lives for Quiz',
-              style: TextStyle(color: Colors.redAccent, fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 15),
             Row(
@@ -377,7 +398,6 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-
 // ExtraLives
 class ExtraLives extends StatelessWidget {
   final int price;
@@ -405,15 +425,15 @@ class ExtraLives extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.redAccent.withValues(alpha: 0.2), Colors.pink.withValues(alpha: 0.1)],
+                colors: [
+                  Colors.redAccent.withValues(alpha: 0.2),
+                  Colors.pink.withValues(alpha: 0.1),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: Colors.redAccent,
-                width: 2
-              ),
+              border: Border.all(color: Colors.redAccent, width: 2),
               boxShadow: [
                 BoxShadow(
                   color: Colors.redAccent.withValues(alpha: 0.3),
@@ -424,13 +444,7 @@ class ExtraLives extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Center(
-                  child: Image.asset(
-                    imagePath,
-                    width: 70,
-                    height: 70
-                    ),
-                  ),
+                Center(child: Image.asset(imagePath, width: 70, height: 70)),
                 Positioned(
                   top: 5,
                   right: 5,
@@ -445,7 +459,7 @@ class ExtraLives extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -453,19 +467,12 @@ class ExtraLives extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            '⭐ $price',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15
-            ),
-          ),
+          Text('⭐ $price', style: TextStyle(color: Colors.white, fontSize: 15)),
         ],
       ),
     );
   }
 }
-
 
 class Merchandise extends StatelessWidget {
   final int price;
@@ -493,9 +500,7 @@ class Merchandise extends StatelessWidget {
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Center(
-              child: Image.asset(imagePath, width: 88, height: 88),
-            ),
+            child: Center(child: Image.asset(imagePath, width: 88, height: 88)),
           ),
           Text(
             '⭐ $price',

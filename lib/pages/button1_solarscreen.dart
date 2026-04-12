@@ -1,58 +1,52 @@
 import 'dart:math';
+import 'bg_musics.dart';
 import 'splashscreen_countdown.dart';
 import 'package:flutter/material.dart';
-
 
 //STAR DATA MODEL
 class Star {
   final double x;
   final double y;
   final double size;
-  final double twinklePhase; // Random starting point for the twinkle
-  final double twinkleSpeed; // How fast this specific star twinkles
-  final double minOpacity;   // The dimmest this star gets
-  final double maxOpacity;   // The brightest this star gets
-
+  final double twinklePhase;
+  final double twinkleSpeed;
+  final double minOpacity;
+  final double maxOpacity;
 
   Star()
-      : x = Random().nextDouble(),
-        y = Random().nextDouble(),
-        // Multiplying two randoms skews the distribution so most stars are tiny, with a few larger ones for depth
-        size = Random().nextDouble() * Random().nextDouble() * 1.8 + 0.5,
-        twinklePhase = Random().nextDouble() * 2 * pi,
-        // Slower, more ambient twinkle speed to avoid distraction
-        twinkleSpeed = Random().nextDouble() * 1.0 + 0.5,
-        // Set distinct bounds for how dim/bright each star naturally gets
-        minOpacity = Random().nextDouble() * 0.2 + 0.05, // 0.05 to 0.25
-        maxOpacity = Random().nextDouble() * 0.4 + 0.4;  // 0.4 to 0.8
-}
+    : x = Random().nextDouble(),
+      y = Random().nextDouble(),
 
+      size = Random().nextDouble() * Random().nextDouble() * 1.8 + 0.5,
+      twinklePhase = Random().nextDouble() * 2 * pi,
+
+      twinkleSpeed = Random().nextDouble() * 1.0 + 0.5,
+
+      minOpacity = Random().nextDouble() * 0.2 + 0.05,
+      maxOpacity = Random().nextDouble() * 0.4 + 0.4;
+}
 
 class SolarSystemInterface extends StatefulWidget {
   const SolarSystemInterface({super.key});
 
-
   @override
   State<SolarSystemInterface> createState() => _SolarSystemInterfaceState();
 }
-
 
 class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     with SingleTickerProviderStateMixin {
   late AnimationController _blinkController;
   final List<Star> stars = List.generate(150, (i) => Star());
 
-
   @override
   void initState() {
     super.initState();
     _blinkController = AnimationController(
-      vsync: this, 
-      // Increased duration to 20 seconds for a much slower, calmer, continuous space ambient loop
+      vsync: this,
       duration: const Duration(seconds: 20),
     )..repeat();
+    BgMusics.instance.play('main_bgm.mp3');
   }
-
 
   @override
   void dispose() {
@@ -65,17 +59,18 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     final double h = MediaQuery.of(context).size.height;
     final double w = MediaQuery.of(context).size.width;
 
-
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, 
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
-        
-        //back arrow
+
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 72, 72, 72)),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 72, 72, 72),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -95,7 +90,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
               );
             },
           ),
-         
+
           _pos(
             context,
             top: -h * 0.15,
@@ -104,7 +99,8 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
             path: 'images/sun.png',
             name: 'Sun',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''The Sun is a star located at the center of our solar system. It is a dynamic star, constantly sending out energy in all directions, which lights up and warms the entire solar system. Without the Sun’s energy, life on Earth would not be possible.
 
 Unlike Earth or other planets, the Sun does not have a solid surface. Instead, it is made mostly of hot gases, hydrogen and helium, held together by its powerful gravity. This gravity is so strong that it keeps everything in orbit, from the largest planet, Jupiter, to the smallest bits of space dust.
@@ -116,7 +112,8 @@ The Sun also sends out solar wind, which are streams of charged particles. When 
 Fun fact: if the Sun were hollow, you could fit around 1.3 million Earths inside it!''',
                 style: TextStyle(color: Colors.white),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''The Sun is made of plasma, a hot form of matter where atoms are electrically charged.
 
 The core is the hottest part, reaching 15 million °C (27 million °F). Here, hydrogen atoms fuse into helium in a process called nuclear fusion, which gives the Sun its energy.
@@ -130,7 +127,8 @@ The Sun and its solar system travel through the Milky Way galaxy at 720,000 km/h
 Fun fact: The Sun’s surface (photosphere) is cooler than its outer atmosphere (corona), which can reach 2 million °C (3.5 million °F). ''',
                 style: TextStyle(color: Colors.white),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''The Sun is a G-type Main-Sequence star, also called a yellow dwarf. This means it is a normal, active star that produces its own light and heat.
 
 The part of the Sun that we can see is called the photosphere, and it has a temperature of about 5,500 °C (10,000 °F). Above it is the corona, which is the Sun’s outer layer, and it is much hotter, reaching about 2 million °C (3.5 million °F).
@@ -150,7 +148,6 @@ Fun fact: The Sun may look calm, but it is actually very active. It has sunspots
             ],
           ),
 
-
           _pos(
             context,
             top: h * 0.15,
@@ -159,7 +156,8 @@ Fun fact: The Sun may look calm, but it is actually very active. It has sunspots
             path: 'images/mercury.png',
             name: 'Mercury',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Mercury is the closest planet to the Sun, but it is not the hottest planet. This is because Mercury does not have a thick atmosphere to trap heat. Instead, it only has a very thin layer of gas called an exosphere, so heat quickly escapes into space.
 
 Because it is so close to the Sun, Mercury is often hard to see from Earth. It is best seen during dawn or twilight, when the Sun is not too bright. Sometimes, Mercury passes directly in front of the Sun. This event is called a transit, and it happens about 13 times in a century, appearing as a black figure or tiny dot.
@@ -171,7 +169,8 @@ Mercury has no moons and no rings, making it one of the simplest planets in stru
 Fun fact: A year on Mercury (orbit around the Sun) is much shorter than on Earth—it only takes 88 Earth days! ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Mercury moves very fast around the Sun. It takes only 88 Earth days to complete one orbit, making it the fastest planet in the solar system to orbit the Sun. It travels at about 47.87 kilometers per second (47.87 km/s).
 
 Even though Mercury moves fast around the Sun, its rotation (day-night cycle) is much slower compared to Earth. One Mercury solar day (day-night cycle) takes about 175.97 Earth days.
@@ -186,7 +185,8 @@ Fun fact: Mercury is the second densest planet, after Earth!
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Mercury’s exosphere is made of atoms like sodium, oxygen, and hydrogen. These atoms are constantly being knocked off the planet’s surface by the solar wind of the Sun. The solar wind refers to the Sun’s continuous release of energy into space.
 
 Because Mercury is very close to the Sun and has no thick atmosphere, and solar radiation pressure, small space rocks (micrometeoroids) and solar particles hit its surface and send atoms into space. This escape of atoms flown into space forms a long comet-like “tail” behind Mercury.
@@ -202,7 +202,6 @@ Fun fact: Mercury has a weak magnetic field, but it is still strong enough to in
             ],
           ),
 
-
           _pos(
             context,
             top: h * 0.15,
@@ -211,7 +210,8 @@ Fun fact: Mercury has a weak magnetic field, but it is still strong enough to in
             path: 'images/venus.png',
             name: 'Venus',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Venus is the second planet from the Sun and is the hottest planet in our solar system. Even though it is not the closest planet to the Sun, its temperature can reach up to 471°C, which is hot enough to melt metals like lead. This happens because of Venus’ thick atmosphere that traps heat, making it feel like a giant oven.
 
 Venus is almost the same size as Earth, which is why it is often called Earth’s “Evil Twin.” However, it is very different because its air is toxic, and the surface is extremely hot. No humans or animals can survive there.
@@ -224,7 +224,8 @@ Fun fact: A day on Venus is so long that it actually lasts longer than its year!
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Venus has a very thick atmosphere made mostly of carbon dioxide, the same gas humans breathe out. Its clouds are made of sulfuric acid, which is very dangerous and can burn skin. Because of this thick atmosphere, the air pressure on Venus is about 90 times stronger than on Earth, like being deep underwater in the ocean.
 
 A very interesting fact about Venus is that a day is longer than a year. One full rotation (day) on Venus takes 243 Earth days, while one orbit around the Sun (year) takes only 225 Earth days. This means a day is longer than a year on Venus.
@@ -237,7 +238,8 @@ Fun fact: Venus has many volcanoes, and some may still be active today!
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Venus is extremely hot because of something called the greenhouse effect. This happens when gases in the atmosphere trap heat from the Sun and prevent it from escaping. Because Venus has a lot of carbon dioxide, the heat builds up, making it even hotter than Mercury.
 
 The atmosphere of Venus spins very fast, creating strong wind and thick clouds that cover the whole planet. Even though the surface is extremely hot, the upper part of the clouds is cooler and always moving.
@@ -255,7 +257,6 @@ Fun fact: Even though Venus spins slowly, its atmosphere moves much faster than 
             ],
           ),
 
-
           _pos(
             context,
             top: h * 0.29,
@@ -264,7 +265,8 @@ Fun fact: Even though Venus spins slowly, its atmosphere moves much faster than 
             path: 'images/earth.png',
             name: 'Earth',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Earth is the third planet from the Sun and the fifth largest in the solar system. Our home planet and the only known planet that supports life. It has the right conditions for living things, including liquid water, breathable air, and a temperature that is not too hot or too cold.
 
 Earth’s atmosphere acts like a protective shield. It provides the air we breathe and burns up small meteors before they can hit the ground. This protection helps keep life safe.
@@ -277,7 +279,8 @@ Fun fact: From space, Earth looks blue because most of its surface is covered wi
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Earth is not a perfect sphere, but an oblate spheroid or a flattened oval shape. This happens because of Earth’s rotation, making the middle part, the equator, bulges outward and the north and south poles a little flat.
 
 Earth is tilted at about 23.5 degrees, which causes the four seasons. When a part of Earth is tilted toward the Sun, it becomes warmer (summer). When tilted away, it becomes colder (winter).
@@ -288,7 +291,8 @@ About 71% of Earth’s surface is covered by water, mostly oceans. This water he
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''About 71% of Earth is covered by water, but 97% is salty ocean water and only 3% is fresh water, which can be used by living things. This limited fresh water is very important for life.
 
 Earth’s outer layer, called the lithosphere, is broken into tectonic plates that slowly move. When these plates collide, they form mountains, and when they pull apart or grind past each other they cause earthquakes.
@@ -313,7 +317,8 @@ Fun fact: Without the Moon, Earth’s tilt could wobble, causing extreme climate
             path: 'images/mars.png',
             name: 'Mars',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Mars is the fourth planet from the Sun and is often called the “Red Planet” because of the rusty, iron-rich dust that covers its surface. This dust gives Mars its reddish color.
 
 Mars is one of the most explored planets in the solar system. Scientists have sent rovers to move around and study its surface.
@@ -328,7 +333,8 @@ Fun fact: Mars’ polar ice caps grow in winter and shrink in summer due to cycl
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Mars is much colder than Earth because it is farther from the Sun and its atmosphere is very thin, letting heat escape easily.
 
 Temperatures on Mars can reach 20°C (70°F) near the equator during the day, but at night can drop to -153°C (-225°F). Because of this, liquid water cannot exist on the surface for long, but water is trapped in polar ice caps at the north and south poles.
@@ -341,7 +347,8 @@ Fun fact: A day on Mars is only 37 minutes longer than an Earth day.
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Mars has two tiny moons, Phobos and Deimos, which are potato-shaped due to their small mass. Phobos is the innermost moon and has many craters and deep grooves, while Deimos is smoother because loose dust fills its craters.
 
 Mars’ core is dense, made of iron, nickel, and sulfur, and is partially liquid. The rocky mantle above it contains moving molten rock, causing “marsquakes.” The crust on top is made of iron, magnesium, aluminum, calcium, and potassium, and is 10–50 kilometers deep (6–30 miles).
@@ -355,8 +362,6 @@ Fun fact: Even though Mars seems quiet from a distance, the planet quakes, blows
             ],
           ),
 
-
-         
           _pos(
             context,
             bottom: h * 0.08,
@@ -365,7 +370,8 @@ Fun fact: Even though Mars seems quiet from a distance, the planet quakes, blows
             path: 'images/jupiter.png',
             name: 'Jupiter',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Jupiter is the largest planet in the solar system. To imagine its size, over 1,300 Earths can fit inside this planet. Its immense gravity and many moons make it often described as a “miniature solar system.”
 
 Jupiter has 95 officially recognized moons, with four large moons: Io, Europa, Callisto, and Ganymede. Ganymede is the largest moon in the Solar System, even bigger than Mercury. These large moons are also known as Galilean satellites. Jupiter also has faint rings, discovered by NASA’s Voyager 1 in 1979, which are made of tiny, dark particles that are difficult to see unless lit by the Sun.
@@ -376,7 +382,8 @@ Fun fact: Jupiter’s strong gravity helps protect Earth by capturing nearby spa
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Jupiter has the shortest day of all planets, completing a rotation (day-night cycle) in just 9.9 Earth hours, which produces strong winds and rapid weather changes. However, it takes Jupiter to orbit the Sun for about 12 Earth years. Similar to Venus, Jupiter has a very small axial tilt of only 3 degrees, meaning it spins nearly upright and does not experience strong seasonal changes like Earth.
 
 Deep inside Jupiter, the extreme pressure and temperature compresses hydrogen into a liquid metallic form, forming the largest “ocean” of liquid metallic hydrogen in the solar system. This liquid conducts electricity and helps generate Jupiter’s powerful magnetic field.
@@ -387,7 +394,8 @@ Fun fact: Jupiter spins so fast that it is slightly wider at the equator than at
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Jupiter is known for its distinct colorful bands, called Belts (dark) and Zones (light), caused by differences in temperature, chemical composition, and rising gases. Its clouds are layered: the top layer is ammonia ice, the middle layer is ammonium hydrosulfide ice, and the innermost layer is water vapor and ice.
 
 With no solid land to slow down the strong jet streams produced by Jupiter's fast rotation, its storms can last for hundreds of years. The planet’s Great Red Spot is a giant storm wider than Earth, continuously spinning over 300 years. Jupiter also has a strong magnetic field, which is 14 times stronger than Earth’s, protecting the planet and its moons from solar and cosmic radiation.
@@ -401,7 +409,6 @@ Fun fact: Jupiter’s Great Red Spot is so big that two Earths could fit inside 
             ],
           ),
 
-
           _pos(
             context,
             bottom: h * 0.12,
@@ -410,7 +417,8 @@ Fun fact: Jupiter’s Great Red Spot is so big that two Earths could fit inside 
             path: 'images/saturn.png',
             name: 'Saturn',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Saturn is the sixth planet from the Sun and is a gas giant famous for its vast rings wrapping the planet. Just like Jupiter and the Sun, this planet is mostly made of hydrogen and helium, no solid land, but it is less dense than liquid water. Therefore, water would just float as a large pool.
 
 Saturn is famous for its extensive ring system, which is composed of ice and rock particles, ranging in size from tiny dust grains to objects tens of meters across. The planet has 146 known moons, with Titan being the largest. In the solar system, it is the second-largest moon, and is so big it is larger than the planet Mercury and has a dense nitrogen-rich atmosphere, making it look almost like a planet on its own.
@@ -419,7 +427,8 @@ Fun fact: Saturn’s rings are so wide but thin that if you scaled the planet do
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''The rings of Saturn are labeled A–G in the order they were discovered. Between the B ring and A ring there is a large gap separating the two rings called the Cassini Division, which is easily visible through telescopes.
 
 Saturn rotates very quickly, completing a full spin in just 10.7 Earth hours, making its day extremely short. However, because it is far from the Sun, it takes 29.4 Earth years to complete a full orbit, so its year is very long. The planet is extremely cold, with an average temperature of -138°C (-218°F).
@@ -432,7 +441,8 @@ Fun fact: Saturn spins so fast that it is slightly flattened at the poles and bu
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''At Saturn’s north pole, there is a giant hexagon-shaped cloud pattern, a swirling windstorm about 30,000 km (20,000 miles) across, big enough to fit nearly three Earths inside. At the center of this hexagon is a massive, hurricane-like storm, first observed by the Voyager I spacecraft.
 
 In 2009, NASA’s Spitzer Space Telescope discovered a faint, massive ring much larger than Saturn’s main rings. This ring, named the Phoebe ring, is composed of dark dust particles likely coming from the moon Phoebe. Later observations with NASA’s WISE telescope revealed the Phoebe ring stretches about 100–270 times the diameter of Saturn and is 10 times larger than the E ring, which was previously the largest known ring.
@@ -446,7 +456,6 @@ Fun fact: Saturn radiates more energy than it receives from the Sun, due to left
             ],
           ),
 
-
           _pos(
             context,
             bottom: h * 0.1,
@@ -455,23 +464,24 @@ Fun fact: Saturn radiates more energy than it receives from the Sun, due to left
             path: 'images/neptune.png',
             name: 'Neptune',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''hatdog ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''sakit sa ulo neto mga sis ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''sana kumita tayo dito ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ],
           ),
 
-
-         
           _pos(
             context,
             bottom: h * 0.08,
@@ -480,7 +490,8 @@ Fun fact: Saturn radiates more energy than it receives from the Sun, due to left
             path: 'images/uranus.png',
             name: 'Uranus',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Uranus is the seventh planet from the Sun and is known for its unusual position in space. Unlike other planets, Uranus rotates on its side, making it look like it is rolling around the Sun instead of spinning upright.
 
 Uranus is called an ice giant because it is mostly made of icy materials like water, methane, and ammonia. It also has a small rocky core inside. The planet has a blue-green color, which comes from methane gas in its atmosphere.
@@ -491,7 +502,8 @@ Fun fact: Uranus looks like a smooth blue ball, but its clouds are actually very
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Uranus has an extreme tilt, which causes very unusual seasons. Each side of the planet can face the Sun for about 21 years, while the other side stays in darkness, creating the most extreme seasonal changes in the solar system.
 
 The planet has 13 narrow and dark rings, made of small particles that reflect very little light, making them hard to see. Uranus also has 28 known moons, and many are named after characters from famous writers like William Shakespeare and Alexander Pope, such as Titania and Oberon.
@@ -502,7 +514,8 @@ Fun fact: Because of its tilt, Uranus can have decades-long daylight or darkness
    ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Uranus is extremely far from the Sun, about 1.8 billion miles away, so sunlight takes around 2 hours and 40 minutes to reach it. This great distance contributes to its very cold environment.
 
 Even though Uranus is closer to the Sun than Neptune, it is colder because it releases very little internal heat, unlike most other planets. Uranus also has a retrograde rotation, meaning it spins in the opposite direction compared to most planets, adding to its unusual motion.
@@ -516,7 +529,6 @@ Fun fact: Because of its sideways tilt and backward spin, Uranus has one of the 
             ],
           ),
 
-
           _pos(
             context,
             bottom: h * 0.1,
@@ -525,7 +537,8 @@ Fun fact: Because of its sideways tilt and backward spin, Uranus has one of the 
             path: 'images/neptune.png',
             name: 'Neptune',
             planetScreens: [
-              const Text(//basic
+              const Text(
+                //basic
                 '''Neptune is the farthest planet from the Sun, and because of this great distance, it takes a very long time to travel around it. In fact, one full orbit takes about 165 Earth years, making its year extremely long compared to Earth.
 
 Unlike many planets that were first seen through telescopes, Neptune was discovered using mathematical calculations. Scientists predicted its existence based on strange movements of other planets before it was ever directly observed.
@@ -540,7 +553,8 @@ Fun fact: Neptune has storms that can move faster than a fighter jet, so if you 
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(//intermediate
+              const Text(
+                //intermediate
                 '''Neptune’s atmosphere is made mostly of hydrogen and helium, with small amounts of methane, which gives the planet its rich blue color. However, Neptune appears more vividly blue than Uranus, and scientists believe an unknown atmospheric component enhances this deeper color.
 
 The planet has at least 16 known moons, with Triton being the largest. Triton is unique because it orbits Neptune in the opposite direction of its planet’s rotation (a retrograde orbit). This suggests that Triton did not form with Neptune but was likely a dwarf planet captured by Neptune's gravity from the Kuiper Belt.
@@ -553,7 +567,8 @@ Fun fact: Triton has geysers that erupt nitrogen gas, making it one of the most 
  ''',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              const Text(// advanced
+              const Text(
+                // advanced
                 '''Neptune holds the title as the windiest world in the solar system, with wind speeds reaching over 2,000 km/h (1,200 miles per hour), almost as fast as a fighter jet. These winds can move clouds of frozen methane across the planet, forming massive and fast-changing weather systems.
 
 In 1989, the spacecraft Voyager 2 discovered a large, oval-shaped storm in Neptune’s southern hemisphere called the Great Dark Spot, which was large enough to fit Earth inside it. Unlike Jupiter’s long-lasting storm, Neptune’s storms appear and disappear over time, showing how unstable and active its atmosphere is.
@@ -574,7 +589,6 @@ Fun fact: Deep inside Neptune, carbon may crystallize into diamonds and fall lik
       ),
     );
   }
-
 
   Widget _pos(
     BuildContext context, {
@@ -629,13 +643,11 @@ Fun fact: Deep inside Neptune, carbon may crystallize into diamonds and fall lik
   }
 }
 
-
-// SOLO PLANET PAGE 
+// SOLO PLANET PAGE
 class SoloPlanetPage extends StatefulWidget {
   final String name;
   final String imagePath;
   final List<Widget> planetScreens;
-
 
   const SoloPlanetPage({
     super.key,
@@ -665,7 +677,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
             letterSpacing: 2,
           ),
         ),
-        //back arrow
+
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -701,7 +713,6 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                       )
                     : const SizedBox(width: 80),
 
-
                 Row(
                   children: [
                     ElevatedButton(
@@ -728,10 +739,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                       ),
                     ),
 
-
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     _currentScreenIndex < widget.planetScreens.length - 1
                         ? TextButton(
                             onPressed: () =>
@@ -744,9 +752,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                               ),
                             ),
                           )
-                        : const SizedBox(
-                            width: 60,
-                          ),
+                        : const SizedBox(width: 60),
                   ],
                 ),
               ],
@@ -758,38 +764,37 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
   }
 }
 
-
 // --- PAINTER ---
 class StarFieldPainter extends CustomPainter {
-  final double animationValue; // This value will drive the continuous twinkle effect (from 0 to 1)
+  final double animationValue;
   final List<Star> stars;
- 
+
   StarFieldPainter({required this.animationValue, required this.stars});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
-   
-    // time variable to drive the continuous sine wave
+
     double time = animationValue * 2 * pi;
 
     for (var star in stars) {
-      // Calculate a unique twinkle value for each star based on its own phase and speed
-      double normalizedSin = (sin(time * star.twinkleSpeed + star.twinklePhase) + 1) / 2;
+      double normalizedSin =
+          (sin(time * star.twinkleSpeed + star.twinklePhase) + 1) / 2;
 
-      // Smoothly interpolate between the star's unique minimum and maximum opacity
-      double currentOpacity = star.minOpacity + (normalizedSin * (star.maxOpacity - star.minOpacity));
-     
-      // Add a subtle glow effect for larger stars to enhance the visual depth
+      double currentOpacity =
+          star.minOpacity +
+          (normalizedSin * (star.maxOpacity - star.minOpacity));
+
       if (star.size > 1.2) {
-         paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.8);
+        paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.8);
       } else {
-         paint.maskFilter = null;
+        paint.maskFilter = null;
       }
 
-      paint.color = Colors.white.withValues(alpha: currentOpacity.clamp(0.0, 1.0));
+      paint.color = Colors.white.withValues(
+        alpha: currentOpacity.clamp(0.0, 1.0),
+      );
 
-      // Draw the star based on relative screen size
       canvas.drawCircle(
         Offset(star.x * size.width, star.y * size.height),
         star.size,

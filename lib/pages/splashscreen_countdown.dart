@@ -5,6 +5,7 @@ import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'package:flutter_application_1/pages/q_timer_lives.dart';
 import 'package:flutter_application_1/pages/q_timer_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bg_musics.dart';
 import 'quiz_QnA.dart';
 import 'quiz_game.dart';
 
@@ -25,6 +26,7 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> {
   @override
   void initState() {
     super.initState();
+    BgMusics.instance.stop(); // stop any screen music before quiz
     startTimer();
   }
 

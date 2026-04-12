@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
+import 'bg_musics.dart';
 
 int musicLevel = 5;
 int sfxLevel = 5;
 int narrationLevel = 5;
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  void initState() {
+    super.initState();
+    BgMusics.instance.play('main_bgm.mp3');
+    BgMusics.instance.setVolume(musicLevel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +83,10 @@ class SettingsPage extends StatelessWidget {
               VolumeRow(
                 title: "Music Volume",
                 currentLevel: musicLevel,
-                onChanged: (val) => musicLevel = val,
+                onChanged: (val) {
+                  musicLevel = val;
+                  BgMusics.instance.setVolume(val);
+                },
               ),
               const SizedBox(height: 12),
               VolumeRow(

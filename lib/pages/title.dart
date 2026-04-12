@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bg_musics.dart';
 import 'button0_charac.dart';
 import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
@@ -26,6 +27,9 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) BgMusics.instance.play('main_bgm.mp3');
+    });
   }
 
   @override
