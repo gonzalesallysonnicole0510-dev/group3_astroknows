@@ -56,15 +56,26 @@ flutter:
     - images/uranus.png
     - images/neptune.png
     - images/sun.png
-    - images/spaceship.png
+
+    - images/rocket1.png
+    - images/rocket2.png
+    - images/rocket3.png
+    - images/rocket4.png
+    - images/rocket5.png
+    - images/rocket6.png
+    - images/rocket7.png
+    - images/rocket8.png
     
-    - images/premium1_ufo.png
+    - images/premium1.png
     - images/premium2.png
     - images/premium3.png
-    - images/livesx2.png
-    - images/livesx3.png
-    - images/livesx5.png
+    - images/extralives2.png
+    - images/extralives3.png
+    - images/extralives5.png
 
+    - images/asteroid0.png
+    - images/asteroid1.png
+    - images/asteroid2.png
 
   fonts:
     - family: Michroma

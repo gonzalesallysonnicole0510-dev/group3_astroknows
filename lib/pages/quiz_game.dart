@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'button2_shop.dart';
 import 'dart:math' as math;
 
+
 import 'package:audioplayers/audioplayers.dart';
 import 'button0_charac.dart';
 import 'title.dart';
@@ -13,54 +14,69 @@ import 'q_achievement.dart';
 import 'q_mission-failed.dart';
 import 'star_animation.dart';
 
+
 class Quizteroid_Quest extends StatefulWidget {
   final List<Map<String, dynamic>> quiz;
   final String planet;
   final String astroknowt;
   final String spaceship;
 
+
   const Quizteroid_Quest({super.key, required this.quiz, required this.planet, required this.astroknowt, required this.spaceship});
+
 
   @override
   State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
 }
 
+
 enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
+
 
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   String avatarPath = 'images/default_avatar.png';
   String spaceshipPath = '';
-  
+ 
   // position and game state variables
   double laserX = 0;
   double laserHeight = 0;
   bool midShot = false;
 
+
   bool isPaused = false;
   int lives = 5;
   int totalPurchasedHearts = 0;
+
 
   int currentQuestion = 0;
   String feedback = '';
   Color boxBorderColor = Colors.lightBlueAccent;
  
-  // Asteroid positions and movement directions
-  List<double> asteroidX = [-0.52, 0, 0.52];
-  List<double> asteroidY = [-0.6, -0.6, -0.6];
+  // Asteroid positions (Adjusted downwards significantly to avoid the top timer)
+  List<double> asteroidX = [-0.61, 0, 0.61];
+  List<double> asteroidY = [0.05, 0.05, 0.05];
+ 
+  // Added slight rotation state for pizzazz
+  List<double> asteroidRotation = [0.0, 0.5, 1.2];
+
+
   List<AsteroidDirection> asteroidFloat = [
     AsteroidDirection.up,
     AsteroidDirection.down,
     AsteroidDirection.up,
   ];
 
+
   double playerX = 0;
   double playerY = 4.0;
   var playerFloat = PlayerDirection.up;
 
+
   Timer? gameTimer;
   Timer? animationSpeed;
+
 
   @override
   void initState() {
@@ -73,17 +89,19 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     startQuizGame();
   }
 
+
   void _playMusic() async {
     await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loop music
     await _audioPlayer.play(AssetSource('bg_music.mp3'));
   }
 
+
 // load hearts
-   Future<void> _loadHearts() async {
+  Future<void> _loadHearts() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       lives = prefs.getInt('currentHearts') ?? 5;
-      totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0; 
+      totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0;
     });
   }
 // save hearts
@@ -93,13 +111,15 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     setState(() => lives = newLives);
   }
 
+
   Future<void> restoreHeartsFromPurchases() async {
     await _loadHearts(); // reload from storage
   }
 
-   Future<bool> buyHearts(int amount, double price) async {
+
+  Future<bool> buyHearts(int amount, double price) async {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       final prefs = await SharedPreferences.getInstance();
      
       int newPurchased = (prefs.getInt('totalPurchasedHearts') ?? 0) + amount;
@@ -131,9 +151,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   int timeLeft = 20;
 
+
   void quizgameTimer() {
-    gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (isPaused || feedback.isNotEmpty || !mounted) return;
+
 
       if (timeLeft > 0) {
         setState(() {
@@ -184,26 +206,33 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
+
   void startQuizGame() {
     animationSpeed = Timer.periodic(const Duration(milliseconds: 70), (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
-        // up and down animation of asteroids
+
         setState(() {
+          // up and down animation of asteroids (Adjusted boundaries to lower center of screen)
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
 
-            if (asteroidY[i] < -0.8) {
+
+            // Shifted bounds so they stay well below the top timer
+            if (asteroidY[i] < -0.05) {
               asteroidFloat[i] = AsteroidDirection.down;
-            } else if (asteroidY[i] > -0.5) {
+            } else if (asteroidY[i] > 0.15) {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
-            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up)
-                ? -0.01
-                : 0.01;
+
+            asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) ? -0.01 : 0.01;
+           
+            // Subtle rotation pizzazz
+            asteroidRotation[i] += (i % 2 == 0) ? 0.005 : -0.005;
           }
         });
+
 
         // up and down animation of player (spaceship)
         if (playerY < 3.8) {
@@ -221,6 +250,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 
+
   // Player movement functions
   void moveLeft() {
     setState(() {
@@ -229,12 +259,14 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
+
   void moveMiddle() {
     setState(() {
       playerX = 0;
       if (!midShot) laserX = playerX;
     });
   }
+
 
   void moveRight() {
     setState(() {
@@ -244,14 +276,18 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
 
+
+
   // Shooting function
   void fireLaser() {
     if (midShot || isPaused || feedback.isNotEmpty) return;
+
 
     setState(() {
       midShot = true;
       laserX = playerX;
     });
+
 
     Timer.periodic(const Duration(milliseconds: 15), (timer) {
         if (!mounted) {
@@ -259,20 +295,24 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           return;
         }
 
+
         setState(() {
           laserHeight += 25;
         });
+
 
         double maxHeight = MediaQuery.of(context).size.height;
         if (laserHeight > maxHeight) {
           _stopLaser(timer);
         }
 
+
         for (int i = 0; i < 3; i++) {
           double hitPos = heightToCoordinate(
             laserHeight + (maxHeight * 0.1),
           );
           bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
+
 
           if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
             asteroidY[i] = -50;
@@ -285,6 +325,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 
+
   void _stopLaser(Timer t) {
     t.cancel();
     setState(() {
@@ -293,35 +334,43 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
+
   double heightToCoordinate(double height) {
     double arenaHeight = MediaQuery.of(context).size.height * 0.7;
     return 1 - (2 * height / arenaHeight);
   }
 
+
   // Answer checking and feedback
   Future<void> checkAnswer(int index) async {
     bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
+
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
       boxBorderColor = isCorrect ? Colors.greenAccent : Colors.redAccent;
     });
-    
+   
       if (!isCorrect) {
         int current = await LivesTimerService.getHearts();
         int newLives = current - 1;
 
+
         await LivesTimerService.setHearts(newLives);
+
 
         setState(() {
           lives = newLives;
         });
       }
 
-    
+
+   
+
 
     if (lives <= 0) {
       await LivesTimerService.startCooldown();
+
 
       Future.delayed(const Duration(milliseconds: 800), () {
           if (mounted) {
@@ -336,12 +385,14 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       return;
     }
 
+
     // Delay before moving to next question or ending game
     Future.delayed(
       const Duration(seconds: 1),
       () {
         if (!mounted) return;
         bool isLast = currentQuestion >= widget.quiz.length - 1;
+
 
         if (isCorrect && isLast) {
           Navigator.pushReplacement(
@@ -365,11 +416,13 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 
+
   // Reset asteroid positions and movement directions
   void _resetAsteroids() {
     setState(() {
-      asteroidX = [-0.52, 0, 0.52];
-      asteroidY = [-0.6, -0.6, -0.6];
+      asteroidX = [-0.61, 0, 0.61];
+      asteroidY = [0.05, 0.05, 0.05]; // Reset to new safe lowered position
+      asteroidRotation = [0.0, 0.5, 1.2];
       asteroidFloat = [
         AsteroidDirection.up,
         AsteroidDirection.down,
@@ -379,20 +432,25 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
 
+
+
   // Main build method for the quiz game UI
   @override
   Widget build(BuildContext context) {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
 
+
   // Calculate rocket size based on screen dimensions
     final double rocketWidth = (sw * 0.20).clamp(210.0, 245.0);
     final double rocketHeight = (sh * 0.15).clamp(210.0, 245.0);
+
 
   // Determines the dynamic color of the timer
   final Color timerColor = timeLeft > 10
       ? Colors.cyanAccent
       : (timeLeft > 5 ? Colors.orangeAccent : Colors.redAccent);
+
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -421,11 +479,9 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   AsteroidChoice(
                     x: asteroidX[i],
                     y: asteroidY[i],
-                    color: i == 1
-                        ? const Color(0xFF3B4043)
-                        : const Color(0xFF5A6064),
+                    rotation: asteroidRotation[i], // Passed the new rotation
+                    imagePath: 'images/asteroid$i.png',
                     label: widget.quiz[currentQuestion]['answers'][i],
-                    alignWidth: rocketWidth,
                   ),
                 // Laser and spaceship
                 AnimatedAlign(
@@ -465,11 +521,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       ),
                       // Astroknowt
                       Positioned(
-                        top: 50,
+                        top: 67,
                         child: Image.asset(
                           avatarPath,
-                          width: 20,
-                          height: 20,
+                          opacity: const AlwaysStoppedAnimation(.8), // 80% transparent
+                          width: 25,
+                          height: 25,
                         ),
                       )
                     ],
@@ -478,6 +535,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
               ],
             ),
           ),
+
 
           // Timer on top of the screen (with floating orb effect)
           Positioned(
@@ -560,6 +618,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             ),
           ),
 
+
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
@@ -610,11 +669,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                           color: const Color(0xFFFFD1DC),
                           size: (sw * 0.09).clamp(23.0, 35.0),
                         ),
-                        SizedBox(width: 6),
+                        const SizedBox(width: 6),
                         Text(
                           '$lives',
                           style: TextStyle(
-                            color: Color(0xFFFFD1DC),
+                            color: const Color(0xFFFFD1DC),
                             fontSize: (sw * 0.08).clamp(20.0, 28.0),
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Share Tech',
@@ -677,6 +736,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 
+
   Widget _buildMoveZone(VoidCallback onTap) {
     return Expanded(
       child: GestureDetector(
@@ -689,75 +749,123 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 }
 
 
-// Widget for individual asteroid choices
+// Updated Widget for individual asteroid choices
 class AsteroidChoice extends StatelessWidget {
-  final double x, y;
-  final Color color;
+  final double x, y, rotation;
+  final String imagePath;
   final String label;
-  final double alignWidth;
+
 
   const AsteroidChoice({
     super.key,
     required this.x,
     required this.y,
-    required this.color,
+    required this.rotation,
+    required this.imagePath,
     required this.label,
-    required this.alignWidth,
   });
 
-  // Build method for individual asteroid choices
+
   @override
   Widget build(BuildContext context) {
     if (y == -50) return const SizedBox.shrink();
-    double size = (MediaQuery.of(context).size.width * 0.18)
-        .clamp(60.0, 85.0);
+   
+    // Adjusted size to be slightly smaller and less cluttery per request
+    double size = (MediaQuery.of(context).size.width * 0.18).clamp(65.0, 95.0);
+   
+    // Pizzazz: Calculate a pulsing opacity for the ambient glow based on the rotation!
+    double glowOpacity = 0.1 + (0.15 * math.sin(rotation * 6).abs());
+
 
     return AnimatedAlign(
       alignment: Alignment(x, y),
       duration: const Duration(milliseconds: 50),
-      child: Container(
+      child: SizedBox(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white24,
-            width: 2,
-          ),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            )
-          ],
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size * 0.25,
-                  fontWeight: FontWeight.bold,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Ambient pulsing glow behind the asteroid
+            Container(
+              width: size * 0.85,
+              height: size * 0.85,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.cyanAccent.withValues(alpha: glowOpacity),
+                    blurRadius: 20,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+            ),
+           
+            // The Asteroid Image with gentle rotation
+            Transform.rotate(
+              angle: rotation,
+              child: Image.asset(
+                imagePath,
+                width: size,
+                height: size,
+                fit: BoxFit.contain,
+              ),
+            ),
+           
+            // Embedded Text constraint box
+            // Sized at 75% of the asteroid to prevent text from overflowing off the "rock"
+            SizedBox(
+              width: size * 0.75,
+              height: size * 0.75,
+              child: Center(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center, // Helps align \n line breaks
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: size * 0.28, // Base scale, FitBox will shrink it if it's long
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'Share Tech',
+                      letterSpacing: 1.0,
+                      shadows: [
+                        // Deeper dark shadow backing to pop off complex asteroid textures
+                        const Shadow(
+                          color: Colors.black87,
+                          offset: Offset(0, 2),
+                          blurRadius: 6,
+                        ),
+                        // Heavy dark stroke for crisp readability
+                        const Shadow(color: Colors.black, offset: Offset(1.5, 1.5), blurRadius: 2),
+                        const Shadow(color: Colors.black, offset: Offset(-1.5, -1.5), blurRadius: 2),
+                        const Shadow(color: Colors.black, offset: Offset(1.5, -1.5), blurRadius: 2),
+                        const Shadow(color: Colors.black, offset: Offset(-1.5, 1.5), blurRadius: 2),
+                        // Subtle cyan holographic glow to tie it back to UI
+                        Shadow(
+                          color: Colors.cyanAccent.withValues(alpha: 0.8),
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
 
+
 // Widget for the shoot button
 class ShootButton extends StatelessWidget {
   final VoidCallback onTap;
   const ShootButton({super.key, required this.onTap});
+
 
   @override
   Widget build(BuildContext context) {
@@ -792,11 +900,13 @@ class ShootButton extends StatelessWidget {
   }
 }
 
+
 // Widget for the pause menu
 class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
   final ValueSetter<String> onUpdateAvatar;
   const PauseMenu({super.key, required this.onResume, required this.onUpdateAvatar,});
+
 
   @override
   Widget build(BuildContext context) {
@@ -868,6 +978,7 @@ class PauseMenu extends StatelessWidget {
       ),
     );
   }
+
 
   Widget _menuButton(
     BuildContext context,

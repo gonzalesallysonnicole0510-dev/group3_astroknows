@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String selectedAstroknowt = 'images/1Avatar.png';
-String selectedSpaceship = 'images/spaceship.png';
+String selectedSpaceship = 'images/rocket1.png';
 
 void main() {
   runApp(const MaterialApp(
@@ -40,11 +40,17 @@ class _CharacCustPageState extends State<CharacCustPage> {
         prefs.getStringList('ownedSpaceships') ?? [];
 
     // Include basic spaceship designs
-    if (!saved.contains('images/spaceship.png' 'images/sun.png' 'images/earth.png')) {
-      saved.insert(0, 'images/spaceship.png');
-      saved.insert(1, 'images/sun.png');
-      saved.insert(2, 'images/earth.png');
+    if (!saved.contains('images/rocket1.png')) {
+      saved.insert(0, 'images/rocket1.png');
+      saved.insert(1, 'images/rocket2.png');
+      saved.insert(2, 'images/rocket3.png');
+      saved.insert(3, 'images/rocket4.png');
+      saved.insert(4, 'images/rocket5.png');
+      saved.insert(5, 'images/rocket6.png');
+      saved.insert(6, 'images/rocket7.png');
+      saved.insert(7, 'images/rocket8.png');
     }
+
 
     setState(() {
       ownedSpaceships = saved;
@@ -258,6 +264,7 @@ class AvatarPreview extends StatelessWidget {
 
         Expanded(
           child: Container(
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.cyanAccent),
               borderRadius: BorderRadius.circular(20),
@@ -283,11 +290,12 @@ class AvatarPreview extends StatelessWidget {
 
                     // astroknowt
                     Positioned(
-                      top: 40,
+                      top: 72,
                       child: Image.asset(
                         avatarPath,
-                        width: 40,
-                        height: 40,
+                        opacity: const AlwaysStoppedAnimation(.8), // 80% transparent
+                        width: 22,
+                        height: 22,
                       )
                     )
                   ],
@@ -352,7 +360,7 @@ class SpaceShipDesigns extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)
         ),
         child: Center(
-          child: Image.asset('images/spaceship.png')),
+          child: Image.asset('images/rocket1.png')),
       )
     );
   }

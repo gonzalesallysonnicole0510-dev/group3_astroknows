@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/pages/button0_charac.dart';
@@ -47,7 +48,7 @@ class _AchievementPageState extends State<AchievementPage>
 
       // Check if they already claimed this planet's reward
       if (claimedQuizzes.contains(normalizedPlanetName)) {
-        rewardStar = 100;
+        rewardStar = 0; // Set to 0 if already claimed to trigger "CLAIMED" state
       }
     });
   }
@@ -100,15 +101,11 @@ class _AchievementPageState extends State<AchievementPage>
 
   @override
   Widget build(BuildContext context) {
-    // Implementing flexible MediaQuery sizing
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color(0xFF040B14),
       body: Stack(
         children: [
-          // Deep Space Gradient Background
+          // 1. Deep Space Gradient Background
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -121,7 +118,7 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
 
-          // Animated Star Field
+          // 2. Animated Star Field
           Positioned.fill(
             child: AnimatedBuilder(
               animation: _starController,
@@ -133,57 +130,63 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
 
-          // Main HUD Interface - Made flexible with SingleChildScrollView
+          // 3. Main HUD Interface - No scrolling, perfectly scaled
           SafeArea(
             child: Center(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 20.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(
-                      maxWidth: 500, // Prevents stretching on tablets/web
+                      maxWidth: 480, // Optimized width for text & layout
                     ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.06,
-                          vertical: screenHeight * 0.04),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF0D121A).withValues(alpha: 0.85),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
-                          width: 2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: BackdropFilter(
+                        // Glassmorphism effect
+                        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 32.0, vertical: 40.0),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0D121A).withValues(alpha: 0.75),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF00E5FF)
+                                    .withValues(alpha: 0.15),
+                                blurRadius: 25,
+                                spreadRadius: 2,
+                              )
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildHUDHeader(),
+                              const SizedBox(height: 32),
+
+                              // Alien & Message Section
+                              _buildTransmission(),
+
+                              const SizedBox(height: 32),
+
+                              // Reward Display
+                              _buildRewardBadge(),
+
+                              const SizedBox(height: 40),
+
+                              // Action Buttons
+                              _buildActionButtons(context),
+                            ],
+                          ),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF00E5FF)
-                                .withValues(alpha: 0.15),
-                            blurRadius: 25,
-                            spreadRadius: 2,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildHUDHeader(),
-                          SizedBox(height: screenHeight * 0.03),
-
-                          // Alien & Message Section
-                          _buildTransmission(screenWidth, screenHeight),
-
-                          SizedBox(height: screenHeight * 0.03),
-
-                          // Reward Display
-                          _buildRewardBadge(screenWidth),
-
-                          SizedBox(height: screenHeight * 0.04),
-
-                          // Action Buttons
-                          _buildActionButtons(context, screenWidth, screenHeight),
-                        ],
                       ),
                     ),
                   ),
@@ -195,7 +198,6 @@ class _AchievementPageState extends State<AchievementPage>
       ),
     );
   }
-
 
   Widget _buildHUDHeader() {
     return Row(
@@ -210,7 +212,7 @@ class _AchievementPageState extends State<AchievementPage>
               color: Color(0xFF00E5FF),
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
-              fontSize: 12,
+              fontSize: 13,
             ),
           ),
         ),
@@ -219,15 +221,11 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
-
-  Widget _buildTransmission(double screenWidth, double screenHeight) {
-    double avatarSize = screenWidth * 0.2;
-    // Cap the max size of the avatar
-    if (avatarSize > 100) avatarSize = 100;
-    if (avatarSize < 60) avatarSize = 60;
+  Widget _buildTransmission() {
+    double avatarSize = 80; // Fixed size, FittedBox will scale it naturally
 
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.04),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
@@ -254,27 +252,27 @@ class _AchievementPageState extends State<AchievementPage>
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(width: screenWidth * 0.04),
+          const SizedBox(width: 20),
           // Transmission Text
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Great Job, Astroknowt!",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: screenWidth < 360 ? 14 : 18,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.01),
+                const SizedBox(height: 8),
                 Text(
                   "You successfully completed the ${widget.planet} sector. Take this reward I've prepared for you!",
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.75),
-                    fontSize: screenWidth < 360 ? 12 : 14,
+                    color: Colors.white.withValues(alpha: 0.8),
+                    fontSize: 14,
                     height: 1.4,
                   ),
                 ),
@@ -286,11 +284,8 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
-
-  Widget _buildRewardBadge(double screenWidth) {
+  Widget _buildRewardBadge() {
     bool isClaimed = rewardStar == 0;
-    double paddingHorizontal = screenWidth * 0.06;
-    double paddingVertical = paddingHorizontal / 2;
 
     return TweenAnimationBuilder(
       tween: Tween(begin: 0.8, end: 1.0),
@@ -300,13 +295,12 @@ class _AchievementPageState extends State<AchievementPage>
         return Transform.scale(
           scale: value,
           child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: paddingHorizontal, vertical: paddingVertical),
+            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14.0),
             decoration: BoxDecoration(
               color: isClaimed
                   ? Colors.grey.withValues(alpha: 0.2)
                   : Colors.amber.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: isClaimed
                     ? Colors.grey.withValues(alpha: 0.5)
@@ -329,14 +323,14 @@ class _AchievementPageState extends State<AchievementPage>
                 Icon(
                   isClaimed ? Icons.check_circle_rounded : Icons.star_rounded,
                   color: isClaimed ? Colors.grey : Colors.amber,
-                  size: screenWidth < 360 ? 28 : 40,
+                  size: 36,
                 ),
-                SizedBox(width: screenWidth * 0.03),
+                const SizedBox(width: 12),
                 Text(
-                  isClaimed ? "CLAIMED" : "+ $rewardStar",
+                  isClaimed ? "CLAIMED" : "+ ${widget.star}", // Display original star value even if claimed internal state is 0
                   style: TextStyle(
                     color: isClaimed ? Colors.grey : Colors.amber,
-                    fontSize: screenWidth < 360 ? 20 : 32,
+                    fontSize: 28,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.5,
                   ),
@@ -349,12 +343,9 @@ class _AchievementPageState extends State<AchievementPage>
     );
   }
 
-
-  Widget _buildActionButtons(BuildContext context, double screenWidth, double screenHeight) {
+  Widget _buildActionButtons(BuildContext context) {
     bool canClaim = rewardStar > 0;
-    double buttonHeight = screenHeight * 0.06;
-    if (buttonHeight < 45) buttonHeight = 45; // Minimum touch target size
-    if (buttonHeight > 60) buttonHeight = 60; // Max cap
+    double buttonHeight = 55; // Fixed reasonable height
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -366,13 +357,13 @@ class _AchievementPageState extends State<AchievementPage>
             onPressed: canClaim ? claimPoints : null,
             icon: Icon(
                 canClaim ? Icons.auto_awesome_rounded : Icons.lock_rounded,
-                size: screenWidth < 360 ? 20 : 24),
+                size: 24),
             label: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 canClaim ? "CLAIM REWARD" : "REWARD SECURED",
-                style: TextStyle(
-                  fontSize: screenWidth < 360 ? 14 : 18,
+                style: const TextStyle(
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.0,
                 ),
@@ -390,23 +381,25 @@ class _AchievementPageState extends State<AchievementPage>
             ),
           ),
         ),
-        SizedBox(height: screenHeight * 0.015),
+        const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
-          height: buttonHeight * 0.9,
+          height: buttonHeight,
           child: OutlinedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => TitlePage(astroknowt: selectedAstroknowt)),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TitlePage(astroknowt: selectedAstroknowt)),
               );
             },
-            icon: Icon(Icons.rocket_launch_rounded, size: screenWidth < 360 ? 18 : 20),
-            label: FittedBox(
+            icon: const Icon(Icons.rocket_launch_rounded, size: 20),
+            label: const FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 "MAIN MENU",
                 style: TextStyle(
-                  fontSize: screenWidth < 360 ? 12 : 16,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.8,
                 ),
@@ -427,23 +420,22 @@ class _AchievementPageState extends State<AchievementPage>
 
   Widget _hudCorner(int side) {
     return Container(
-      width: 15,
-      height: 15,
+      width: 16,
+      height: 16,
       decoration: BoxDecoration(
         border: Border(
-          top: const BorderSide(color: Color(0xFF00E5FF), width: 2),
+          top: const BorderSide(color: Color(0xFF00E5FF), width: 2.5),
           left: side == 0
-              ? const BorderSide(color: Color(0xFF00E5FF), width: 2)
+              ? const BorderSide(color: Color(0xFF00E5FF), width: 2.5)
               : BorderSide.none,
           right: side == 1
-              ? const BorderSide(color: Color(0xFF00E5FF), width: 2)
+              ? const BorderSide(color: Color(0xFF00E5FF), width: 2.5)
               : BorderSide.none,
         ),
       ),
     );
   }
 }
-
 
 class StarFieldPainter extends CustomPainter {
   final double blink;

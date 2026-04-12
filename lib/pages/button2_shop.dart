@@ -323,9 +323,9 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Merchandise(
-                  imagePath: 'images/premium1_ufo.png',
+                  imagePath: 'images/premium1.png',
                   price: 3000,
-                  onBuy: () => _showDialog(3000, 'spaceship', spaceshipPath: 'images/premium1_ufo.png'),
+                  onBuy: () => _showDialog(3000, 'spaceship', spaceshipPath: 'images/premium1.png'),
                 ),
                 Merchandise(
                   imagePath: 'images/premium2.png',
@@ -351,19 +351,19 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ExtraLives(
-                  imagePath: 'images/livesx2.png',
+                  imagePath: 'images/extralives2.png',
                   price: 1500,
                   hearts: 2,
                   onBuy: () => _showDialog(1500, 'hearts', hearts: 2),
                 ),
                 ExtraLives(
-                  imagePath: 'images/livesx3.png',
+                  imagePath: 'images/extralives3.png',
                   price: 3000,
                   hearts: 3,
                   onBuy: () => _showDialog(3000, 'hearts', hearts: 3),
                 ),
                 ExtraLives(
-                  imagePath: 'images/livesx5.png',
+                  imagePath: 'images/extralives5.png',
                   price: 5000,
                   hearts: 5,
                   onBuy: () => _showDialog(5000, 'hearts', hearts: 5),
