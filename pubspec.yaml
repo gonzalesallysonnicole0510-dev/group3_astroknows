@@ -33,6 +33,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/main_bgm.mp3
     - assets/bg_music.mp3
     - images/1Avatar.png
     - images/2Avatar.png
