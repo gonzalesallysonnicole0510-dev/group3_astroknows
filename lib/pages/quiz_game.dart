@@ -41,7 +41,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   // Game state variables
   bool isPaused = false;
-  bool isLanding = true; // Added for the start animation
+  bool isLanding = true;
   int lives = 3;
   int totalPurchasedHearts = 0;
 
@@ -68,7 +68,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   // Player positions
   double playerX = 0;
-  double playerY = -1.5; // Start way off-screen at the top for landing animation
+  double playerY = -1.5;
   var playerFloat = PlayerDirection.up;
 
   Timer? gameTimer;
@@ -77,11 +77,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   @override
   void initState() {
     super.initState();
-    SfxManager.instance.travelSpace(); // traveling thru space sound effect
+    SfxManager.instance.travelSpace();
     avatarPath = widget.astroknowt;
     spaceshipPath = widget.spaceship;
     _loadHearts();
-    _playLandingAnimation(); // Trigger the landing animation sequence
+    _playLandingAnimation();
   }
 
   void _playLandingAnimation() {
@@ -89,7 +89,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) {
         setState(() {
-          playerY = 0.95; // Changed from 0.8 to sit right above the UI
+          playerY = 0.95;
         });
       }
     });
@@ -212,7 +212,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   boxBorderColor = Colors.lightBlueAccent;
                   _resetAsteroids();
                   timeLeft = 20;
-                  timeBuffer = 0; // Reset the buffer to prevent immediate timeout on the next tick
+                  timeBuffer = 0;
                });
              }
            });
@@ -416,7 +416,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
 
-    // Fixed sizing: Removed the 210.0 minimum clamps so it gracefully fits smaller screens
     final double rocketWidth = (sw * 0.18).clamp(60.0, 110.0);
     final double rocketHeight = (sh * 0.12).clamp(80.0, 120.0);
 
@@ -483,7 +482,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                 // Player Spaceship
                 AnimatedAlign(
                   alignment: Alignment(playerX, playerY),
-                  // Slower curve for landing, quick responsive linear for floating
                   duration: isLanding
                       ? const Duration(milliseconds: 1400)
                       : const Duration(milliseconds: 150),
@@ -497,7 +495,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                         width: rocketWidth,
                         height: rocketHeight,
                       ),
-                      // Avatar positioned to sit nicely within the cockpit area of the spaceship, adjust the top offset as needed based on your specific art assets
                       Positioned(
                         top: rocketHeight * 0.28,
                         child: Image.asset(
@@ -533,7 +530,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       curve: Curves.linear,
                       width: (timeLeft.clamp(0, 20) / 20) * sw,
                       height: 4,
-                      margin: const EdgeInsets.only(top: 18), // Centers the line with the orb
+                      margin: const EdgeInsets.only(top: 18),
                       decoration: BoxDecoration(
                         color: timerColor,
                         borderRadius: BorderRadius.circular(10),
@@ -556,7 +553,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                       top: 2,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
-                        // ... (keep the rest of the timer circle the same)
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
@@ -574,6 +570,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                             ),
                           ],
                         ),
+
                         child: Center(
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 300),
@@ -600,7 +597,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             right: (sw * 0.05).clamp(15.0, 30.0),
             child: GestureDetector(
               onTap: () {
-                if(isLanding) return; // Disallow pause while landing
+                if(isLanding) return;
                 SfxManager.instance.pause();
                 setState(() => isPaused = true);
                 gameTimer?.cancel();
@@ -708,7 +705,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
               },
               onUpdateAvatar: (newPath) {
                 setState(() {
-                  // Assuming selectedAstroknowt/Spaceship variables are managed elsewhere or globally
                   avatarPath = selectedAstroknowt;
                   spaceshipPath = selectedSpaceship;
                 });
@@ -729,10 +725,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 }
-
-// ----------------------------------------------------
-// Updated Widgets (AsteroidChoice, ShootButton remain essentially untouched)
-// ----------------------------------------------------
 
 class AsteroidChoice extends StatelessWidget {
   final double x, y, rotation;

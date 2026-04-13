@@ -56,18 +56,15 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
       saved.insert(7, 'images/rocket8.png');
     }
 
-
     setState(() {
       ownedSpaceships = saved;
     });
   }
 
-
   Future<void> _saveSelectedSpaceship(String path) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('selectedSpaceship', path);
   }
-
 
   void _updateAvatar(String avatarPath) async {
     final prefs = await SharedPreferences.getInstance();
@@ -83,7 +80,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -94,10 +90,9 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(10, 10, 26, 1.0),
-
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('CHARACTER CUSTOMIZATION:'),
+        title: const Text('CHARACTER CUSTOMIZATION'),
         centerTitle: true,
         titleTextStyle: const TextStyle(
           color: Colors.white,
@@ -106,10 +101,9 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
           letterSpacing: 1.2,
           shadows: [Shadow(blurRadius: 12, color: Colors.cyanAccent)],
         ),
-        // back button
         leading: GestureDetector(
           onTap: () {
-            SfxManager.instance.backButton(); // sound effect
+            SfxManager.instance.backButton();
             Navigator.pop(context);
           },
           child: Container(
@@ -130,7 +124,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
           ),
         ),
       ),
-
       body: Stack(
         children: [
           AnimatedBuilder(
@@ -143,39 +136,38 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
             },
           ),
           Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02, top: screenHeight * 0.02, bottom: screenHeight * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  Row(
-                    // Astroknowt look selection
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      AstroknowtDesigns(
-                        isSelected: isAvatar,
-                        onTap: () {
-                          setState(() {
-                            SfxManager.instance.secButton();   // secondary button sound effect
-                            currentType = CustomizationType.astroknowt;
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      // Spaceship design seleciton
-                      SpaceShipDesigns(
-                        isSelected: !isAvatar,
-                        onTap: () {
-                          setState(() {
-                            SfxManager.instance.secButton();   // secondary button sound effect
-                            currentType = CustomizationType.spaceship;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-
-                // MAIN CONTAINER
+            padding: EdgeInsets.only(
+                left: screenWidth * 0.02,
+                right: screenWidth * 0.02,
+                top: screenHeight * 0.02,
+                bottom: screenHeight * 0.02),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    AstroknowtDesigns(
+                      isSelected: isAvatar,
+                      onTap: () {
+                        setState(() {
+                          SfxManager.instance.secButton();
+                          currentType = CustomizationType.astroknowt;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    SpaceShipDesigns(
+                      isSelected: !isAvatar,
+                      onTap: () {
+                        setState(() {
+                          SfxManager.instance.secButton();
+                          currentType = CustomizationType.spaceship;
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 10),
                 Expanded(
                   child: Container(
@@ -197,7 +189,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
                     ),
                     child: Row(
                       children: [
-                        // Astroknowt and Spaceship Grid
                         Expanded(
                           flex: 2,
                           child: Padding(
@@ -206,25 +197,23 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
                               crossAxisCount: isLandscape ? 4 : 3,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
-                              children:
-                                  (isAvatar
-                                          ? [
-                                              'images/1Avatar.png',
-                                              'images/2Avatar.png',
-                                              'images/3Avatar.png',
-                                              'images/4Avatar.png',
-                                              'images/5Avatar.png',
-                                              'images/6Avatar.png',
-                                              'images/7Avatar.png',
-                                              'images/AvatarAlien.png',
-                                            ]
-                                          : ownedSpaceships)
-                                      .map((path) => _avatarBtn(path))
-                                      .toList(),
+                              children: (isAvatar
+                                      ? [
+                                          'images/1Avatar.png',
+                                          'images/2Avatar.png',
+                                          'images/3Avatar.png',
+                                          'images/4Avatar.png',
+                                          'images/5Avatar.png',
+                                          'images/6Avatar.png',
+                                          'images/7Avatar.png',
+                                          'images/AvatarAlien.png',
+                                        ]
+                                      : ownedSpaceships)
+                                  .map((path) => _avatarBtn(path))
+                                  .toList(),
                             ),
                           ),
                         ),
-                        // Preview
                         Container(
                           width: 1,
                           margin: EdgeInsets.symmetric(
@@ -255,8 +244,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
     );
   }
 
-
-  // Avatar Choices Button
   Widget _avatarBtn(String path) {
     final bool isSelected = (currentType == CustomizationType.astroknowt)
         ? selectedAstroknowt == path
@@ -264,7 +251,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
 
     return GestureDetector(
       onTap: () {
-        // selection button sound effect
         SfxManager.instance.selection();
         _updateAvatar(path);
       },
@@ -300,13 +286,17 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
   }
 }
 
-
-
 class AvatarPreview extends StatelessWidget {
   final String avatarPath;
   final String spaceshipPath;
   final CustomizationType type;
-  const AvatarPreview({super.key, required this.avatarPath, required this.spaceshipPath, required this.type});
+  
+  const AvatarPreview({
+    super.key, 
+    required this.avatarPath, 
+    required this.spaceshipPath, 
+    required this.type
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -349,31 +339,58 @@ class AvatarPreview extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: isAvatar   // Astroknowt only
+              child: isAvatar
                   ? Padding(
                       padding: const EdgeInsets.all(16),
                       child: Image.asset(avatarPath, fit: BoxFit.contain),
                     )
-                  : Stack(    // Spaceship + Astroknowt
-                      alignment: Alignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(   // Spaceship
-                            spaceshipPath,
-                            fit: BoxFit.contain,
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Increased the rocket height multiplier to 0.95 to make the rocket larger
+                        double rocketHeight = constraints.maxHeight * 0.95;
+
+                        return SizedBox(
+                          height: rocketHeight,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // ROCKET
+                              Image.asset(
+                                spaceshipPath,
+                                fit: BoxFit.contain,
+                              ),
+                              // AVATAR BUBBLE 
+                              Align(
+                                // Adjusted the Y alignment to -0.25 to move the avatar slightly upwards into the rocket window
+                                alignment: const Alignment(0.0, -0.25), 
+                                child: Container(
+                                  // Increased bubble size multiplier to 0.26 to match the larger rocket
+                                  width: rocketHeight * 0.26, 
+                                  height: rocketHeight * 0.26,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white.withValues(alpha: 0.4), 
+                                      width: 2
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.cyanAccent.withValues(alpha: 0.2),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      )
+                                    ],
+                                    image: DecorationImage(
+                                      image: AssetImage(avatarPath),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Positioned(
-                          top: 80,
-                          child: Image.asset(
-                            avatarPath,   // Astroknowt
-                            opacity: const AlwaysStoppedAnimation(.8),
-                            width: 22,
-                            height: 22,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
             ),
           ),
@@ -382,7 +399,6 @@ class AvatarPreview extends StatelessWidget {
     );
   }
 }
-
 
 class AstroknowtDesigns extends StatelessWidget {
   final VoidCallback onTap;
@@ -411,7 +427,6 @@ class AstroknowtDesigns extends StatelessWidget {
   }
 }
 
-
 class SpaceShipDesigns extends StatelessWidget {
   final VoidCallback onTap;
   final bool isSelected;
@@ -438,7 +453,6 @@ class SpaceShipDesigns extends StatelessWidget {
     );
   }
 }
-
 
 class StarFieldPainter extends CustomPainter {
   final double blinkValue;
