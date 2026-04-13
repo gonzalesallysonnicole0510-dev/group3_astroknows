@@ -15,7 +15,7 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin {
   late AnimationController _blinkController;
-  int totalStar = 10000;
+  int totalStar = 0;
   int currentHearts = 3;
   int totalPurchasedHearts = 0;
 
@@ -35,7 +35,7 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      totalStar = prefs.getInt('totalStars') ?? 10000;
+      totalStar = prefs.getInt('totalStars') ?? 0;
       currentHearts = prefs.getInt('currentHearts') ?? 3;
       totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0;
     });
