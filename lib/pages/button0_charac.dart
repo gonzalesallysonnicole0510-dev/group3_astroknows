@@ -212,7 +212,6 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
                                               'images/1Avatar.png',
                                               'images/2Avatar.png',
                                               'images/3Avatar.png',
-                                              'images/3Avatar.png',
                                               'images/4Avatar.png',
                                               'images/5Avatar.png',
                                               'images/6Avatar.png',
