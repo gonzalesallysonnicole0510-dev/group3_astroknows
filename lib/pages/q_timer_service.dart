@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // This is a global function to continue the lives cooldown timer even if LivesTimerPage is exited
 class LivesTimerService {
-  static const int maxLives = 5;
+  static const int maxLives = 3;
   static const int refillDuration = 300000; // 5 minutes
 
   // Get current hearts
@@ -51,7 +51,7 @@ class LivesTimerService {
   static Future<void> refillHearts() async {
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setInt('currentHearts', 5);
+    await prefs.setInt('currentHearts', 3);
     await prefs.remove('heartsResetTime');
   }
 

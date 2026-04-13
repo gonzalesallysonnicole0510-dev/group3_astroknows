@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/pages/b-sfx_manager.dart';
+import 'package:flutter_application_1/pages/button3_settings.dart';
 import "package:flutter_application_1/pages/splashscreen_intro.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await SfxManager.instance.setVolume(sfxLevel);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,

@@ -33,14 +33,28 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/bg_music.mp3
+    - assets/main_bgm.mp3
+    - assets/mainButton_click.mp3
+    - assets/secButton_click.mp3
+    - assets/selection_click.mp3
+    - assets/pauseButton_click.mp3
+    - assets/backButton_click.mp3
+    - assets/countdown_launch.mp3
+    - assets/space_travel.mp3
+    - assets/laser_shoot.mp3
+    - assets/correct_answer.mp3
+    - assets/wrong_answer.mp3
+    - assets/mission_accomplished.mp3
+    - assets/claim.mp3
+    - assets/mission_failed.mp3
+    
     - images/1Avatar.png
     - images/2Avatar.png
     - images/3Avatar.png
     - images/4Avatar.png
     - images/5Avatar.png
     - images/6Avatar.png
-    - images/7Avatar.png
+    # - images/7Avatar.png
     - images/AvatarAlien.png
 
     - images/icon.png

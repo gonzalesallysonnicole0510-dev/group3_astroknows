@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/button3_settings.dart';
 import 'package:flutter_application_1/pages/q_timer_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'button2_shop.dart';
 import 'dart:math' as math;
 
-
-import 'package:audioplayers/audioplayers.dart';
+import 'b-sfx_manager.dart';
 import 'button0_charac.dart';
 import 'title.dart';
-import 'q_achievement.dart';
-import 'q_mission-failed.dart';
+import 'q_mission_accomplished.dart';
+import 'q_mission_failed.dart';
 import 'star_animation.dart';
-
 
 class Quizteroid_Quest extends StatefulWidget {
   final List<Map<String, dynamic>> quiz;
@@ -21,21 +19,16 @@ class Quizteroid_Quest extends StatefulWidget {
   final String astroknowt;
   final String spaceship;
 
-
   const Quizteroid_Quest({super.key, required this.quiz, required this.planet, required this.astroknowt, required this.spaceship});
-
 
   @override
   State<Quizteroid_Quest> createState() => _Quizteroid_QuestState();
 }
 
-
 enum AsteroidDirection { up, down }
 enum PlayerDirection { up, down }
 
-
 class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
   String avatarPath = 'images/default_avatar.png';
   String spaceshipPath = '';
  
@@ -44,11 +37,9 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   double laserHeight = 0;
   bool midShot = false;
 
-
   bool isPaused = false;
-  int lives = 5;
+  int lives = 3;
   int totalPurchasedHearts = 0;
-
 
   int currentQuestion = 0;
   String feedback = '';
@@ -61,38 +52,28 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   // Added slight rotation state for pizzazz
   List<double> asteroidRotation = [0.0, 0.5, 1.2];
 
-
   List<AsteroidDirection> asteroidFloat = [
     AsteroidDirection.up,
     AsteroidDirection.down,
     AsteroidDirection.up,
   ];
 
-
   double playerX = 0;
   double playerY = 4.0;
   var playerFloat = PlayerDirection.up;
 
-
   Timer? gameTimer;
   Timer? animationSpeed;
-
 
   @override
   void initState() {
     super.initState();
+    SfxManager.instance.travelSpace();  // traveling thru space sound effect
     avatarPath = widget.astroknowt;
     spaceshipPath = widget.spaceship;
-    _playMusic();
     _loadHearts();
     quizgameTimer();
     startQuizGame();
-  }
-
-
-  void _playMusic() async {
-    await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loop music
-    await _audioPlayer.play(AssetSource('bg_music.mp3'));
   }
 
 
@@ -100,7 +81,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   Future<void> _loadHearts() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      lives = prefs.getInt('currentHearts') ?? 5;
+      lives = prefs.getInt('currentHearts') ?? 3;
       totalPurchasedHearts = prefs.getInt('totalPurchasedHearts') ?? 0;
     });
   }
@@ -142,7 +123,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    SfxManager.instance.stopLoop(); 
     gameTimer?.cancel();
     animationSpeed?.cancel();
     super.dispose();
@@ -151,11 +132,9 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   int timeLeft = 20;
 
-
   void quizgameTimer() {
     gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (isPaused || feedback.isNotEmpty || !mounted) return;
-
 
       if (timeLeft > 0) {
         setState(() {
@@ -167,10 +146,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             boxBorderColor = Colors.redAccent;
             lives--;
             _saveHearts(lives);
+            SfxManager.instance.wrong();  // wrong answer sound
           });
           if (lives <= 0) {
               Future.delayed(const Duration(milliseconds: 800), () {
                   if (mounted) {
+                    SfxManager.instance.missionFailed();  // Mission failed sound
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const MissionFailedPage(),
@@ -184,6 +165,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                 if (!mounted) return;
                 bool isLast = currentQuestion >= widget.quiz.length - 1;
                 if (isLast) {
+                  SfxManager.instance.missionFailed();  // Mission failed sound
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const MissionFailedPage(),
@@ -211,12 +193,10 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     animationSpeed = Timer.periodic(const Duration(milliseconds: 70), (timer) {
         if (isPaused || feedback.isNotEmpty || !mounted) return;
 
-
         setState(() {
           // up and down animation of asteroids (Adjusted boundaries to lower center of screen)
           for (int i = 0; i < 3; i++) {
             if (asteroidY[i] == -50) continue;
-
 
             // Shifted bounds so they stay well below the top timer
             if (asteroidY[i] < -0.05) {
@@ -225,14 +205,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
               asteroidFloat[i] = AsteroidDirection.up;
             }
 
-
             asteroidY[i] += (asteroidFloat[i] == AsteroidDirection.up) ? -0.01 : 0.01;
            
             // Subtle rotation pizzazz
             asteroidRotation[i] += (i % 2 == 0) ? 0.005 : -0.005;
           }
         });
-
 
         // up and down animation of player (spaceship)
         if (playerY < 3.8) {
@@ -259,14 +237,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-
   void moveMiddle() {
     setState(() {
       playerX = 0;
       if (!midShot) laserX = playerX;
     });
   }
-
 
   void moveRight() {
     setState(() {
@@ -276,18 +252,16 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
 
-
-
   // Shooting function
   void fireLaser() {
     if (midShot || isPaused || feedback.isNotEmpty) return;
 
+    SfxManager.instance.laser();  // Laser sound effect
 
     setState(() {
       midShot = true;
       laserX = playerX;
     });
-
 
     Timer.periodic(const Duration(milliseconds: 15), (timer) {
         if (!mounted) {
@@ -295,24 +269,20 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           return;
         }
 
-
         setState(() {
           laserHeight += 25;
         });
-
 
         double maxHeight = MediaQuery.of(context).size.height;
         if (laserHeight > maxHeight) {
           _stopLaser(timer);
         }
 
-
         for (int i = 0; i < 3; i++) {
           double hitPos = heightToCoordinate(
             laserHeight + (maxHeight * 0.1),
           );
           bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
-
 
           if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
             asteroidY[i] = -50;
@@ -325,7 +295,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     );
   }
 
-
   void _stopLaser(Timer t) {
     t.cancel();
     setState(() {
@@ -334,44 +303,40 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-
   double heightToCoordinate(double height) {
     double arenaHeight = MediaQuery.of(context).size.height * 0.7;
     return 1 - (2 * height / arenaHeight);
   }
 
-
   // Answer checking and feedback
   Future<void> checkAnswer(int index) async {
     bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
-
 
     setState(() {
       feedback = isCorrect ? "CORRECT!" : "INCORRECT!";
       boxBorderColor = isCorrect ? Colors.greenAccent : Colors.redAccent;
     });
+
+      if (isCorrect) {
+        SfxManager.instance.correct();  // correct answer sound
+      } else {
+        SfxManager.instance.wrong();  // wrong answer sound
+      }
    
       if (!isCorrect) {
         int current = await LivesTimerService.getHearts();
         int newLives = current - 1;
 
-
         await LivesTimerService.setHearts(newLives);
-
 
         setState(() {
           lives = newLives;
         });
       }
 
-
-   
-
-
     if (lives <= 0) {
       await LivesTimerService.startCooldown();
-
-
+      SfxManager.instance.missionFailed();  // Mission failed sound
       Future.delayed(const Duration(milliseconds: 800), () {
           if (mounted) {
             Navigator.pushReplacement(
@@ -385,7 +350,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       return;
     }
 
-
     // Delay before moving to next question or ending game
     Future.delayed(
       const Duration(seconds: 1),
@@ -393,11 +357,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         if (!mounted) return;
         bool isLast = currentQuestion >= widget.quiz.length - 1;
 
-
         if (isCorrect && isLast) {
+          SfxManager.instance.accomplished(); // Mission accomplished sound
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => AchievementPage(
+            MaterialPageRoute(builder: (_) => AccomplishedPage(
                 star: 500,
                 planet: widget.planet,
               ),
@@ -618,13 +582,15 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             ),
           ),
 
-
           // Pause button
           Positioned(
             top: (sh * 0.05).clamp(30.0, 60.0),
             right: (sw * 0.05).clamp(15.0, 30.0),
             child: GestureDetector(
-              onTap: () => setState(() => isPaused = true),
+              onTap: () {
+                SfxManager.instance.pause(); // pause button sound effect
+                setState(() => isPaused = true);
+              },
               child: Container(
                 width: (sw * 0.12).clamp(45.0, 60.0),
                 height: (sw * 0.12).clamp(45.0, 60.0),
@@ -723,19 +689,21 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           ),
           if (isPaused)
             PauseMenu(
-              onResume: () => setState(() => isPaused = false),
-              onUpdateAvatar: (newPath) {
-                setState(() {
-                  avatarPath = selectedAstroknowt;
-                  spaceshipPath = selectedSpaceship;
-                });
+              onResume: () {
+                SfxManager.instance.secButton();  // sound effect
+                setState(() => isPaused = false);
               },
+              onUpdateAvatar: (newPath) {
+                  setState(() {
+                    avatarPath = selectedAstroknowt;
+                    spaceshipPath = selectedSpaceship;
+                  });
+                },
             ),
         ],
       ),
     );
   }
-
 
   Widget _buildMoveZone(VoidCallback onTap) {
     return Expanded(
@@ -755,7 +723,6 @@ class AsteroidChoice extends StatelessWidget {
   final String imagePath;
   final String label;
 
-
   const AsteroidChoice({
     super.key,
     required this.x,
@@ -764,7 +731,6 @@ class AsteroidChoice extends StatelessWidget {
     required this.imagePath,
     required this.label,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -775,7 +741,6 @@ class AsteroidChoice extends StatelessWidget {
    
     // Pizzazz: Calculate a pulsing opacity for the ambient glow based on the rotation!
     double glowOpacity = 0.1 + (0.15 * math.sin(rotation * 6).abs());
-
 
     return AnimatedAlign(
       alignment: Alignment(x, y),
@@ -866,7 +831,6 @@ class ShootButton extends StatelessWidget {
   final VoidCallback onTap;
   const ShootButton({super.key, required this.onTap});
 
-
   @override
   Widget build(BuildContext context) {
     double size = (MediaQuery.of(context).size.width * 0.15)
@@ -906,7 +870,6 @@ class PauseMenu extends StatelessWidget {
   final VoidCallback onResume;
   final ValueSetter<String> onUpdateAvatar;
   const PauseMenu({super.key, required this.onResume, required this.onUpdateAvatar,});
-
 
   @override
   Widget build(BuildContext context) {
@@ -949,14 +912,29 @@ class PauseMenu extends StatelessWidget {
                   context,
                   'CUSTOMIZATION',
                   onTap: () async {
-                    await Navigator.push(
+                    SfxManager.instance.secButton();  // secondary button sound effect
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt),
                       ),
                     );
                     onUpdateAvatar(selectedAstroknowt);
-                    // 3. Resume the game
-                    onResume();
+                    onResume(); // Resume the game
+                  },
+                ),
+                const SizedBox(height: 15),
+                _menuButton(
+                  context,
+                  'SETTINGS',
+                  onTap: () async {
+                    SfxManager.instance.secButton();  // secondary button sound effect
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingsPage(),
+                      ),
+                    );
+                    onUpdateAvatar(selectedAstroknowt);
+                    onResume(); // Resume the game
                   },
                 ),
                 const SizedBox(height: 15),
@@ -964,12 +942,15 @@ class PauseMenu extends StatelessWidget {
                   context,
                   'EXIT',
                   isExit: true,
-                  onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
-                    ),
-                    (route) => false,
-                  ),
+                  onTap: () {
+                    SfxManager.instance.secButton();  // secondary button sound effect
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt),
+                      ),
+                      (route) => false,
+                    );
+                  },
                 ),
               ],
             ),

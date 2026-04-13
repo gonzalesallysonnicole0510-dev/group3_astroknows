@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_application_1/pages/b-sfx_manager.dart';
+// import 'package:flutter_application_1/pages/bg_music.dart';
 import 'button0_charac.dart';
 import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
@@ -26,6 +26,9 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
+    // Future.delayed(const Duration(milliseconds: 300), () {
+    //   if (mounted) BgMusics.instance.play('assets/main_bgm.mp3');
+    // });
   }
 
   @override
@@ -131,7 +134,11 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
         ),
       ),
       child: ElevatedButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SolarSystemInterface())),
+        onPressed: () {
+          // button click sound effect
+          SfxManager.instance.mainButton();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const SolarSystemInterface()));
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -164,7 +171,11 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
         color: const Color(0xFF15152D),
       ),
       child: ElevatedButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => destination)),
+        onPressed: () {
+          // button click sound effect
+          SfxManager.instance.mainButton();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => destination));
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -189,6 +200,8 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
   Widget _buildCharacterButton(BuildContext context, double h) {
     return GestureDetector(
       onTap: () async {
+        // button click sound effect
+        SfxManager.instance.mainButton();
         await Navigator.push(context, MaterialPageRoute(builder: (context) => CharacCustPage(type: CustomizationType.astroknowt)));
         refreshCharacter();
       },
