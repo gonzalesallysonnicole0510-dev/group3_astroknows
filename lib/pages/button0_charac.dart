@@ -216,6 +216,7 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
                                               'images/4Avatar.png',
                                               'images/5Avatar.png',
                                               'images/6Avatar.png',
+                                              'images/7Avatar.png',
                                               'images/AvatarAlien.png',
                                             ]
                                           : ownedSpaceships)
