@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/b-sfx_manager.dart';
 import 'package:flutter_application_1/pages/q_timer_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -204,7 +205,10 @@ Widget _buildActionButtons(BuildContext context, bool isSmallScreen) {
         // width: double.infinity,
         height: isSmallScreen ? 45 : 55,
         child: OutlinedButton.icon(
-          onPressed: () => Navigator.maybePop(context),
+          onPressed: () {
+            SfxManager.instance.secButton(); // sound effect
+            Navigator.maybePop(context);
+          },
           icon: const Icon(Icons.home_rounded, size: 20),
           label: Text(
             "RETURN",

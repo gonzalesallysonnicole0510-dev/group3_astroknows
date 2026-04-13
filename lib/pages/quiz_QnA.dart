@@ -16,17 +16,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3.  What gases make up most of the Sun?',
-          'answers': ['Neon and\n  Helium', ' Hydrogen\nand Helium', 'Carbon Dioxide\n   and Helium'],
+          'answers': ['Neon and\n Helium', 'Hydrogen\nand Helium', 'Carbon Dioxide\n and Helium'],
           'correct': 1  //Hydrogen and Helium
         },
         {
           'question': '4.  Does the Sun have a solid surface?',
-          'answers': ['Yes', '   Only at\n the center', 'No'],
+          'answers': ['Yes', 'Only at\n the center', 'No'],
           'correct': 2  //No
         },
         {
           'question': '5.  What is the reason that keeps everything surrounding the Sun in orbit?',
-          'answers': ['  Sun’s\nradiation', ' Sun’s\ngravity', ' Sun’s\nenergy'],
+          'answers': ['Sun’s\nradiation', 'Sun’s\ngravity', 'Sun’s\nenergy'],
           'correct': 1 //Sun’s gravity
         },
         {
@@ -36,22 +36,22 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7.  What streams of charged particles does the Sun send out?',
-          'answers': [' Meteor\nshowers', 'Comets', 'Solar\nwind'],
+          'answers': ['Meteor\nshowers', 'Comets', 'Solar wind'],
           'correct': 2  //Solar wind
         },
         {
           'question': '8.  Where can you see the auroras caused by the Sun?',
-          'answers': [' North and\nSouth Poles', 'Equator', ' Tropical\ncountries'],
+          'answers': ['North and\nSouth Poles', 'Equator', 'Tropical\ncountries'],
           'correct': 0  //North and South Poles
         },
         {
           'question': '9.  Compared to other stars, the Sun is considered _________.',
-          'answers': ['Tiny', 'Medium\n -sized', 'Huge'],
+          'answers': ['Tiny', 'Medium\n-sized', 'Huge'],
           'correct': 1  //Medium-sized
         },
         {
           'question': '10.  Why is the Sun important for life on Earth?',
-          'answers': ['  It provides\nlight and heat', ' It makes\nEarth spin', '  It creates\nmoon phases'],
+          'answers': ['It provides\nlight and heat', 'It makes\nEarth spin', 'It creates\nmoon phases'],
           'correct': 0 //It provides light and heat
         },
       ],
@@ -69,7 +69,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What process produces the Sun’s energy?',
-          'answers': ['  Photo-\nsynthesis', 'Nuclear\n fusion', 'Combustion'],
+          'answers': ['Photo-\nsynthesis', 'Nuclear\nfusion', 'Combustion'],
           'correct': 1  //Nuclear fusion
         },
         {
@@ -84,7 +84,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6.  What do the rings of dust around the Sun show?',
-          'answers': ['Paths of\n planets', 'Comets', 'Asteroids'],
+          'answers': ['Paths of\nplanets', 'Comets', 'Asteroids'],
           'correct': 0 //Paths of planets
         },
         {
@@ -175,7 +175,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2.  Mercury is slightly larger than which natural object in the solar system?',
-          'answers': ['Earth’s Moon', 'Mars', 'Earth'],
+          'answers': [' Earth’s\n Moon', 'Mars', 'Earth'],
           'correct': 0  //Earth’s Moon
         },
         {
@@ -185,7 +185,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  Which natural object in the solar system does Mercury resemble due to its cratered look to its surface?',
-          'answers': ['Mars', 'Earth’s Moon', 'Venus'],
+          'answers': ['Mars', ' Earth’s\n Moon', 'Venus'],
           'correct': 1  //Earth’s Moon
         },
         {
@@ -195,12 +195,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6.  Despite being closest to the Sun, why is Mercury not the hottest planet?',
-          'answers': ['It’s too small', 'It has no atmosphere to trap heat', 'It is covered in ice'],
+          'answers': ['It’s too\n small', 'It has no\n atmosphere \nto trap heat', 'It is \ncovered \nin ice'],
           'correct': 1  //It has no atmosphere to trap heat
         },
         {
           'question': '7.  Which is NOT a similarity between Mercury and Earth’s Moon?',
-          'answers': ['Cratered look', 'No rings', 'Gravity'],
+          'answers': ['Cratered\nlook', 'No rings', 'Gravity'],
           'correct': 2  //Gravity
         },
         {
@@ -210,7 +210,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9.  Mercury doesn’t have any atmosphere to retain Sun heat. Instead, it has a very thin outer layer called an _______.',
-          'answers': ['Mesosphere', 'Thermosphere', 'Exosphere'],
+          'answers': ['Mesosphere', 'Thermo-\nsphere', 'Exosphere'],
           'correct': 2  //Exosphere
         },
         {
@@ -247,7 +247,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6.  What makes up 80% of Mercury’s radius?',
-          'answers': ['Metallic Core', 'Outer Shell', 'Mantle'],
+          'answers': ['Metallic\nCore', 'Outer\nShell', 'Mantle'],
           'correct': 0  //Metallic Core
         },
         {
@@ -257,12 +257,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8.  Why does Mercury have extreme temperatures?',
-          'answers': ['It has many moons', 'It has no thick atmosphere', 'It spins very fast'],
+          'answers': [' It has \nmany moons', 'It has no \n thick \natmosphere', 'It spins \nvery fast'],
           'correct': 1  //It has no thick atmosphere
         },
         {
           'question': '9.  How does the Sun appear from Mercury?',
-          'answers': ['Smaller', 'The same size', 'More than three times larger'],
+          'answers': ['Smaller', 'The same \n size', 'More than \n three times \n larger'],
           'correct': 2  //More than three times larger
         },
         {
@@ -284,12 +284,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3.  What element/s are found in Mercury’s exosphere?',
-          'answers': ['Helium only', 'Carbon dioxide and nitrogen', 'Sodium, oxygen, and hydrogen'],
+          'answers': ['Helium only', 'Carbon dioxide\n and nitrogen', 'Sodium, oxygen, \n and hydrogen'],
           'correct': 2  //Sodium, oxygen, and hydrogen
         },
         {
           'question': '4.  What forms behind Mercury due to escaping particles?',
-          'answers': ['Comet-like tail', 'Rings', 'Darkness'],
+          'answers': ['Comet-like \n tail', 'Rings', 'Darkness'],
           'correct': 0  //Comet-like tail
         },
         {
@@ -309,17 +309,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8.  Why do some craters on Mercury stay very cold?',
-          'answers': ['They are underwater', 'No sunlight reaches them', 'They spin away from the Sun'],
+          'answers': ['They are \nunderwater', 'No sunlight \nreaches them', 'They spin \naway from \nthe Sun'],
           'correct': 1  //No sunlight reaches them
         },
         {
           'question': '9.  What causes atoms to escape Mercury’s surface?',
-          'answers': ['Solar Wind', 'Gravity', 'Magnetic Field'],
+          'answers': ['Solar Wind', 'Gravity', 'Magnetic\nField'],
           'correct': 0  //Solar Wind
         },
         {
           'question': '10.  What type of magnetic field does Mercury have?',
-          'answers': ['None', 'Weak magnetic field', 'Very strong magnetic field'],
+          'answers': ['None', 'Weak\n magnetic \nfield', 'Very strong \nmagnetic field'],
           'correct': 1  //Weak magnetic field
         },
       ],
@@ -342,17 +342,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3.  Venus is often called Earth’s _________ because of their similar size?',
-          'answers': ['Neighbor planet', 'Evil twin', 'Sister planet'],
+          'answers': ['Neighbor\nplanet', 'Evil twin', 'Sister\nplanet'],
           'correct': 1  //Evil twin
         },
         {
           'question': '4.  Why is Venus the hottest planet?',
-          'answers': ['It is closest to the Sun', 'Its atmosphere traps heat', 'It has more volcanoes'],
+          'answers': ['It is closest\nto the Sun', 'Its atmosphere\ntraps heat', 'It has more\nvolcanoes'],
           'correct': 1  //Its atmosphere traps heat
         },
         {
           'question': '5.  Why is Venus very bright in the sky?',
-          'answers': ['It produces its own light', 'Its clouds reflect sunlight', 'It is covered in ice'],
+          'answers': ['It produces\nits own light', 'Its clouds\nreflect sunlight', 'It is covered\nin ice'],
           'correct': 1  //Its clouds reflect sunlight
         },
         {
@@ -372,7 +372,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9.  What nickname is given to Venus because it shines brightly?',
-          'answers': ['Red Planet', 'Blue Planet', 'Morning Star'],
+          'answers': ['Red Planet', 'Blue Planet', 'Morning\nStar'],
           'correct': 2  //Morning Star
         },
         {
@@ -399,7 +399,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  What is special about time on Venus?',
-          'answers': ['A day is shorter than a year', 'A day is longer than a year', 'A day is 24 hours'],
+          'answers': ['A day is\nshorter\nthan a year', 'A day is\nlonger than\na year', 'A day is\n24 hours'],
           'correct': 1  //A day is longer than a year
         },
         {
@@ -419,12 +419,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8.  Venus’ lightning is related to what type of clouds?',
-          'answers': ['Water clouds', 'Sulfuric acid clouds', 'Ice clouds'],
+          'answers': ['Water clouds', 'Sulfuric\nacid clouds', 'Ice clouds'],
           'correct': 1  //Sulfuric acid clouds
         },
         {
           'question': '9. What is it like to stand on Venus because of pressure?',
-          'answers': ['Like flying', 'Like being in space', 'Like being deep underwater'],
+          'answers': ['Like flying', 'Like being\nin space', 'Like being\ndeep underwater'],
           'correct': 2  //Like being deep underwater
         },
         {
@@ -436,12 +436,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'advanced': [
         {
           'question': '1.  What causes Venus to be extremely hot?',
-          'answers': ['Distance from the Sun', 'Greenhouse effect', 'Lack of gravity'],
+          'answers': ['Distance from\nthe Sun', 'Greenhouse\neffect', 'Lack of\ngravity'],
           'correct': 1  //Greenhouse effect
         },
         {
           'question': '2.  What is the greenhouse effect?',
-          'answers': ['Trapping of heat by gases', 'Cooling of the planet', 'Freezing of clouds'],
+          'answers': ['Trapping of\nheat by gases', 'Cooling of\nthe planet', 'Freezing of\nclouds'],
           'correct': 0  //Trapping of heat by gases
         },
         {
@@ -451,12 +451,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  What is the rotation of Venus called?',
-          'answers': ['Retrograde rotation', 'Forward rotation', 'Side rotation'],
+          'answers': ['Retrograde\nrotation', 'Forward\nrotation', 'Side\nrotation'],
           'correct': 0  //Retrograde rotation
         },
         {
           'question': '5.  Why does the Sun rise in the West on Venus?',
-          'answers': ['Cloud reflection', 'Backward rotation', 'Fast orbit'],
+          'answers': ['Cloud\nreflection', 'Backward\nrotation', 'Fast orbit'],
           'correct': 1  //Backward rotation
         },
         {
@@ -466,22 +466,22 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7.  What happens to water on Venus?',
-          'answers': ['It freezes', 'It evaporates', 'It turns into ice clouds'],
+          'answers': ['It freezes', 'It evaporates', 'It turns into\nice clouds'],
           'correct': 1  //It evaporates
         },
         {
           'question': '8.  What moves faster on Venus?',
-          'answers': ['The atmosphere', 'The ground', 'The core'],
+          'answers': ['The\natmosphere', 'The ground', 'The core'],
           'correct': 0  //The atmosphere
         },
         {
           'question': '9. Why is Venus considered dangerous?',
-          'answers': ['It has no gravity', 'It has toxic air and extreme heat', 'It is too small'],
+          'answers': ['It has no\ngravity', 'It has toxic\nair and extreme\nheat', 'It is\ntoo small'],
           'correct': 2  //It has toxic air and extreme heat
         },
         {
           'question': '10.  What type of clouds help create lightning on Venus?',
-          'answers': ['Ice clouds', 'Dust clouds', 'Sulfuric acid clouds '],
+          'answers': ['Ice clouds', 'Dust clouds', 'Sulfuric\nacid clouds '],
           'correct': 2  //Sulfuric acid clouds
         },
       ],
@@ -499,7 +499,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. Where does the name “Earth” originate from?',
-          'answers': ['Roman Mythology', 'Greek Mythology', 'Old English'],
+          'answers': ['Roman\nMythology', 'Greek\nMythology', 'Old\nEnglish'],
           'correct': 2  //Old English
         },
         {
@@ -514,17 +514,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '5. Why is Earth the densest planet in the solar system?',
-          'answers': ['Due to its many oceans', 'Because it has life', 'Due to its large iron core'],
+          'answers': ['Due to its\nmany oceans', 'Because it\nhas life', 'Due to its\nlarge iron core'],
           'correct': 2  //Due to its large iron core
         },
         {
           'question': '6. Unlike the other planets, Earth is NOT named after what?',
-          'answers': ['Greek or Roman gods', 'Famous scientists and astronauts', 'Different types of rocks'],
+          'answers': ['Greek or\nRoman gods', 'Famous scientists\nand astronauts', 'Different types\nof rocks'],
           'correct': 0  //Greek or Roman gods
         },
         {
           'question': '7. What helps protect Earth from small meteors?',
-          'answers': ['The Moon', 'The atmosphere', 'The oceans'],
+          'answers': ['The Moon', 'The\natmosphere', 'The oceans'],
           'correct': 1  //The atmosphere
         },
         {
@@ -534,7 +534,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Why do we have a leap year?',
-          'answers': ['Because Earth spins faster', 'Because of the Moon', 'Because of the extra 0.25 day'],
+          'answers': ['Because Earth\nspins faster', 'Because of\nthe Moon', 'Because of the\nextra 0.25 day'],
           'correct': 2  //Because of the extra 0.25 day
         },
         {
@@ -546,27 +546,27 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'intermediate': [
         {
           'question': '1. Which best describes the shape of Earth?',
-          'answers': ['Perfect sphere', 'Oblate spheroid', 'Oblong'],
+          'answers': ['Perfect\nsphere', 'Oblate\nspheroid', 'Oblong'],
           'correct': 1  //Oblate spheroid
         },
         {
           'question': '2. What causes Earth to bulge slightly at the equator?',
-          'answers': ['Strong winds', 'Its rotation', 'Ocean movement'],
+          'answers': ['Strong\nwinds', 'Its\nrotation', 'Ocean\nmovement'],
           'correct': 1  //Its rotation
         },
         {
           'question': '3. Earth’s axis is tilted at 23.45°, which results in what?',
-          'answers': ['Four Seasons', 'Day and night cycles', 'Weather patterns'],
+          'answers': ['Four\nSeasons', 'Day and\nnight cycles', 'Weather\npatterns'],
           'correct': 0  //Four Seasons
         },
         {
           'question': '4. What happens when a part of Earth is tilted toward the Sun?',
-          'answers': ['It gets less sunlight', 'It freezes', 'It becomes warmer'],
+          'answers': ['It gets less\nsunlight', 'It freezes', 'It becomes\nwarmer'],
           'correct': 2  //It becomes warmer
         },
         {
           'question': '5. What happens six months after one hemisphere experiences summer?',
-          'answers': ['It stays the same', 'The opposite hemisphere experiences summer', 'The Sun stops moving'],
+          'answers': ['It stays\nthe same', 'The opposite\nhemisphere\nexperiences summer', 'The Sun\nstops moving'],
           'correct': 1  //The opposite hemisphere experiences summer
         },
         {
@@ -581,24 +581,24 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. Why is water important to Earth?',
-          'answers': ['It makes Earth spin faster', 'It helps control temperature and supports life', 'It creates gravity'],
+          'answers': ['It makes Earth\nspin faster', 'It helps control\ntemperature and\nsupports life', 'It creates gravity'],
           'correct': 1  //It helps control temperature and supports life
         },
         {
           'question': '9. What does Earth’s atmosphere mainly do for the planet?',
-          'answers': ['Protects from harmful radiation and keeps it warm', 'Changes Earth’s shape', 'Creates oceans'],
+          'answers': ['Protects from harmful\nradiation and\nkeeps it warm', 'Changes Earth’s\nshape', 'Creates\noceans'],
           'correct': 0  //Protects from harmful radiation and keeps it warm
         },
         {
           'question': '10. Why do places near the equator stay warm most of the year?',
-          'answers': ['They are closer to the Sun', 'They have fewer clouds', 'They receive more direct sunlight'],
+          'answers': ['They are closer\nto the Sun', 'They have\nfewer clouds', 'They receive more\ndirect sunlight'],
           'correct': 2  //They receive more direct sunlight
         },
       ],
       'advanced': [
         {
           'question': '1. What is 97% of Earth’s water?',
-          'answers': ['Sweet oceans', 'Drinkable water', 'Salty oceans'],
+          'answers': ['Sweet\noceans', 'Drinkable\nwater', 'Salty\noceans'],
           'correct': 2  //Salty oceans
         },
         {
@@ -608,7 +608,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What is Earth’s outer layer called?',
-          'answers': ['Thermosphere', 'Lithosphere', 'Exosphere'],
+          'answers': ['Thermo-\nsphere', 'Lithosphere', 'Exosphere'],
           'correct': 1  //Lithosphere
         },
         {
@@ -618,12 +618,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '5. What are the large moving pieces of Earth’s outer layer called?',
-          'answers': ['Tectonic plates', 'Continents', 'Magma layers'],
+          'answers': ['Tectonic\nplates', 'Continents', 'Magma\nlayers'],
           'correct': 0  //Tectonic plates
         },
         {
           'question': '6. What forms when tectonic plates collide?',
-          'answers': ['Volcanoes', 'Mountain ranges', 'Earthquakes'],
+          'answers': ['Volcanoes', 'Mountain\nranges', 'Earthquakes'],
           'correct': 1  //Mountain ranges
         },
         {
@@ -638,7 +638,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Which is NOT the effect on Earth by the moon’s gravity?',
-          'answers': ['Secure Earth’s gravity', 'Stabilizes the climate', 'Steadies the rotation'],
+          'answers': ['Secure Earth’s\ngravity', 'Stabilizes\nthe climate', 'Steadies the\nrotation'],
           'correct': 0  //Secure Earth’s gravity
         },
         {
@@ -671,7 +671,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. What color does the Martian sky appear during the day?',
-          'answers': ['Blue-green', 'Reddish-orange', 'Yellowish-white'],
+          'answers': ['Blue-green', 'Reddish-\norange', 'Yellowish-\nwhite'],
           'correct': 1  //Reddish-orange
         },
         {
@@ -691,12 +691,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. Why does Mars appear red?',
-          'answers': ['Iron minerals in its soil', 'Oxygen in the atmosphere', 'Methane clouds'],
+          'answers': ['Iron minerals\nin its soil', 'Oxygen in\nthe atmosphere', 'Methane\nclouds'],
           'correct': 0  //Iron minerals in its soil
         },
         {
           'question': '9. The ice on Mars grows in winter and shrinks in summer. What is it made of?',
-          'answers': ['Ice water and Oxygen', 'Nitrogen and Ice water', 'Carbon dioxide and Ice water'],
+          'answers': ['Ice water\nand Oxygen', 'Nitrogen and\nIce water', 'Carbon dioxide\nand Ice water'],
           'correct': 2  //Carbon dioxide and Ice water
         },
         {
@@ -723,12 +723,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. WWhy can’t liquid water exist on the Martian surface today?',
-          'answers': ['It’s too hot', 'The atmosphere is too thin', 'There is no gravity'],
+          'answers': ['It’s too\nhot', 'The atmosphere\nis too thin', 'There is no\ngravity'],
           'correct': 1  //The atmosphere is too thin
         },
         {
           'question': '5. Where is water currently trapped on Mars?',
-          'answers': ['In the polar ice caps', 'In the oceans', 'In the volcanoes'],
+          'answers': ['In the polar\nice caps', 'In the\noceans', 'In the\nvolcanoes'],
           'correct': 1 //In the polar ice caps
         },
         {
@@ -738,12 +738,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Which factor causes Mars to be so cold compared to Earth?',
-          'answers': ['Closer to the Sun', 'Thin atmosphere', 'Fast rotation'],
+          'answers': ['Closer to\nthe Sun', 'Thin\natmosphere', 'Fast\nrotation'],
           'correct': 1  //Thin atmosphere
         },
         {
           'question': '8. Mars can have clouds, wind, and snow because:',
-          'answers': ['Its atmosphere is active enough', 'Its core is hot', 'Its moons create storms'],
+          'answers': ['Its atmosphere\nis active enough', 'Its core\nis hot', 'Its moons\ncreate storms'],
           'correct': 0  //Its atmosphere is active enough
         },
         {
@@ -753,7 +753,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. Why is the Martian day slightly longer than an Earth day?',
-          'answers': ['Rotation is faster', '24.6 hours sol', 'Orbit is longer'],
+          'answers': ['Rotation\nis faster', '24.6 hours\nsol', 'Orbi is\nlonger'],
           'correct': 1  //24.6 hours sol
         },
       ],
@@ -770,27 +770,27 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What is the shape of Mars’ moons, Phobos and Deimos?',
-          'answers': ['Perfectly round', 'Potato-shaped', 'Square-shaped'],
+          'answers': ['Perfectly\nround', 'Potato-\nshaped', 'Square-\nshaped'],
           'correct': 1  //Potato-shaped
         },
         {
           'question': '4. Phobos is heavily cratered and has:',
-          'answers': ['Smooth plains', 'Volcanoes', 'Deep grooves'],
+          'answers': ['Smooth\nplains', 'Volcanoes', 'Deep\ngrooves'],
           'correct': 2  //Deep grooves
         },
         {
           'question': '5. Deimos is smoother because:',
-          'answers': ['Dust fills its craters', 'It is larger', 'It is closer to the Sun'],
+          'answers': ['Dust fills\nits craters', 'It is\nlarger', 'It is closer\nto the Sun'],
           'correct': 0  //Dust fills its craters
         },
         {
           'question': '6. Mars’ core is made of:',
-          'answers': ['Hydrogen', 'Helium', 'Iron, nickel, and sulfur'],
+          'answers': ['Hydrogen', 'Helium', 'Iron, nickel,\nand sulfur'],
           'correct': 2  //Iron, nickel, and sulfur
         },
         {
           'question': '7. What layer above the core causes marsquakes?',
-          'answers': ['Crust', 'Rocky mantle', 'Atmosphere'],
+          'answers': ['Crust', 'Rocky\nmantle', 'Atmosphere'],
           'correct': 0  //Crust
         },
         {
@@ -828,7 +828,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. As Jupiter does not have a solid surface, this planet is considered a _________.',
-          'answers': ['Gas giant', 'Landless planet', 'Air giant'],
+          'answers': ['Gas giant', 'Landless\nplanet', 'Air giant'],
           'correct': 0 //Gas giant
         },
         {
@@ -848,7 +848,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Jupiter acts like a “space vacuum” because its gravity pulls in…',
-          'answers': ['Comets and asteroids', 'Other planets', 'The sun'],
+          'answers': ['Comets and\nasteroids', 'Other\nplanets', 'The sun'],
           'correct': 0 //Comets and asteroids
         },
         {
@@ -858,12 +858,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Jupiter’s faint rings are made up of…',
-          'answers': ['Ice crystals', 'Rocks', 'Dark particles'],
+          'answers': ['Ice crystals', 'Rocks', 'Dark\nparticles'],
           'correct': 2 //Dark particles
         },
         {
           'question': '10. Why is Jupiter considered a gas giant?',
-          'answers': ['It has a solid core', 'It is made of gases', 'It has a solid surface'],
+          'answers': ['It has a\nsolid core', 'It is made\nof gases', 'It has a\nsolid surface'],
           'correct': 1 //It is made of gases
         }
       ],
@@ -875,12 +875,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. What is the “ocean” inside Jupiter actually made of?',
-          'answers': ['Water', 'Liquid metallic hydrogen', 'Lava'],
+          'answers': ['Water', 'Liquid\nmetallic\nhydrogen', 'Lava'],
           'correct': 1 //Liquid metallic hydrogen
         },
         {
           'question': '3. What is the reason why spacecrafts get crushed and vaporized if they fly through Jupiter?',
-          'answers': ['Intense pressure', 'Intense storm', 'Intense oceans'],
+          'answers': ['Intense\npressure', 'Intense\nstorm', 'Intense\noceans'],
           'correct': 0 //Intense pressure
         },
         {
@@ -890,12 +890,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '5. While there is no solid surface, how does this gas giant create liquid?',
-          'answers': ['Freezing gas', 'Compressing hydrogen', 'Chemical reactions'],
+          'answers': ['Freezing\ngas', 'Compressing\nhydrogen', 'Chemical\nreactions'],
           'correct': 1 //Compressing hydrogen
         },
         {
           'question': '6. Liquids help Jupiter to generate what?',
-          'answers': ['Intense temperatures', 'Powerful magnetic field', 'Strong gravitational pull'],
+          'answers': ['Intense\ntemperatures', 'Powerful\nmagnetic field', 'Strong\ngravitational\npull'],
           'correct': 1 //Powerful magnetic field
         },
         {
@@ -905,7 +905,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. Due to Jupiter’s fast rotation, what effects happened at its equator?',
-          'answers': ['Became flatter', 'Became brighter', 'Became wider'],
+          'answers': ['Became\nflatter', 'Became\nbrighter', 'Became\nwider'],
           'correct': 2 //Became wider
         },
         {
@@ -915,19 +915,19 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. Which is NOT the effect of Jupiter’s fast rotation?',
-          'answers': ['Creates hexagon storms', 'Produces strong winds', 'Rapid weather changes'],
+          'answers': ['Creates\nhexagon storms', 'Produces\nstrong winds', 'Rapid weather\nchanges'],
           'correct': 0 //Creates hexagon storms
         }
       ],
       'advanced': [
         {
           'question': '1. What did the difference in temperature, chemical composition, and rising gases create?',
-          'answers': ['Distinct colorful bands', 'Distinct colorful moons', 'Distinct colorful oceans'],
+          'answers': ['Distinct\ncolorful bands', 'Distinct\ncolorful moons', 'Distinct\ncolorful oceans'],
           'correct': 0 //Distinct colorful bands
         },
         {
           'question': '2. What is the name of the hurricane-like storm that has lasted for centuries?',
-          'answers': ['The Blue Spot', 'The Great Red Spot', 'The Giant Whirlpool'],
+          'answers': ['The Blue\nSpot', 'The Great\nRed Spot', 'The Giant\nWhirlpool'],
           'correct': 1  //The Great Red Spot
         },
         {
@@ -937,7 +937,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. What are the two types of colorful bands of Jupiter?',
-          'answers': ['Belts & Zones', 'Phobos & Deimos', 'Ring & Sash'],
+          'answers': ['Belts &\nZones', 'Phobos &\nDeimos', 'Ring &\nSash'],
           'correct': 0 //Belts & Zones
         },
         {
@@ -952,7 +952,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Which makes up the top layer of Jupiter’s clouds?',
-          'answers': ['Ammonia ice', 'Ammonium hydrosulfide ice', 'Water vapor and ice'],
+          'answers': ['Ammonia ice', 'Ammonium\nhydrosulfide ice', 'Water vapor\nand ice'],
           'correct': 0 //Ammonia ice
         },
         {
@@ -962,12 +962,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. From what Jupiter protects Earth and its moons?',
-          'answers': ['Cosmic dust', 'Solar wind', 'Solar radiation'],
+          'answers': ['Cosmic\ndust', 'Solar wind', 'Solar\nradiation'],
           'correct': 2 //Solar radiation
         },
         {
           'question': '10. Which makes up the middle layer of Jupiter’s clouds?',
-          'answers': ['Ammonia ice', 'Ammonium hydrosulfide ice', 'Water vapor and ice'],
+          'answers': ['Ammonia ice', 'Ammonium\nhydrosulfide ice', 'Water vapor\nand ice'],
           'correct': 1 //Ammonium hydrosulfide ice
         }
       ]
@@ -990,17 +990,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. Saturn is mostly made up of which two gases?',
-          'answers': ['Carbon dioxide and methane', 'Oxygen and nitrogen', 'Hydrogen and helium'],
+          'answers': ['Carbon dioxide\nand methane', 'Oxygen and nitrogen', 'Hydrogen and helium'],
           'correct': 2 //Hydrogen and helium
         },
         {
           'question': '4. Why does Saturn have no solid surface?',
-          'answers': ['It is made of gas and liquid', 'It is covered in water', 'It is too hot to form land'],
+          'answers': ['It is made\nof gas and\nliquid', 'It is covered\nin water', 'It is too\nhot to form\nland'],
           'correct': 0 //It is made of gas and liquid
         },
         {
           'question': '5. Saturn’s rings are mainly made of rock and…',
-          'answers': ['Ice', 'Water', 'Dark particles'],
+          'answers': ['Ice', 'Water', 'Dark\nparticles'],
           'correct': 0 //Ice
         },
         {
@@ -1010,7 +1010,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Why does Titan look almost like a planet?',
-          'answers': ['It has rings', 'It has a thick atmosphere', 'It glows in the dark'],
+          'answers': ['It has\nrings', 'It has a\nthick atmosphere', 'It glows in\nthe dark'],
           'correct': 1 //It has a thick atmosphere
         },
         {
@@ -1020,7 +1020,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Compared to water, Saturn is…',
-          'answers': ['More dense', 'Less dense', 'Exactly the same density'],
+          'answers': ['More dense', 'Less dense', 'Exactly the\nsame density'],
           'correct': 1 //Less dense
         },
         {
@@ -1037,7 +1037,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. What is the name of the large gap between Saturn’s A and B rings?',
-          'answers': ['The Great Gap', 'The Cassini Division', 'The Dark Zone'],
+          'answers': ['The Great\nGap', 'The Cassini\nDivision', 'The Dark\nZone'],
           'correct': 1 //The Cassini Division
         },
         {
@@ -1047,7 +1047,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. Why does Saturn have a short day but a long year?',
-          'answers': ['It spins fast but is far from the Sun', 'It spins slowly but is close to the Sun', 'It does not move'],
+          'answers': ['It spins fast\nbut is far\nfrom the Sun', 'It spins slowly\nbut is close\nto the Sun', 'It does\nnot move'],
           'correct': 0 //It spins fast but is far from the Sun
         },
         {
@@ -1062,12 +1062,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Why can’t a spacecraft safely land on Saturn?',
-          'answers': ['Because of its strong gravitational pull', 'It has no solid surface', 'It is too small'],
+          'answers': ['Because of its\nstrong gravitational\npull', 'It has no\nsolid surface', 'It is too\nsmall'],
           'correct': 1 //It has no solid surface
         },
         {
           'question': '8. What would happen to a spacecraft deep inside Saturn?',
-          'answers': ['It would freeze only', 'It would be crushed and melted', 'It would float uncontrollably'],
+          'answers': ['It would\nfreeze only', 'It would be\ncrushed and\nmelted', 'It would float\nuncontrollably'],
           'correct': 1 //It would be crushed and melted
         },
         {
@@ -1077,7 +1077,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. Why does Saturn appear slightly flattened?',
-          'answers': ['Because of its fast rotation', 'Because of its extremely low density', 'Because of its rings'],
+          'answers': ['Because of its\nfast rotation', 'Because of its\nextremely low\ndensity', 'Because of\nits rings'],
           'correct': 0 //Because of its fast rotation
         }
       ],
@@ -1094,7 +1094,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What lies at the center of the hexagon storm?',
-          'answers': ['A volcano', 'A hurricane-like storm', 'A solid core'],
+          'answers': ['A volcano', 'A hurricane-\nlike storm', 'A solid\ncore'],
           'correct': 1 //A hurricane-like storm
         },
         {
@@ -1109,7 +1109,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6. What is the Phoebe ring mostly made of?',
-          'answers': ['Ice chunks', 'Dark dust particles', 'Liquid gas'],
+          'answers': ['Ice chunks', 'Dark dust\nparticles', 'Liquid gas'],
           'correct': 1 //Dark dust particles
         },
         {
@@ -1119,17 +1119,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. How large is the Phoebe ring compared to Saturn?',
-          'answers': ['Same size', '2–70 times larger', '100–270 times larger'],
+          'answers': ['Same size', '2–70 times\nlarger', '100–270 times\nlarger'],
           'correct': 2 //100–270 times larger
         },
         {
           'question': '9. What are Saturn’s upper cloud layers mainly made of?',
-          'answers': ['Oxygen and nitrogen', 'Ammonia and other compounds', 'Pure ice water only'],
+          'answers': ['Oxygen and\nnitrogen', 'Ammonia and\nother compounds', 'Pure ice\nwater only'],
           'correct': 1 //Ammonia and other compounds
         },
         {
           'question': '10. Why does Saturn give off more energy than it receives from the Sun?',
-          'answers': ['Leftover heat from formation', 'Nuclear fusion inside', 'Reflection of sunlight'],
+          'answers': ['Leftover heat\nfrom formation', 'Nuclear fusion\ninside', 'Reflection of\nsunlight'],
           'correct': 0 //Leftover heat from formation
         }
       ]
@@ -1147,7 +1147,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. What is unusual about how Uranus moves?',
-          'answers': ['It spins very fast', 'It rotates on its side', 'It does not spin'],
+          'answers': ['It spins\nvery fast', 'It rotates\non its side', 'It does\nnot spin'],
           'correct': 1 //It rotates on its side
         },
         {
@@ -1182,12 +1182,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Uranus was the first planet discovered using what?',
-          'answers': ['The naked eye', 'A telescope', 'A satellite'],
+          'answers': ['The naked\neye', 'A telescope', 'A satellite'],
           'correct': 1 //A telescope
         },
         {
           'question': '10. Who discovered Uranus?',
-          'answers': ['Galileo', 'William Herschel', 'Isaac Newton'],
+          'answers': ['Galileo', 'William\nHerschel', 'Isaac\nNewton'],
           'correct': 1 //William Herschel
         }
       ],
@@ -1199,7 +1199,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2. Why does Uranus experience extreme seasons?',
-          'answers': ['It is very far from the Sun', 'It has many moons', 'It is tilted on its side'],
+          'answers': ['It is very\nfar from\nthe Sun', 'It has\nmany moons', 'It is tilted\non its side'],
           'correct': 2 //It is tilted on its side
         },
         {
@@ -1209,7 +1209,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4. What are Uranus’ rings mostly made of?',
-          'answers': ['Small dark particles', 'Ice blocks', 'Gas clouds'],
+          'answers': ['Small dark\nparticles', 'Ice blocks', 'Gas clouds'],
           'correct': 0 //Small dark particles
         },
         {
@@ -1224,12 +1224,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Which writers are specifically mentioned for Uranus’ moon names?',
-          'answers': ['Charles Dickens and Maya Angelou', 'William Shakespeare and Alexander Pope', 'Mark Twain and Robert Frost'],
+          'answers': ['Charles Dickens\n& Maya Angelou', 'William Shakespeare\n& Alexander Pope', 'Mark Twain &\n Robert Frost'],
           'correct': 1 //William Shakespeare and Alexander Pope
         },
         {
           'question': '8. What are the names of some of Uranus’ moons mentioned in the info?',
-          'answers': ['Titania and Oberon', 'Europa and Ganymede', 'Titan and Rhea'],
+          'answers': ['Titania &\n Oberon', 'Europa &\n Ganymede', 'Titan &\n Rhea'],
           'correct': 0 //Titania and Oberon
         },
         {
@@ -1246,27 +1246,27 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'advanced': [
         {
           'question': '1. About how far is Uranus from the Sun?',
-          'answers': ['500 million miles', '1 billion miles', '1.8 billion miles'],
+          'answers': ['500 million\nmiles', '1 billion\nmiles', '1.8 billion\nmiles'],
           'correct': 2 //1.8 billion miles
         },
         {
           'question': '2. How long does sunlight take to reach Uranus?',
-          'answers': ['4 hours', '2 hours and 40 minutes', '1 hour and 45 minutes'],
+          'answers': ['4 hours', '2 hours &\n 40 minutes', '1 hour &\n 45 minutes'],
           'correct': 1 //2 hours and 40 minutes
         },
         {
           'question': '3. Why is Uranus colder than Neptune?',
-          'answers': ['It is smaller', 'It has very little internal heat', 'It has thicker clouds'],
+          'answers': ['It is\nsmaller', 'It has very\nlittle internal\nheat', 'It has \nthicker clouds'],
           'correct': 1 //It has very little internal heat
         },
         {
           'question': '4. What is Uranus’ type of rotation called?',
-          'answers': ['Retrograde rotation', 'Forward rotation', 'Tilted rotation'],
+          'answers': ['Retrograde\nrotation', 'Forward\nrotation', 'Tilted\nrotation'],
           'correct': 0 //Retrograde rotation
         },
         {
           'question': '5. What makes Uranus unique among planets?',
-          'answers': ['It has no moons', 'It rotates on its side', 'It has no atmosphere'],
+          'answers': ['It has\nno moons', 'It rotates\non its side', 'It has no\natmosphere'],
           'correct': 1 //It rotates on its side
         },
         {
@@ -1281,17 +1281,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. What is Uranus mostly made of?',
-          'answers': ['Fire and lava', 'Rock and metal', 'Icy materials like water and ammonia'],
+          'answers': ['Fire and\nlava', 'Rock and\nmetal', 'Icy materials\nlike water &\n ammonia'],
           'correct': 2 //Icy materials like water and ammonia
         },
         {
           'question': '9. Why does Uranus receive less sunlight?',
-          'answers': ['It spins slowly', 'It is very far from the Sun', 'It has thick rings'],
+          'answers': ['It spins\nslowly', 'It is very\nfar from the\nSun', 'It has\nthick rings'],
           'correct': 1 //It is very far from the Sun
         },
         {
           'question': '10. What makes Uranus different from Earth in temperature?',
-          'answers': ['It is hotter', 'It has the same temperature', 'It is extremely colder'],
+          'answers': ['It is\nhotter', 'It has the\nsame temperature', 'It is\nextremely\ncolder'],
           'correct': 2
         }
       ]
@@ -1314,17 +1314,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. Neptune was the first planet discovered using _______.',
-          'answers': ['A telescope', 'Mathematical calculations', 'A space probe'],
+          'answers': ['A telescope', 'Mathematical\ncalculations', 'A space\nprobe'],
           'correct': 1 //Mathematical calculations
         },
         {
           'question': '4. What is Neptune known for in terms of wind?',
-          'answers': ['Calm winds', 'Strong storms', 'Supersonic winds'],
+          'answers': ['Calm winds', 'Strong\nstorms', 'Supersonic\nwinds'],
           'correct': 2 //Supersonic winds
         },
         {
           'question': '5. Neptune’s winds move faster than what?',
-          'answers': ['A car', 'The speed of sound', 'A bird'],
+          'answers': ['A car', 'The speed\nof sound', 'A bird'],
           'correct': 1 //The speed of sound
         },
         {
@@ -1339,7 +1339,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8. Which Roman god is Neptune named after?',
-          'answers': ['The god of war', 'The god of the sea', 'The god of the sky'],
+          'answers': ['The god of\nwar', 'The god of\nthe sea', 'The god of\nthe sky'],
           'correct': 1 //The god of the sea
         },
         {
@@ -1356,7 +1356,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
       'intermediate': [
         {
           'question': '1. Neptune’s atmosphere is mostly made of __________.',
-          'answers': ['Hydrogen and helium', 'Methane and carbon dioxide', 'Nitrogen and oxygen'],
+          'answers': ['Hydrogen and\nhelium', 'Methane and\ncarbon dioxide', 'Nitrogen and\noxygen'],
           'correct': 0 //Hydrogen and helium
         },
         {
@@ -1366,7 +1366,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. Neptune appears more vividly blue than Uranus because of _________.',
-          'answers': ['its closeness to the Sun', 'An unknown atmospheric component', 'its thicker ice layer'],
+          'answers': ['its closeness\nto the Sun', 'An unknown\natmospheric\ncomponent', 'its thicker\nice layer'],
           'correct': 1 //An unknown atmospheric component
         },
         {
@@ -1386,7 +1386,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. Neptune’s ring arcs are made of __________.',
-          'answers': ['Chunks of ice', 'Clumps of dust and debris', 'Rocky surfaces'],
+          'answers': ['Chunks of\nice', 'Clumps of\ndust & debris', 'Rocky\nsurfaces'],
           'correct': 1 //Clumps of dust and debris
         },
         {
@@ -1401,7 +1401,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '10. If it were noon on Neptune, the sunlight would appear as…',
-          'answers': ['Bright daylight', 'Dark night', 'Dim twilight'],
+          'answers': ['Bright\ndaylight', 'Dark night', 'Dim\ntwilight'],
           'correct': 2 //Dim twilight
         }
       ],
@@ -1418,17 +1418,17 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '3. What was the name of the large storm discovered by Voyager 2?',
-          'answers': ['Great Red Spot', 'Great Dark Spot', 'Giant Storm Eye'],
+          'answers': ['Great Red\nSpot', 'Great Dark\nSpot', 'Giant Storm\nEye'],
           'correct': 1 //Great Dark Spot
         },
         {
           'question': '4. Why do Neptune’s storms change over time?',
-          'answers': ['Weak gravity', 'Unstable atmosphere', 'Lack of clouds'],
+          'answers': ['Weak\ngravity', 'Unstable\natmosphere', 'Lack of\nclouds'],
           'correct': 1 //Unstable atmosphere
         },
         {
           'question': '5. How long does one season on Neptune last?',
-          'answers': ['More than 20 years', 'More than 30 years', 'More than 40 years'],
+          'answers': ['More than\n20 years', 'More than\n30 years', 'More than\n40 years'],
           'correct': 2 //More than 40 years
         },
         {
@@ -1438,7 +1438,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7. What process is theorized to release heat as carbon crystallizes and sinks toward Neptune\'s core?',
-          'answers': ['Nuclear fusion', 'Diamond rain', 'Methane combustion'],
+          'answers': ['Nuclear\nfusion', 'Diamond\nrain', 'Methane\ncombustion'],
           'correct': 1 //Diamond rain
         },
         {
@@ -1448,12 +1448,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9. Where is Neptune’s magnetic field believed to be generated?',
-          'answers': ['A “slushy” layer of water and ammonia', 'A solid iron-nickel core', 'The upper cloud deck'],
+          'answers': ['A “slushy” layer\nof water & ammonia', 'A solid iron\n-nickel core', 'The upper\ncloud deck'],
           'correct': 0 //A “slushy” layer of water and ammonia
         },
         {
           'question': '10. Why is Neptune called a “blueprint” for the rest of the galaxy?',
-          'answers': ['Neptune-sized exoplanets are extremely common', 'It was the first planet ever formed', 'It contains all the elements found in the Sun'],
+          'answers': ['Neptune-sized\nexoplanets are\nextremely common', 'It was the\nfirst planet\never formed', 'It contains all\nthe elements found\nin the Sun'],
           'correct': 0 //Neptune-sized exoplanets are extremely common
         }
       ]

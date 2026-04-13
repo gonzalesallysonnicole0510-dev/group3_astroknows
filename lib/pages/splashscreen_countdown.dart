@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/b-sfx_manager.dart';
 import 'package:flutter_application_1/pages/button0_charac.dart';
 import 'package:flutter_application_1/pages/q_timer_lives.dart';
 import 'package:flutter_application_1/pages/q_timer_service.dart';
@@ -76,7 +77,7 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> with Ti
   void startTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
-
+      
       if (countdown > 1) {
         setState(() {
           countdown--;
@@ -113,6 +114,10 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> with Ti
     if (!mounted) return; 
 
     if (hearts <= 0 && remaining > 0) {
+
+      // Same mission failed sound effect
+      SfxManager.instance.missionFailed();
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

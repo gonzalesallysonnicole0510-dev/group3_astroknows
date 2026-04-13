@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'package:flutter_application_1/pages/b-sfx_manager.dart';
+
 import 'splashscreen_countdown.dart';
 import 'package:flutter/material.dart';
-
+// import 'bg_music.dart';
 
 //STAR DATA MODEL
 class Star {
@@ -51,6 +53,7 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
       // Increased duration to 20 seconds for a much slower, calmer, continuous space ambient loop
       duration: const Duration(seconds: 20),
     )..repeat();
+    // BgMusics.instance.play('main_bgm.mp3');
   }
 
 
@@ -65,18 +68,19 @@ class _SolarSystemInterfaceState extends State<SolarSystemInterface>
     final double h = MediaQuery.of(context).size.height;
     final double w = MediaQuery.of(context).size.width;
 
-
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent, 
         elevation: 0.0,
-        
-        //back arrow
+        //back button
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 72, 72, 72)),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color.fromARGB(255, 72, 72, 72)),
+          onPressed: () {
+            SfxManager.instance.backButton(); // sound effect
+            Navigator.pop(context);
+          },
         ),
       ),
 
@@ -447,30 +451,6 @@ Fun fact: Saturn radiates more energy than it receives from the Sun, due to left
           ),
 
 
-          _pos(
-            context,
-            bottom: h * 0.1,
-            right: w * 0.32,
-            size: h * 0.18,
-            path: 'images/neptune.png',
-            name: 'Neptune',
-            planetScreens: [
-              const Text(//basic
-                '''hatdog ''',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              const Text(//intermediate
-                '''sakit sa ulo neto mga sis ''',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              const Text(// advanced
-                '''sana kumita tayo dito ''',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ],
-          ),
-
-
          
           _pos(
             context,
@@ -594,6 +574,7 @@ Fun fact: Deep inside Neptune, carbon may crystallize into diamonds and fall lik
       right: right,
       child: GestureDetector(
         onTap: () {
+          SfxManager.instance.selection();  // selection planet & sun sound effect
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -665,10 +646,13 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
             letterSpacing: 2,
           ),
         ),
-        //back arrow
+        //back button
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            SfxManager.instance.backButton(); // sound effect
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -690,7 +674,10 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
               children: [
                 _currentScreenIndex > 0
                     ? TextButton(
-                        onPressed: () => setState(() => _currentScreenIndex--),
+                        onPressed: () {
+                          SfxManager.instance.selection();  // selection sound effect
+                          setState(() => _currentScreenIndex--);
+                        },
                         child: const Text(
                           "Previous",
                           style: TextStyle(
@@ -713,6 +700,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                         ),
                       ),
                       onPressed: () {
+                        SfxManager.instance.launch();  // Countdown & launching spaceship sound effect
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -734,8 +722,10 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                     ),
                     _currentScreenIndex < widget.planetScreens.length - 1
                         ? TextButton(
-                            onPressed: () =>
-                                setState(() => _currentScreenIndex++),
+                            onPressed: () {
+                              SfxManager.instance.selection();  // selection sound effect
+                              setState(() => _currentScreenIndex++);
+                            },
                             child: const Text(
                               "Next",
                               style: TextStyle(
