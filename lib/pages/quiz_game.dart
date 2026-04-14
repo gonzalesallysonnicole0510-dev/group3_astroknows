@@ -47,13 +47,13 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   int currentQuestion = 0;
   String feedback = '';
-  Color boxBorderColor = Colors.lightBlueAccent;
+  Color boxBorderColor = Colors.lightBlueAccent.withValues(alpha: 0.7);
 
   bool timerRunning = false;
 
   // Asteroid positions
-  List<double> asteroidX = [-0.61, 0, 0.61];
-  List<double> asteroidY = [-0.15, -0.15, -0.15];
+  List<double> asteroidX = [-0.65, 0, 0.65]; // Spread slightly wider
+  List<double> asteroidY = [-0.65, -0.65, -0.65];
   List<double> asteroidRotation = [0.0, 0.5, 1.2];
   List<AsteroidDirection> asteroidFloat = [
     AsteroidDirection.up,
@@ -85,11 +85,10 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   }
 
   void _playLandingAnimation() {
-    // 1. Give the UI a split second to build, then drop the ship
     Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) {
         setState(() {
-          playerY = 0.95;
+          playerY = 0.90;
         });
       }
     });
@@ -105,7 +104,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-  // load hearts
   Future<void> _loadHearts() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -114,7 +112,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-  // save hearts
   Future<void> _saveHearts(int newLives) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('currentHearts', newLives);
@@ -160,42 +157,41 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   void quizgameTimer() {
     gameTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-
       if (isPaused || isLanding || feedback.isNotEmpty || !mounted) return;
 
       timeBuffer += 0.1;
 
       if (timeBuffer >= 1) {
-       timeBuffer = 0;
+        timeBuffer = 0;
 
-       if (timeLeft > 0) {
+        if (timeLeft > 0) {
           setState(() {
-           timeLeft--;
-         });
-       }
+            timeLeft--;
+          });
+        }
 
         if (timeLeft == 0) {
           setState(() {
             feedback = "Time's Up!";
-           boxBorderColor = Colors.redAccent;
+            boxBorderColor = Colors.redAccent;
             lives--;
             _saveHearts(lives);
             SfxManager.instance.wrong();
-         });
+          });
 
           if (lives <= 0) {
-           Future.delayed(const Duration(milliseconds: 800), () {
-             if (mounted) {
-               SfxManager.instance.missionFailed();
-               Navigator.pushReplacement(
-                 context,
-                 MaterialPageRoute(builder: (_) => const MissionFailedPage()),
-               );
+            Future.delayed(const Duration(milliseconds: 800), () {
+              if (mounted) {
+                SfxManager.instance.missionFailed();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MissionFailedPage()),
+                );
               }
             });
           } else {
             Future.delayed(const Duration(seconds: 1), () {
-             if (!mounted) return;
+              if (!mounted) return;
 
               bool isLast = currentQuestion >= widget.quiz.length - 1;
 
@@ -206,20 +202,20 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   MaterialPageRoute(builder: (_) => const MissionFailedPage()),
                 );
               } else {
-               setState(() {
+                setState(() {
                   currentQuestion++;
                   feedback = '';
-                  boxBorderColor = Colors.lightBlueAccent;
+                  boxBorderColor = Colors.lightBlueAccent.withValues(alpha: 0.7);
                   _resetAsteroids();
                   timeLeft = 20;
                   timeBuffer = 0;
-               });
-             }
-           });
-         }
-       }
+                });
+              }
+            });
+          }
+        }
       }
-   });
+    });
   }
 
   void startQuizGame() {
@@ -227,13 +223,12 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
       if (isPaused || isLanding || feedback.isNotEmpty || !mounted) return;
 
       setState(() {
-        // Asteroid up and down animation
         for (int i = 0; i < 3; i++) {
           if (asteroidY[i] == -50) continue;
 
-          if (asteroidY[i] < -0.05) {
+          if (asteroidY[i] < -0.75) {
             asteroidFloat[i] = AsteroidDirection.down;
-          } else if (asteroidY[i] > 0.15) {
+          } else if (asteroidY[i] > -0.55) {
             asteroidFloat[i] = AsteroidDirection.up;
           }
 
@@ -241,9 +236,9 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
           asteroidRotation[i] += (i % 2 == 0) ? 0.005 : -0.005;
         }
 
-        if (playerY < 0.93) {
+        if (playerY < 0.88) {
           playerFloat = PlayerDirection.down;
-        } else if (playerY > 0.97) {
+        } else if (playerY > 0.92) {
           playerFloat = PlayerDirection.up;
         }
 
@@ -252,11 +247,10 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     });
   }
 
-  // Player movement functions
   void moveLeft() {
-    if (isLanding) return; // Prevent movement during landing
+    if (isLanding) return;
     setState(() {
-      playerX = -0.61;
+      playerX = -0.65;
       if (!midShot) laserX = playerX;
     });
   }
@@ -272,12 +266,11 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
   void moveRight() {
     if (isLanding) return;
     setState(() {
-      playerX = 0.61;
+      playerX = 0.65;
       if (!midShot) laserX = playerX;
     });
   }
 
-  // Shooting function
   void fireLaser() {
     if (midShot || isPaused || isLanding || feedback.isNotEmpty) return;
 
@@ -305,7 +298,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
       for (int i = 0; i < 3; i++) {
         double hitPos = heightToCoordinate(laserHeight + (maxHeight * 0.1));
-        bool isHit = (asteroidX[i] - laserX).abs() < 0.2;
+        bool isHit = (asteroidX[i] - laserX).abs() < 0.25;
 
         if (asteroidY[i] != -50 && asteroidY[i] > hitPos && isHit) {
           asteroidY[i] = -50;
@@ -330,7 +323,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     return 1 - (2 * height / arenaHeight);
   }
 
-  // Answer checking and feedback
   Future<void> checkAnswer(int index) async {
     bool isCorrect = index == widget.quiz[currentQuestion]['correct'];
 
@@ -389,7 +381,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         setState(() {
           if (isCorrect) currentQuestion++;
           feedback = '';
-          boxBorderColor = Colors.lightBlueAccent;
+          boxBorderColor = Colors.lightBlueAccent.withValues(alpha: 0.7);
           _resetAsteroids();
           timeLeft = 20;
           timeBuffer = 0;
@@ -400,8 +392,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
   void _resetAsteroids() {
     setState(() {
-      asteroidX = [-0.61, 0, 0.61];
-      asteroidY = [-0.15, -0.15, -0.15];
+      asteroidX = [-0.65, 0, 0.65];
+      asteroidY = [-0.65, -0.65, -0.65];
       asteroidRotation = [0.0, 0.5, 1.2];
       asteroidFloat = [
         AsteroidDirection.up,
@@ -416,8 +408,8 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
 
-    final double rocketWidth = (sw * 0.18).clamp(60.0, 110.0);
-    final double rocketHeight = (sh * 0.12).clamp(80.0, 120.0);
+    final double rocketWidth = (sw * 0.16).clamp(50.0, 95.0);
+    final double rocketHeight = (sh * 0.10).clamp(70.0, 105.0);
 
     final Color timerColor = timeLeft > 10
         ? Colors.cyanAccent
@@ -429,7 +421,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
         children: [
           const SpaceWarpScreen(),
           Positioned.fill(
-            bottom: sh * 0.2,
+            bottom: sh * 0.18,
             child: Row(
               children: [
                 _buildMoveZone(moveLeft),
@@ -442,7 +434,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             top: 0,
             left: 0,
             right: 0,
-            height: sh * 0.7,
+            height: sh * 0.75,
             child: Stack(
               children: [
                 for (int i = 0; i < 3; i++)
@@ -454,7 +446,6 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                     label: widget.quiz[currentQuestion]['answers'][i],
                   ),
 
-                // Laser alignment adjusted to match new resting position
                 AnimatedAlign(
                   alignment: Alignment(laserX, 0.70),
                   duration: const Duration(milliseconds: 50),
@@ -462,14 +453,14 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                     width: rocketWidth,
                     child: Center(
                       child: Container(
-                        width: 4,
+                        width: 3,
                         height: laserHeight,
                         decoration: BoxDecoration(
                           color: Colors.cyanAccent,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.cyanAccent.withValues(alpha: 0.8),
-                              blurRadius: 10,
+                              blurRadius: 8,
                               spreadRadius: 1,
                             )
                           ],
@@ -479,7 +470,7 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                   ),
                 ),
 
-                // Player Spaceship
+                // Player Spaceship & Avatar Bubble
                 AnimatedAlign(
                   alignment: Alignment(playerX, playerY),
                   duration: isLanding
@@ -496,12 +487,24 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
                         height: rocketHeight,
                       ),
                       Positioned(
-                        top: rocketHeight * 0.28,
-                        child: Image.asset(
-                          avatarPath,
-                          opacity: const AlwaysStoppedAnimation(.8),
-                          width: rocketWidth * 0.35,
-                          height: rocketWidth * 0.35,
+                        top: rocketHeight * 0.22,
+                        child: Container(
+                          width: rocketWidth * 0.30,
+                          height: rocketWidth * 0.30,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha: 0.1),
+                            border: Border.all(
+                              color: Colors.cyanAccent.withValues(alpha: 0.4),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              avatarPath,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       )
                     ],
@@ -511,118 +514,85 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
             ),
           ),
 
-          // Timer on top
+          // Timer
           Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              bottom: false,
-              child: SizedBox(
-                height: 40,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    AnimatedContainer(
-                      duration: timeLeft == 20
-                          ? Duration.zero
-                          : const Duration(seconds: 1),
-                      curve: Curves.linear,
-                      width: (timeLeft.clamp(0, 20) / 20) * sw,
-                      height: 4,
-                      margin: const EdgeInsets.only(top: 18),
-                      decoration: BoxDecoration(
-                        color: timerColor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: timerColor.withValues(alpha: 0.8),
-                            blurRadius: 8,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    AnimatedPositioned(
-                      duration: (timeLeft == 20 || isPaused)
-                          ? Duration.zero
-                          : const Duration(seconds: 1),
-                      curve: Curves.linear,
-                      left: (timeLeft.clamp(0, 20) / 20) * sw - 18,
-                      top: 2,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFF131B26),
-                          border: Border.all(
-                            color: timerColor,
-                            width: timeLeft <= 5 ? 3 : 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: timerColor.withValues(alpha: timeLeft <= 5 ? 0.8 : 0.4),
-                              blurRadius: timeLeft <= 5 ? 15 : 8,
-                              spreadRadius: timeLeft <= 5 ? 4 : 1,
-                            ),
-                          ],
-                        ),
-
-                        child: Center(
-                          child: AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 300),
-                            style: TextStyle(
-                              color: timeLeft <= 5 ? Colors.redAccent : Colors.white,
-                              fontSize: timeLeft <= 5 ? 18 : 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Share Tech',
-                            ),
-                            child: Text('$timeLeft'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            top: (sh * 0.04).clamp(20.0, 45.0),
+            left: (sw * 0.02).clamp(8.0, 20.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF131B26).withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: timerColor.withValues(alpha: 0.7),
+                  width: timeLeft <= 5 ? 2.0 : 1.0,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: timerColor.withValues(alpha: timeLeft <= 5 ? 0.4 : 0.1),
+                    blurRadius: timeLeft <= 5 ? 8 : 4,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.timer_outlined,
+                    color: timerColor,
+                    size: (sw * 0.04).clamp(16.0, 20.0),
+                  ),
+                  const SizedBox(width: 6),
+                  SizedBox(
+                    width: 24,
+                    child: Text(
+                      '$timeLeft',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: timeLeft <= 5 ? Colors.redAccent : Colors.white,
+                        fontSize: (sw * 0.04).clamp(14.0, 18.0),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Share Tech',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
 
           // Pause button
           Positioned(
-            top: (sh * 0.05).clamp(30.0, 60.0),
-            right: (sw * 0.05).clamp(15.0, 30.0),
+            top: (sh * 0.04).clamp(20.0, 45.0),
+            right: (sw * 0.02).clamp(8.0, 20.0),
             child: GestureDetector(
               onTap: () {
-                if(isLanding) return;
+                if (isLanding) return;
                 SfxManager.instance.pause();
                 setState(() => isPaused = true);
                 gameTimer?.cancel();
               },
               child: Container(
-                width: (sw * 0.12).clamp(45.0, 60.0),
-                height: (sw * 0.12).clamp(45.0, 60.0),
+                width: (sw * 0.10).clamp(35.0, 45.0),
+                height: (sw * 0.10).clamp(35.0, 45.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF131B26),
+                  color: const Color(0xFF131B26).withValues(alpha: 0.8),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.cyanAccent,
-                    width: 2.5,
+                    color: Colors.cyanAccent.withValues(alpha: 0.7),
+                    width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyanAccent.withValues(alpha: 0.3),
-                      blurRadius: 10,
+                      color: Colors.cyanAccent.withValues(alpha: 0.2),
+                      blurRadius: 6,
                     )
                   ],
                 ),
                 child: Icon(
                   Icons.pause,
                   color: Colors.white,
-                  size: (sw * 0.06).clamp(24.0, 32.0),
+                  size: (sw * 0.05).clamp(18.0, 24.0),
                 ),
               ),
             ),
@@ -630,65 +600,76 @@ class _Quizteroid_QuestState extends State<Quizteroid_Quest> {
 
           // Lives and question box
           Positioned(
-            bottom: sh * 0.05,
-            left: sw * 0.08,
-            right: sw * 0.08,
+            bottom: (sh * 0.03).clamp(15.0, 40.0),
+            left: sw * 0.06,
+            right: sw * 0.06,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.favorite,
-                          color: const Color(0xFFFFD1DC),
-                          size: (sw * 0.09).clamp(23.0, 35.0),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '$lives',
-                          style: TextStyle(
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.favorite,
                             color: const Color(0xFFFFD1DC),
-                            fontSize: (sw * 0.08).clamp(20.0, 28.0),
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Share Tech',
+                            size: (sw * 0.05).clamp(16.0, 22.0),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 6),
+                          Text(
+                            '$lives',
+                            style: TextStyle(
+                              color: const Color(0xFFFFD1DC),
+                              fontSize: (sw * 0.045).clamp(14.0, 20.0),
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Share Tech',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     ShootButton(onTap: fireLaser),
                   ],
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 12),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   width: double.infinity,
-                  height: sh * 0.12,
+                  constraints: BoxConstraints(
+                    minHeight: sh * 0.10,
+                  ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF131B26),
-                    borderRadius: BorderRadius.circular(15),
+                    color: const Color(0xFF131B26).withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: boxBorderColor,
-                      width: 2.5,
+                      width: 1.5,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: boxBorderColor.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      )
+                    ]
                   ),
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FittedBox(
-                        child: Text(
-                          feedback.isEmpty
-                              ? widget.quiz[currentQuestion]['question']
-                              : feedback,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: (sh * 0.035).clamp(18.0, 26.0),
-                            fontFamily: 'Share Tech',
-                          ),
-                          textAlign: TextAlign.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      child: Text(
+                        feedback.isEmpty
+                            ? widget.quiz[currentQuestion]['question']
+                            : feedback,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: (sh * 0.025).clamp(14.0, 20.0),
+                          fontFamily: 'Share Tech',
+                          height: 1.3,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -744,8 +725,8 @@ class AsteroidChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     if (y == -50) return const SizedBox.shrink();
 
-    double size = (MediaQuery.of(context).size.width * 0.18).clamp(65.0, 95.0);
-    double glowOpacity = 0.1 + (0.15 * math.sin(rotation * 6).abs());
+    double size = (MediaQuery.of(context).size.width * 0.15).clamp(45.0, 75.0);
+    double glowOpacity = 0.08 + (0.12 * math.sin(rotation * 6).abs());
 
     return AnimatedAlign(
       alignment: Alignment(x, y),
@@ -764,8 +745,8 @@ class AsteroidChoice extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.cyanAccent.withValues(alpha: glowOpacity),
-                    blurRadius: 20,
-                    spreadRadius: 5,
+                    blurRadius: 15,
+                    spreadRadius: 2,
                   ),
                 ],
               ),
@@ -780,35 +761,29 @@ class AsteroidChoice extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: size * 0.75,
-              height: size * 0.75,
+              width: size * 0.85,
+              height: size * 0.85,
               child: Center(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: size * 0.28,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'Share Tech',
-                      letterSpacing: 1.0,
-                      shadows: [
-                        const Shadow(
-                          color: Colors.black87,
-                          offset: Offset(0, 2),
-                          blurRadius: 6,
-                        ),
-                        const Shadow(color: Colors.black, offset: Offset(1.5, 1.5), blurRadius: 2),
-                        const Shadow(color: Colors.black, offset: Offset(-1.5, -1.5), blurRadius: 2),
-                        const Shadow(color: Colors.black, offset: Offset(1.5, -1.5), blurRadius: 2),
-                        const Shadow(color: Colors.black, offset: Offset(-1.5, 1.5), blurRadius: 2),
-                        Shadow(
-                          color: Colors.cyanAccent.withValues(alpha: 0.8),
-                          blurRadius: 10,
-                        ),
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: size * 0.26,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'Share Tech',
+                        letterSpacing: 0.8,
+                        shadows: [
+                          const Shadow(color: Colors.black87, offset: Offset(0, 2), blurRadius: 4),
+                          const Shadow(color: Colors.black, offset: Offset(1.0, 1.0), blurRadius: 2),
+                          const Shadow(color: Colors.black, offset: Offset(-1.0, -1.0), blurRadius: 2),
+                          Shadow(color: Colors.cyanAccent.withValues(alpha: 0.6), blurRadius: 6),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -827,30 +802,30 @@ class ShootButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double size = (MediaQuery.of(context).size.width * 0.15).clamp(50.0, 70.0);
+    double size = (MediaQuery.of(context).size.width * 0.11).clamp(35.0, 48.0); 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: const Color(0xFF232B32),
+          color: const Color(0xFF131B26).withValues(alpha: 0.8),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.cyanAccent,
-            width: 2,
+            color: Colors.cyanAccent.withValues(alpha: 0.7),
+            width: 1.5, // Thinner border
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.cyanAccent.withValues(alpha: 0.2),
-              blurRadius: 8,
+              color: Colors.cyanAccent.withValues(alpha: 0.15),
+              blurRadius: 6,
             )
           ],
         ),
         child: Icon(
           Icons.flash_on,
           color: Colors.cyanAccent,
-          size: size * 0.55,
+          size: size * 0.50,
         ),
       ),
     );
@@ -873,16 +848,14 @@ class PauseMenu extends StatelessWidget {
         color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: Container(
-            // FIX: Dynamic margin ensures it never touches the edges on small screens
             margin: EdgeInsets.symmetric(
               horizontal: sw * 0.1, 
               vertical: sh * 0.1
             ),
-            // FIX: Prevents it from getting absurdly wide on tablets/large screens
-            constraints: const BoxConstraints(maxWidth: 350),
+            constraints: const BoxConstraints(maxWidth: 320),
             padding: EdgeInsets.symmetric(
-              vertical: (sh * 0.04).clamp(20.0, 40.0),
-              horizontal: 25,
+              vertical: (sh * 0.03).clamp(15.0, 30.0),
+              horizontal: 20,
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF1A1B35).withValues(alpha: 0.95),
@@ -892,66 +865,63 @@ class PauseMenu extends StatelessWidget {
                 width: 2,
               ),
             ),
-            // FIX: SingleChildScrollView is inside the decorated container now
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'PAUSED',
-                    style: TextStyle(
-                      fontFamily: 'Michroma',
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'PAUSED',
+                  style: TextStyle(
+                    fontFamily: 'Michroma',
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 30),
-                  _menuButton(context, 'RESUME', onTap: onResume),
-                  const SizedBox(height: 15),
-                  _menuButton(
-                    context,
-                    'CUSTOMIZATION',
-                    onTap: () async {
-                      SfxManager.instance.secButton();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt)),
-                      );
-                      onUpdateAvatar(selectedAstroknowt);
-                      onResume();
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _menuButton(
-                    context,
-                    'SETTINGS',
-                    onTap: () async {
-                      SfxManager.instance.secButton();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const SettingsPage()),
-                      );
-                      onUpdateAvatar(selectedAstroknowt);
-                      onResume();
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  _menuButton(
-                    context,
-                    'EXIT',
-                    isExit: true,
-                    onTap: () {
-                      SfxManager.instance.secButton();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt)),
-                        (route) => false,
-                      );
-                    },
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                _menuButton(context, 'RESUME', onTap: onResume),
+                const SizedBox(height: 12),
+                _menuButton(
+                  context,
+                  'CUSTOMIZATION',
+                  onTap: () async {
+                    SfxManager.instance.secButton();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CharacCustPage(type: CustomizationType.astroknowt)),
+                    );
+                    onUpdateAvatar(selectedAstroknowt);
+                    onResume();
+                  },
+                ),
+                const SizedBox(height: 12),
+                _menuButton(
+                  context,
+                  'SETTINGS',
+                  onTap: () async {
+                    SfxManager.instance.secButton();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingsPage()),
+                    );
+                    onUpdateAvatar(selectedAstroknowt);
+                    onResume();
+                  },
+                ),
+                const SizedBox(height: 12),
+                _menuButton(
+                  context,
+                  'EXIT',
+                  isExit: true,
+                  onTap: () {
+                    SfxManager.instance.secButton();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => TitlePage(astroknowt: selectedAstroknowt)),
+                      (route) => false,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -962,7 +932,7 @@ class PauseMenu extends StatelessWidget {
   Widget _menuButton(BuildContext context, String label, {required VoidCallback onTap, bool isExit = false}) {
     return SizedBox(
       width: double.infinity,
-      height: 48,
+      height: 42,
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
@@ -980,6 +950,8 @@ class PauseMenu extends StatelessWidget {
           style: TextStyle(
             color: isExit ? Colors.redAccent : Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: 13,
+            letterSpacing: 1.2,
           ),
         ),
       ),

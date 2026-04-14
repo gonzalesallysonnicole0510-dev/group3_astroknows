@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'AstroKnows',
       debugShowCheckedModeBanner: false,
-      home: SplashScreen_Intro(),
+      home: SplashScreenIntro(),
     );
   }
 }
