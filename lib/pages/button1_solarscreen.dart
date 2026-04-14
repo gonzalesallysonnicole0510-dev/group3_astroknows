@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_application_1/pages/b-narration.dart';
 import 'package:flutter_application_1/pages/b-sfx_manager.dart';
 
 import 'splashscreen_countdown.dart';
@@ -617,7 +618,6 @@ class SoloPlanetPage extends StatefulWidget {
   final String imagePath;
   final List<Widget> planetScreens;
 
-
   const SoloPlanetPage({
     super.key,
     required this.name,
@@ -631,6 +631,28 @@ class SoloPlanetPage extends StatefulWidget {
 
 class _SoloPlanetPageState extends State<SoloPlanetPage> {
   int _currentScreenIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _playInfoNarration();
+    });
+  }
+
+  @override
+  void dispose() {
+    NarrationManager.instance.stop();
+    super.dispose();
+  }
+
+  void _playInfoNarration() { // plays narration for current info
+    NarrationManager.instance.playPlanetInfo(
+      widget.name,
+      _currentScreenIndex,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -651,6 +673,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
             SfxManager.instance.backButton(); // sound effect
+            NarrationManager.instance.stop();
             Navigator.pop(context);
           },
         ),
@@ -677,6 +700,9 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                         onPressed: () {
                           SfxManager.instance.selection();  // selection sound effect
                           setState(() => _currentScreenIndex--);
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                              _playInfoNarration();
+                          });
                         },
                         child: const Text(
                           "Previous",
@@ -687,7 +713,6 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                         ),
                       )
                     : const SizedBox(width: 80),
-
 
                 Row(
                   children: [
@@ -701,6 +726,7 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                       ),
                       onPressed: () {
                         SfxManager.instance.launch();  // Countdown & launching spaceship sound effect
+                        NarrationManager.instance.stop();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -716,15 +742,16 @@ class _SoloPlanetPageState extends State<SoloPlanetPage> {
                       ),
                     ),
 
+                    const SizedBox(width: 10),
 
-                    const SizedBox(
-                      width: 10,
-                    ),
                     _currentScreenIndex < widget.planetScreens.length - 1
                         ? TextButton(
                             onPressed: () {
                               SfxManager.instance.selection();  // selection sound effect
                               setState(() => _currentScreenIndex++);
+                              Future.delayed(const Duration(milliseconds: 100), () {
+                                _playInfoNarration();
+                              });
                             },
                             child: const Text(
                               "Next",

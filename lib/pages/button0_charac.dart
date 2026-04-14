@@ -251,7 +251,7 @@ class _CharacCustPageState extends State<CharacCustPage> with SingleTickerProvid
 
     return GestureDetector(
       onTap: () {
-        SfxManager.instance.selection();
+        SfxManager.instance.selection();  // selection sound effect
         _updateAvatar(path);
       },
       child: AnimatedContainer(
