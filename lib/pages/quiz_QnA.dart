@@ -11,8 +11,8 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2.  The Sun is shaped like a…',
-          'answers': ['Sphere', 'Oblong', 'Circle'],
-          'correct': 0 //Sphere
+          'answers': ['Oblong', 'Sphere', 'Circle'],
+          'correct': 1 //Sphere
         },
         {
           'question': '3.  What gases make up most of the Sun?',
@@ -31,8 +31,8 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '6.  The Sun is the _____ object in the solar system.',
-          'answers': ['Biggest', 'Fastest', 'Reddest'],
-          'correct': 0 //Biggest
+          'answers': ['Fastest', 'Biggest', 'Reddest'],
+          'correct': 1 //Biggest
         },
         {
           'question': '7.  What streams of charged particles does the Sun send out?',
@@ -46,8 +46,8 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '9.  Compared to other stars, the Sun is considered _________.',
-          'answers': ['Tiny', 'Medium\n-sized', 'Huge'],
-          'correct': 1  //Medium-sized
+          'answers': ['Medium\n-sized', 'Huge', 'Tiny'],
+          'correct': 0  //Medium-sized
         },
         {
           'question': '10.  Why is the Sun important for life on Earth?',
@@ -74,12 +74,12 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  How long does the Sun take to rotate at the equator?',
-          'answers': ['25 days', '39 days', '36 days'],
+          'answers': ['25 days', '36 days', '39 days'],
           'correct': 0  //25 days
         },
         {
           'question': '5.  How long does it take to rotate near the poles?',
-          'answers': ['33 days', '36 days', '39 days'],
+          'answers': ['26 days', '36 days', '39 days'],
           'correct': 1 //36 days
         },
         {
@@ -89,8 +89,8 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '7.  How fast does the Sun move through the Milky Way?',
-          'answers': [' 100,000 \n   km/h ', ' 850,000 \n   km/h ', ' 720,000 \n   km/h '],
-          'correct': 2  //720,000 km/h
+          'answers': [' 720,000 \n   km/h ', ' 850,000 \n   km/h ', ' 100,000 \n   km/h '],
+          'correct': 0  //720,000 km/h
         },
         {
           'question': '8.  How long does it take the Sun to orbit the galaxy?',
@@ -117,8 +117,8 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '2.  What is another name for this type of star?',
-          'answers': ['White giant', 'Blue dwarf', '  Yellow  \n  dwarf  '],
-          'correct': 2 //Yellow dwarf
+          'answers': ['  Yellow  \n  dwarf  ', 'Blue dwarf', 'White Giant'],
+          'correct': 0 //Yellow dwarf
         },
         {
           'question': '3. What is the visible surface of the Sun called?',
@@ -127,13 +127,13 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '4.  About how hot is the Sun’s photosphere?',
-          'answers': ['2,500 °C', '5,500 °C', '15M °C'],
-          'correct': 1  //5,500 °C
+          'answers': ['5,500 °C', '2M °C', '15M °C'],
+          'correct': 0  //5,500 °C
         },
         {
           'question': '5.  Which part of the Sun is hotter than the photosphere?',
-          'answers': ['Core', 'Surface', 'Corona'],
-          'correct': 2 //Corona
+          'answers': ['Core', 'Corona', 'Surface'],
+          'correct': 1 //Corona
         },
         {
           'question': '6.  What percentage of the solar system’s mass does the Sun hold?',
@@ -147,7 +147,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
         },
         {
           'question': '8.  What is the Sun’s final stage after becoming a red giant?',
-          'answers': ['Black hole', 'Neutron\n   star', 'White dwarf'],
+          'answers': ['Black hole', 'Neutron\nstar', 'White dwarf'],
           'correct': 2  //White dwarf
         },
         {
@@ -209,7 +209,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
           'correct': 0  //13 times
         },
         {
-          'question': '9.  Mercury doesn’t have any atmosphere to retain Sun heat. Instead, it has a very thin outer layer called an _______.',
+          'question': '9.  Mercury doesn’t have any atmosphere to retain Sun heat. Instead, it has a very thin outer layer called _______.',
           'answers': ['Mesosphere', 'Thermo-\nsphere', 'Exosphere'],
           'correct': 2  //Exosphere
         },

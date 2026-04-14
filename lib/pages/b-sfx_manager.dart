@@ -45,7 +45,7 @@ class SfxManager {
   void selection() => play('assets/selection_click.mp3');
   void pause() => play('assets/pauseButton_click.mp3');
   void backButton() => play('assets/backButton_click.mp3');
-  void launch() => play('assets/countdown_launch.mp3');
+  void launch() => play('assets/launch_splashscreen.mp3');
   void travelSpace() => playLoop('assets/space_travel.mp3');
   void laser() => play('assets/laser_shoot.mp3');
   void correct() => play('assets/correct_answer.mp3');

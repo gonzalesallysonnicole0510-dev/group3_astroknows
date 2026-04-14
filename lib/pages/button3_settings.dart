@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/b-narration.dart';
 import 'dart:math';
 import 'b-sfx_manager.dart';
 import 'bg_music.dart';
@@ -16,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderStateMixin {
     late AnimationController _blinkController;
+    bool isNarrationOn = NarrationManager.instance.isEnabled;
 
   @override
   void initState() {
@@ -40,11 +42,20 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(10, 10, 26, 1.0),
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leadingWidth: 70,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'SETTINGS',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Russo One',
+            fontSize: 18,
+            letterSpacing: 3,
+            shadows: [Shadow(blurRadius: 12, color: Colors.cyanAccent)],
+          ),
+        ),
         // back button
         leading: GestureDetector(
           onTap: () {
@@ -82,7 +93,10 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
             },
           ),
           Center(
-            child: Container(
+            child: Padding (
+              padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02, top: screenHeight * 0.02, bottom: screenHeight * 0.02),
+              child: Container(
+              margin: EdgeInsets.only(bottom: 10),
               width: screenWidth * 0.7,
               decoration: BoxDecoration(
                 color: const Color(0xFF1A1B35).withValues(alpha: 0.5),
@@ -92,47 +106,68 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                   width: 1,
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Text(
-                      'SETTINGS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Russo One',
-                        fontSize: 23,
-                        letterSpacing: 1.2,
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [    
+                      const SizedBox(height: 15),
+                      VolumeRow(
+                        title: "Music Volume",
+                        currentLevel: musicLevel,
+                        onChanged: (val) {
+                          musicLevel = val;
+                          BgMusics.instance.setVolume(val);
+                        },
                       ),
-                    ),
+                      const SizedBox(height: 15),
+                      VolumeRow(
+                        title: "Sound Effects",
+                        currentLevel: sfxLevel,
+                        onChanged: (val) {
+                          sfxLevel = val;
+                          SfxManager.instance.setVolume(val);
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Narration",
+                            style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Russo One', letterSpacing: 1.2),
+                          ),
+                          const SizedBox(width: 15),
+                            Switch(
+                              value: isNarrationOn,
+                              onChanged: (value) async {
+                                await NarrationManager.instance.setEnabled(value);
+                                setState(() {
+                                  isNarrationOn = value;
+                                });
+                                if (value) {
+                                  SfxManager.instance.secButton();
+                                } else {
+                                  SfxManager.instance.backButton();
+                                }
+                              },
+                              activeThumbColor:
+                                  Colors.cyanAccent.withValues(alpha: 0.7),
+                            ),
+                          ],
+                        ),
+                      const SizedBox(height: 15),
+                      VolumeRow(
+                        title: "Narration",
+                        currentLevel: narrationLevel,
+                        onChanged: (val) {
+                          narrationLevel = val;
+                          NarrationManager.instance.setVolume(val);
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                    ],
                   ),
-    
-                  VolumeRow(
-                    title: "Music Volume",
-                    currentLevel: musicLevel,
-                    onChanged: (val) {
-                      musicLevel = val;
-                      BgMusics.instance.setVolume(val);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  VolumeRow(
-                    title: "Sound Effects",
-                    currentLevel: sfxLevel,
-                    onChanged: (val) {
-                      sfxLevel = val;
-                      SfxManager.instance.setVolume(val);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  VolumeRow(
-                    title: "Narration",
-                    currentLevel: narrationLevel,
-                    onChanged: (val) => narrationLevel = val,
-                  ),
-                  const SizedBox(height: 15),
-                ],
+                ),
               ),
             ),
           ),
@@ -142,12 +177,13 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   }
 }
 
+
 class VolumeRow extends StatefulWidget {
   final String title;
   final int currentLevel;
   final Function(int) onChanged;
 
-  const VolumeRow({
+  VolumeRow({
     super.key,
     required this.title,
     required this.currentLevel,
@@ -176,10 +212,12 @@ class _VolumeRowState extends State<VolumeRow> {
           widget.title,
           style: const TextStyle(
             color: Colors.white,
+            fontFamily: 'Russo One',
             fontSize: 18,
+            letterSpacing: 1.2,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

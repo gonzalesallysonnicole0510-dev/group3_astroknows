@@ -178,6 +178,7 @@ class _SplashScreen_CountdownState extends State<SplashScreen_Countdown> with Ti
           planet: selectedQuiz['planet'],
           astroknowt: selectedAstroknowt,
           spaceship: selectedSpaceship,
+          level: levelKey,
         ),
       ),
     );
