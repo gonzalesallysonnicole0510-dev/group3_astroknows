@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter_application_1/pages/b-sfx_manager.dart';
-// import 'package:flutter_application_1/pages/bg_music.dart';
 import 'button0_charac.dart';
 import 'button1_solarscreen.dart';
 import 'button2_shop.dart';
@@ -26,9 +25,6 @@ class _TitlePageState extends State<TitlePage> with SingleTickerProviderStateMix
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    // Future.delayed(const Duration(milliseconds: 300), () {
-    //   if (mounted) BgMusics.instance.play('assets/main_bgm.mp3');
-    // });
   }
 
   @override
