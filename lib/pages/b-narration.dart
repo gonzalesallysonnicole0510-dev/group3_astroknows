@@ -364,7 +364,7 @@ const Map<String, Map<String, Map<int, String>>> _quizNarrationMap = {
   },
 };
 
-// ── Info screen narration: planet → levelIndex (0=basic, 1=intermediate, 2=advanced) ──
+
 const Map<String, Map<int, String>> _infoNarrationMap = {
   'Sun':     { 0: 'assets/narration/-sun_basic.mp3',  
                1: 'assets/narration/-sun_intermediate.mp3',

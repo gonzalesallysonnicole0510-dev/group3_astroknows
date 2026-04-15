@@ -165,7 +165,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'mercury_quiz': {
-    'planet': 'mercury',
+    'planet': 'Mercury',
     'levels': {
       'basic': [
         {
@@ -327,7 +327,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'venus_quiz': {
-    'planet': 'venus',
+    'planet': 'Venus',
     'levels': {
       'basic': [
         {
@@ -489,7 +489,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'earth_quiz': {
-    'planet': 'earth',
+    'planet': 'Earth',
     'levels': {
       'basic': [
         {
@@ -651,7 +651,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'mars_quiz': {
-    'planet': 'mars',
+    'planet': 'Mars',
     'levels': {
       'basic': [
         {
@@ -813,7 +813,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'jupiter_quiz': {
-    'planet': 'jupiter',
+    'planet': 'Jupiter',
     'levels': {
       'basic': [
         {
@@ -975,7 +975,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'saturn_quiz': {
-    'planet': 'saturn',
+    'planet': 'Saturn',
     'levels': {
       'basic': [
         {
@@ -1137,7 +1137,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'uranus_quiz': {
-    'planet': 'uranus',
+    'planet': 'Uranus',
     'levels': {
       'basic': [
         {
@@ -1299,7 +1299,7 @@ final Map<String, Map<String, dynamic>> allQuizzes = {
   },
 
   'neptune_quiz': {
-    'planet': 'neptune',
+    'planet': 'Neptune',
     'levels': {
       'basic': [
         {
